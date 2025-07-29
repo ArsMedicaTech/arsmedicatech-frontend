@@ -1,0 +1,38 @@
+name: QA
+
+on:
+  push:
+    branches:
+      - dev
+      - stage
+      - main
+  pull_request:
+    branches:
+      - dev
+      - stage
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      ENCRYPTION_KEY: "test-encryption-key-for-ci-123456789"
+      SENTRY_DSN: "test-sentry-dsn-for-ci-123456789"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Node.js dependencies
+        run: |
+          if [ -f package.json ]; then npm install; fi
+
+      - name: Run npm tests
+        run: npm test
+
+      - name: TypeScript type check
+        run: npx tsc --project ./config/tsconfig.cicd.json --noEmit
