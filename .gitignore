@@ -1,29 +1,13 @@
 .vscode/
 
-*venv/
 node_modules/
 .idea/
 
-PERSONAL_NOTES.md
-
 .env
-
-data/mydatabase.db
-__pycache__/
-
-hs_err_pid*.log
-oscar_mcmaster.properties
 
 *.lock
 *-lock.json
 
-
-# special folder for sorting assorted incoming files:
-stuff/
-
-k8s/values.yaml
-
-emr/k8s/values.yaml
 
 dist/
 
@@ -37,9 +21,3 @@ playwright/.cache/
 docs/_build
 
 typings/
-
-micro/livekit/egress.yaml
-micro/livekit/livekit.yaml
-
-config/*.apps.googleusercontent.com.json
-config.py
