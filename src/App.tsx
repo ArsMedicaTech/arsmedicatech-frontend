@@ -51,6 +51,7 @@ import logger from './services/logging';
 import { PluginRoute } from './types';
 
 import authService from './services/auth';
+import PDFdemo from './components/PDFdemo';
 
 function useLoadPlugins() {
   useEffect(() => {
@@ -286,6 +287,7 @@ function ErrorPage() {
 
 const baseRoutes: PluginRoute[] = [
   { index: true, element: <Dashboard /> },
+  {path: 'pdf-demo', element: <PDFdemo />},
   { path: 'about', element: <About /> },
   { path: 'contact', element: <Contact /> },
   { path: 'patients', element: <Patients /> },
