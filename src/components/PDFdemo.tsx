@@ -165,8 +165,8 @@ const styles: Record<string, CSSProperties> = {
 export const TreatmentPlanExample: React.FC = () => {
   // Sample treatment plan data
   const planData: TreatmentPlanData = {
-    patient: { 
-      name: 'Marie Dubois', 
+    patient: {
+      name: 'Marie Dubois',
       id: 'PAT-12345',
       date: 'March 15, 2024'
     },
@@ -182,7 +182,7 @@ export const TreatmentPlanExample: React.FC = () => {
   return (
     <div style={{ padding: '20px' }}>
       <h2>Patient Treatment Plan</h2>
-      
+
       {/* PDF Download Button wraps the content to be converted */}
       <PDFDownloadButton
         filename={`treatment-plan-${planData.patient.id}`}
@@ -225,8 +225,8 @@ export const TreatmentPlanExample: React.FC = () => {
               <tbody>
                 {/* Map through medications to create table rows */}
                 {planData.medications.map((med, i) => (
-                  <tr 
-                    key={i} 
+                  <tr
+                    key={i}
                     // Alternate row colors for better readability
                     style={i % 2 === 0 ? styles.tableRowEven : styles.tableRowOdd}
                   >
@@ -295,7 +295,7 @@ Key benefits:
   return (
     <div style={{ padding: '20px' }}>
       <h2>Medical Research Report</h2>
-      
+
       {/* PDF Download Button with custom styling */}
       <PDFDownloadButton
         filename="llm-research-report"
@@ -313,10 +313,10 @@ Key benefits:
           </div>
 
           {/* Search query section - highlighted */}
-          <div style={{ 
-            ...styles.section, 
-            backgroundColor: '#f0f8ff', 
-            borderLeft: '4px solid #9b59b6' 
+          <div style={{
+            ...styles.section,
+            backgroundColor: '#f0f8ff',
+            borderLeft: '4px solid #9b59b6'
           }}>
             <h3 style={{ marginTop: 0, color: '#9b59b6' }}>Search Query</h3>
             <p>{reportData.query}</p>
@@ -336,10 +336,10 @@ Key benefits:
             <h2>References</h2>
             {/* Map through sources to create reference list */}
             {reportData.sources.map((source, i) => (
-              <div key={i} style={{ 
-                marginBottom: '15px', 
-                paddingLeft: '15px', 
-                borderLeft: '2px solid #ddd' 
+              <div key={i} style={{
+                marginBottom: '15px',
+                paddingLeft: '15px',
+                borderLeft: '2px solid #ddd'
               }}>
                 {/* Reference title */}
                 <p style={{ margin: '0 0 5px 0', fontWeight: 'bold' }}>
@@ -360,7 +360,7 @@ Key benefits:
           {/* Disclaimer footer */}
           <div style={{ ...styles.footer, backgroundColor: '#f9f9f9' }}>
             <p style={{ fontSize: '11px', color: '#666', margin: 0 }}>
-              <strong>Note:</strong> This summary is AI-generated based on RAG and Medline. 
+              <strong>Note:</strong> This summary is AI-generated based on RAG and Medline.
               Please consult a healthcare professional for validation.
             </p>
           </div>
@@ -401,26 +401,26 @@ export const CodeGenerationExample: React.FC = () => {
     // Draw header background
     doc.setFillColor(39, 174, 96);  // Green color
     doc.rect(0, 0, 210, 40, 'F');   // Rectangle: x, y, width, height, 'F' = filled
-    
+
     // Header text
     doc.setTextColor(255, 255, 255);  // White text
     doc.setFontSize(20);
     doc.text('Treatment Plan', 105, 25, { align: 'center' });
-    
+
     // Reset text color for body content
     doc.setTextColor(0, 0, 0);  // Black text
 
     // Body content - starting Y position
     let y = 50;
-    
+
     // Patient information
     doc.setFontSize(12);
     doc.text(`Patient: ${planData.patient.name}`, 20, y);
     y += 10;  // Move down 10mm
-    
+
     doc.text(`ID: ${planData.patient.id}`, 20, y);
     y += 10;
-    
+
     doc.text(`Date: ${planData.date}`, 20, y);
     y += 20;  // Extra space before table
 
@@ -439,7 +439,7 @@ export const CodeGenerationExample: React.FC = () => {
     <div style={{ padding: '20px' }}>
       <h2>Code-based PDF Generation</h2>
       <p>Patient: {planData.patient.name}</p>
-      
+
       {/* PDF generation using custom function */}
       <PDFDownloadButton
         generateContent={generatePDF}
@@ -470,16 +470,16 @@ export const PDFDemo: React.FC = () => {
         </p>
 
         {/* Grid layout for examples */}
-        <div style={{ 
-          display: 'grid', 
+        <div style={{
+          display: 'grid',
           gap: '30px',
           // Responsive grid: minimum 400px columns, auto-fit as many as possible
           gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))'
         }}>
           {/* Example 1: Treatment Plan (HTML→PDF) */}
-          <div style={{ 
-            backgroundColor: 'white', 
-            padding: '20px', 
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>
@@ -487,9 +487,9 @@ export const PDFDemo: React.FC = () => {
           </div>
 
           {/* Example 2: LLM Report (HTML→PDF) */}
-          <div style={{ 
-            backgroundColor: 'white', 
-            padding: '20px', 
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>
@@ -497,9 +497,9 @@ export const PDFDemo: React.FC = () => {
           </div>
 
           {/* Example 3: Code Generation (Code→PDF) */}
-          <div style={{ 
-            backgroundColor: 'white', 
-            padding: '20px', 
+          <div style={{
+            backgroundColor: 'white',
+            padding: '20px',
             borderRadius: '8px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>

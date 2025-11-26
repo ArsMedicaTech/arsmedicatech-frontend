@@ -8,10 +8,10 @@ import html2pdf from 'html2pdf.js';
 interface PDFOptions {
   /** Document margins in mm */
   margin?: number;
-  
+
   /** PDF filename (with .pdf extension) */
   filename?: string;
-  
+
   /** Image export options */
   image?: {
     /** Image format */
@@ -19,7 +19,7 @@ interface PDFOptions {
     /** Image quality (0-1) */
     quality?: number;
   };
-  
+
   /** html2canvas library options */
   html2canvas?: {
     /** Rendering scale (higher = better quality) */
@@ -31,7 +31,7 @@ interface PDFOptions {
     /** Improve text rendering */
     letterRendering?: boolean;
   };
-  
+
   /** jsPDF library options */
   jsPDF?: {
     /** Measurement unit */
@@ -52,46 +52,46 @@ interface PDFDownloadButtonProps {
    * If provided, the component will use html2pdf to convert this content
    */
   children?: ReactNode;
-  
+
   /** 
    * Function to programmatically generate the PDF (Code→PDF mode)
    * Receives a jsPDF instance and must generate the content
    */
   generateContent?: (doc: jsPDF) => void | Promise<void>;
-  
+
   /** 
    * PDF filename (without .pdf extension)
    * @default 'document'
    */
   filename?: string;
-  
+
   /** 
    * Text displayed on the download button
    * @default 'Download PDF'
    */
   buttonText?: string;
-  
+
   /** 
    * Custom CSS styles for the button
    */
   buttonStyle?: CSSProperties;
-  
+
   /** 
    * CSS class names for the button
    */
   className?: string;
-  
+
   /** 
    * Configuration options for html2pdf
    * Only used in HTML→PDF mode
    */
   pdfOptions?: PDFOptions;
-  
+
   /** 
    * Callback function called after successful PDF generation
    */
   onSuccess?: () => void;
-  
+
   /** 
    * Callback function called when an error occurs during generation
    */
@@ -121,10 +121,10 @@ interface PDFDownloadButtonProps {
 const PDFDownloadButton: React.FC<PDFDownloadButtonProps> = ({
   // HTML → PDF mode props
   children,
-  
+
   // Code → PDF mode props
   generateContent,
-  
+
   // Common props
   filename = 'document',
   buttonText = 'Download PDF',
@@ -152,17 +152,17 @@ const PDFDownloadButton: React.FC<PDFDownloadButtonProps> = ({
     const defaultOptions: PDFOptions = {
       margin: 10,                          // 10mm margins on all sides
       filename: `${filename}.pdf`,          // Output filename
-      image: { 
+      image: {
         type: 'jpeg',                      // JPEG format for images
         quality: 0.98                      // High quality (98%)
       },
-      html2canvas: { 
+      html2canvas: {
         scale: 2,                          // 2x scale for better resolution
         useCORS: true,                     // Allow cross-origin images
         logging: false,                    // Disable console logs
         letterRendering: true              // Improve text rendering
       },
-      jsPDF: { 
+      jsPDF: {
         unit: 'mm',                        // Millimeters as unit
         format: 'a4',                      // A4 paper size
         orientation: 'portrait'            // Portrait orientation
@@ -190,14 +190,14 @@ const PDFDownloadButton: React.FC<PDFDownloadButtonProps> = ({
 
     // Create new jsPDF instance
     const doc = new jsPDF();
-    
+
     // Call user's generation function
     await generateContent(doc);
-    
+
     // Download the generated PDF
     doc.save(`${filename}.pdf`);
   };
-
+  
   /**
    * Main click handler that determines which mode to use
    * Chooses between HTML→PDF or Code→PDF based on provided props
@@ -216,16 +216,16 @@ const PDFDownloadButton: React.FC<PDFDownloadButtonProps> = ({
         // Neither mode configured - throw error
         throw new Error('Either children or generateContent must be provided');
       }
-      
+
       // Call success callback if provided
       if (onSuccess) onSuccess();
     } catch (error) {
       // Log error to console
       console.error('PDF generation error:', error);
-      
+
       // Ensure error is Error instance
       const err = error instanceof Error ? error : new Error('Unknown error');
-      
+
       // Call error callback if provided, otherwise show alert
       if (onError) {
         onError(err);
