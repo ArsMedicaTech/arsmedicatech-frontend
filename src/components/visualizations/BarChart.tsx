@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function BarChart({
   data,
@@ -100,7 +100,7 @@ export default function BarChart({
       .attr('y', 9)
       .attr('dy', '.35em')
       .style('text-anchor', 'end')
-      .text(d => d); // Non traduit
+      .text(d => d);
   }, [data, lowerBound, upperBound]);
 
   return <div ref={ref}></div>;

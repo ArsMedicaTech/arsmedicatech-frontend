@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { EncounterForm } from '../components/EncounterForm';
 import { encounterAPI, patientAPI } from '../services/api';
 import { EncounterType, PatientType } from '../types';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export function EncounterFormPage() {
   const { t } = useTranslation();
@@ -52,7 +52,7 @@ export function EncounterFormPage() {
       } else {
         const targetPatientId = patientId || patient?.demographic_no;
         if (!targetPatientId) {
-          throw new Error(t("patient_id_required"));
+          throw new Error(t('patient_id_required'));
         }
         await encounterAPI.create(targetPatientId, encounterData);
       }
@@ -83,7 +83,7 @@ export function EncounterFormPage() {
         <div className="flex items-center justify-center min-h-64">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-            <p className="text-gray-600">{t("loading_encounter_form")}</p>
+            <p className="text-gray-600">{t('loading_encounter_form')}</p>
           </div>
         </div>
       </div>
@@ -97,11 +97,11 @@ export function EncounterFormPage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              {encounter ? t("edit_encounter") : t("new_encounter")}
+              {encounter ? t('edit_encounter') : t('new_encounter')}
             </h1>
             {patient && (
               <p className="text-gray-600 mt-2">
-                {t("Patient")}: {patient.first_name} {patient.last_name} (ID: {patient.demographic_no})
+                {t('Patient')}: {patient.first_name} {patient.last_name} (ID: {patient.demographic_no})
               </p>
             )}
           </div>
@@ -109,7 +109,7 @@ export function EncounterFormPage() {
             onClick={handleCancel}
             className="px-4 py-2 text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
-            ← {t("Back")}
+            ← {t('Back')}
           </button>
         </div>
       </div>

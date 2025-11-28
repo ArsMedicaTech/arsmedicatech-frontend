@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { EntityDetailsModal } from '../components/EntityDetailsModal';
 import { encounterAPI } from '../services/api';
 import { EncounterType, PatientType, SOAPNotesType } from '../types';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export function EncounterDetail() {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ export function EncounterDetail() {
 
   const extractEntities = async () => {
     if (!encounter?.note_text) {
-      alert(t("no_notes_available_to_extract"));
+      alert(t('no_notes_available_to_extract'));
       return;
     }
 
@@ -87,7 +87,7 @@ export function EncounterDetail() {
       }
     } catch (error) {
       console.error('Error extracting entities:', error);
-      alert(t("extract_entities_failed"));
+      alert(t('extract_entities_failed'));
     } finally {
       setIsExtractingEntities(false);
     }
@@ -100,7 +100,7 @@ export function EncounterDetail() {
 
   const renderSOAPNotes = (soapNotes: SOAPNotesType) => {
     const formatText = (text: string) => {
-      if (!text) return t("no_notes_available");
+      if (!text) return t('no_notes_available');
       return text.replace(/\\n/g, '\n');
     };
 
@@ -147,7 +147,7 @@ export function EncounterDetail() {
     return (
       <div className="space-y-4">
         <div>
-          <h4 className="font-semibold text-blue-600">{t("Subjective")}</h4>
+          <h4 className="font-semibold text-blue-600">{t('Subjective')}</h4>
           <div
             className="text-gray-700 bg-gray-50 p-3 rounded whitespace-pre-wrap text-left"
             dangerouslySetInnerHTML={{
@@ -159,7 +159,7 @@ export function EncounterDetail() {
           />
         </div>
         <div>
-          <h4 className="font-semibold text-green-600">{t("Objective")}</h4>
+          <h4 className="font-semibold text-green-600">{t('Objective')}</h4>
           <div
             className="text-gray-700 bg-gray-50 p-3 rounded whitespace-pre-wrap text-left"
             dangerouslySetInnerHTML={{
@@ -171,7 +171,7 @@ export function EncounterDetail() {
           />
         </div>
         <div>
-          <h4 className="font-semibold text-yellow-600">{t("Assessment")}</h4>
+          <h4 className="font-semibold text-yellow-600">{t('Assessment')}</h4>
           <div
             className="text-gray-700 bg-gray-50 p-3 rounded whitespace-pre-wrap text-left"
             dangerouslySetInnerHTML={{
@@ -183,7 +183,7 @@ export function EncounterDetail() {
           />
         </div>
         <div>
-          <h4 className="font-semibold text-red-600">{t("Plan")}</h4>
+          <h4 className="font-semibold text-red-600">{t('Plan')}</h4>
           <div
             className="text-gray-700 bg-gray-50 p-3 rounded whitespace-pre-wrap text-left"
             dangerouslySetInnerHTML={{
@@ -209,9 +209,9 @@ export function EncounterDetail() {
     }
     return (
       <div>
-        <h4 className="font-semibold text-gray-600 mb-2">{t("Notes")}</h4>
+        <h4 className="font-semibold text-gray-600 mb-2">{t('Notes')}</h4>
         <p className="text-gray-700 bg-gray-50 p-3 rounded whitespace-pre-wrap">
-          {noteText || t("no_notes_available")}
+          {noteText || t('no_notes_available')}
         </p>
       </div>
     );
@@ -220,7 +220,7 @@ export function EncounterDetail() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-center">{t("loading_encounter_details")}</p>
+        <p className="text-center">{t('loading_encounter_details')}</p>
       </div>
     );
   }
@@ -228,12 +228,12 @@ export function EncounterDetail() {
   if (!encounter) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <p className="text-center text-red-600">{t("encounter_not_found")}</p>
+        <p className="text-center text-red-600">{t('encounter_not_found')}</p>
         <button
           onClick={() => navigate('/patients')}
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
         >
-          {t("back_to_patients")}
+          {t('back_to_patients')}
         </button>
       </div>
     );
@@ -248,12 +248,12 @@ export function EncounterDetail() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">
-              {t("Encounter Details")}
+              {t('Encounter Details')}
             </h1>
-            <p className="text-gray-600">{t("Note ID")}: {encounter.note_id}</p>
+            <p className="text-gray-600">{t('Note ID')}: {encounter.note_id}</p>
             {patient && (
               <p className="text-gray-600">
-                {t("Patient")}: {patient.first_name} {patient.last_name} (ID: {patient.demographic_no})
+                {t('Patient')}: {patient.first_name} {patient.last_name} (ID: {patient.demographic_no})
               </p>
             )}
           </div>
@@ -263,14 +263,14 @@ export function EncounterDetail() {
                 onClick={() => navigate(`/patients/${patient.demographic_no}`)}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
               >
-                {t("View Patient")}
+                {t('View Patient')}
               </button>
             )}
             <button
               onClick={() => navigate('/patients')}
               className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
             >
-              {t("Back to Patients")}
+              {t('Back to Patients')}
             </button>
           </div>
         </div>
@@ -279,27 +279,27 @@ export function EncounterDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Encounter Information */}
         <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">{t("Encounter Information")}</h2>
+          <h2 className="text-xl font-semibold mb-4">{t('Encounter Information')}</h2>
           <div className="space-y-3">
             <p>
-              <strong>{t("Note ID")}:</strong> {encounter.note_id || '-'}
+              <strong>{t('Note ID')}:</strong> {encounter.note_id || '-'}
             </p>
             <p>
-              <strong>{t("Visit Date")}:</strong>{' '}
+              <strong>{t('Visit Date')}:</strong>{' '}
               {encounter.date_created
                 ? new Date(encounter.date_created).toLocaleDateString()
                 : '-'}
             </p>
             <p>
-              <strong>{t("Provider")}:</strong> {encounter.provider_id || '-'}
+              <strong>{t('Provider')}:</strong> {encounter.provider_id || '-'}
             </p>
             <p>
-              <strong>{t("Status")}:</strong> {encounter.status || '-'}
+              <strong>{t('Status')}:</strong> {encounter.status || '-'}
             </p>
             {encounter.diagnostic_codes &&
               encounter.diagnostic_codes.length > 0 && (
                 <div>
-                  <strong>{t("Diagnostic Codes")}:</strong>
+                  <strong>{t('Diagnostic Codes')}:</strong>
                   <div className="mt-1">
                     {encounter.diagnostic_codes.map((code, index) => (
                       <span
@@ -318,31 +318,31 @@ export function EncounterDetail() {
         {/* Patient Information */}
         {patient && (
           <div className="bg-white shadow rounded-lg p-6">
-            <h2 className="text-xl font-semibold mb-4">{t("Patient Information")}</h2>
+            <h2 className="text-xl font-semibold mb-4">{t('Patient Information')}</h2>
             <div className="space-y-3">
               <p>
-                <strong>{t("Name")}:</strong> {patient.first_name} {patient.last_name}
+                <strong>{t('Name')}:</strong> {patient.first_name} {patient.last_name}
               </p>
               <p>
-                <strong>{t("ID")}:</strong> {patient.demographic_no}
+                <strong>{t('ID')}:</strong> {patient.demographic_no}
               </p>
               <p>
-                <strong>{t("Date of Birth")}:</strong>{' '}
+                <strong>{t('Date of Birth')}:</strong>{' '}
                 {patient.date_of_birth
                   ? new Date(patient.date_of_birth).toLocaleDateString()
                   : '-'}
               </p>
               <p>
-                <strong>{t("Sex")}:</strong> {patient.sex || '-'}
+                <strong>{t('Sex')}:</strong> {patient.sex || '-'}
               </p>
               <p>
-                <strong>{t("Phone")}:</strong> {patient.phone || '-'}
+                <strong>{t('Phone')}:</strong> {patient.phone || '-'}
               </p>
               <p>
-                <strong>{t("Email")}:</strong> {patient.email || '-'}
+                <strong>{t('Email')}:</strong> {patient.email || '-'}
               </p>
               <p>
-                <strong>{t("Address")}:</strong> {patient.location ? patient.location.join(', ') : '-'}
+                <strong>{t('Address')}:</strong> {patient.location ? patient.location.join(', ') : '-'}
               </p>
             </div>
           </div>
@@ -351,7 +351,7 @@ export function EncounterDetail() {
 
       {/* Notes Section */}
       <div className="mt-8 bg-white shadow rounded-lg p-6">
-        <h2 className="text-xl font-semibold mb-4">{t("Clinical Notes")}</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('Clinical Notes')}</h2>
         {renderNoteText(encounter.note_text, encounter.note_type)}
       </div>
 
@@ -366,14 +366,14 @@ export function EncounterDetail() {
               : 'bg-purple-500 text-white hover:bg-purple-600'
           }`}
         >
-          {isExtractingEntities ? t("Extracting...") : t("Extract Entities")}
+          {isExtractingEntities ? t('Extracting...') : t('Extract Entities')}
         </button>
 
         <button
           onClick={() => navigate(`/encounters/${encounter.note_id}/edit`)}
           className="px-6 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
         >
-          {t("Edit Encounter")}
+          {t('Edit Encounter')}
         </button>
 
         {patient && (
@@ -381,7 +381,7 @@ export function EncounterDetail() {
             onClick={() => navigate(`/patients/${patient.demographic_no}`)}
             className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            {t("View All Encounters")}
+            {t('View All Encounters')}
           </button>
         )}
       </div>

@@ -17,7 +17,7 @@ export interface User {
   role: string;
   max_organizations?: number;
   user_organizations?: number;
-  appointments?: number; // Optional, if needed
+  appointments?: number;
 }
 
 interface UserContextType {
@@ -34,7 +34,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Debug logging for state changes
   useEffect(() => {
     logger.debug('UserContext - user state changed:', user);
     logger.debug('UserContext - isAuthenticated state changed:', !!user);

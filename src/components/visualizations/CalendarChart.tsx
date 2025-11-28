@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function CalendarChart({
   data,
@@ -143,7 +143,7 @@ export default function CalendarChart({
       .attr('y', legendHeight + 18)
       .attr('text-anchor', 'middle')
       .attr('font-size', 12)
-      .text(metric); // NON traduit
+      .text(metric);
 
   }, [data]);
 

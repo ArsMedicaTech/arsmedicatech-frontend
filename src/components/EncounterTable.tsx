@@ -2,10 +2,10 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import React from "react";
-import { EncounterType } from "../types";
-import { useTranslation } from "react-i18next";
+} from '@tanstack/react-table';
+import React from 'react';
+import { EncounterType } from '../types';
+import { useTranslation } from 'react-i18next';
 
 export function EncounterTable({
   encounters,
@@ -26,38 +26,38 @@ export function EncounterTable({
 
   const columns = React.useMemo(
     () => [
-      { accessorKey: "note_id", header: t("noteId") },
+      { accessorKey: 'note_id', header: t('noteId') },
       {
-        accessorKey: "date_created",
-        header: t("visitDate"),
+        accessorKey: 'date_created',
+        header: t('visitDate'),
         cell: (ctx: any) => {
           const value = ctx.getValue();
-          return value ? new Date(value).toLocaleDateString() : "-";
+          return value ? new Date(value).toLocaleDateString() : '-';
         },
       },
-      { accessorKey: "provider_id", header: t("provider") },
+      { accessorKey: 'provider_id', header: t('provider') },
       {
-        accessorKey: "note_text",
-        header: t("notes"),
+        accessorKey: 'note_text',
+        header: t('notes'),
         cell: (ctx: any) => {
           const value = ctx.getValue();
-          return typeof value === "string" && value.length > 80
-            ? value.substring(0, 80) + "..."
-            : value || "-";
+          return typeof value === 'string' && value.length > 80
+            ? value.substring(0, 80) + '...'
+            : value || '-';
         },
       },
       {
-        accessorKey: "diagnostic_codes",
-        header: t("diagnosticCodes"),
+        accessorKey: 'diagnostic_codes',
+        header: t('diagnosticCodes'),
         cell: (ctx: any) => {
           const value = ctx.getValue();
-          return value && Array.isArray(value) ? value.join(", ") : "-";
+          return value && Array.isArray(value) ? value.join(', ') : '-';
         },
       },
-      { accessorKey: "status", header: t("status") },
+      { accessorKey: 'status', header: t('status') },
       {
-        id: "actions",
-        header: t("actions"),
+        id: 'actions',
+        header: t('actions'),
         cell: (ctx: any) => {
           const encounter = ctx.row.original;
           return (
@@ -70,7 +70,7 @@ export function EncounterTable({
                   }}
                   className="px-3 py-1 bg-blue-500 text-white rounded"
                 >
-                  {t("view")}
+                  {t('view')}
                 </button>
               )}
               {onEdit && (
@@ -81,7 +81,7 @@ export function EncounterTable({
                   }}
                   className="px-3 py-1 bg-yellow-500 text-white rounded"
                 >
-                  {t("edit")}
+                  {t('edit')}
                 </button>
               )}
               {onDelete && (
@@ -92,7 +92,7 @@ export function EncounterTable({
                   }}
                   className="px-3 py-1 bg-red-500 text-white rounded"
                 >
-                  {t("delete")}
+                  {t('delete')}
                 </button>
               )}
             </div>
@@ -109,9 +109,9 @@ export function EncounterTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <p className="p-4">{t("loadingEncounters")}</p>;
+  if (isLoading) return <p className="p-4">{t('loadingEncounters')}</p>;
   if (!encounters || encounters.length === 0)
-    return <p className="p-4 text-gray-500">{t("noEncounters")}</p>;
+    return <p className="p-4 text-gray-500">{t('noEncounters')}</p>;
 
   return (
     <div className="overflow-x-auto">
@@ -133,7 +133,7 @@ export function EncounterTable({
             <tr
               key={row.id}
               onClick={() => onRowClick?.(row.original)}
-              className={`${onRowClick ? "cursor-pointer hover:bg-gray-50" : ""}`}
+              className={`${onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
             >
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id} className="px-6 py-4 text-sm">

@@ -107,7 +107,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
       <input
         ref={ref}
-        type="checkbox"
+        type='checkbox'
         className={cn(
           'peer h-5 w-5 shrink-0 appearance-none rounded-md border border-input bg-background flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 checked:bg-primary checked:border-primary',
           className
@@ -138,7 +138,7 @@ export const IconButton = React.forwardRef<
 IconButton.displayName = 'IconButton';
 
 export const RequiredAsterisk = () => (
-  <span className="text-red-500 ml-0.5" title="Required">
+  <span className="text-red-500 ml-0.5" title='Required'>
     *
   </span>
 );
@@ -154,7 +154,3 @@ export const Label = React.forwardRef<
   />
 ));
 Label.displayName = 'Label';
-
-
-
-

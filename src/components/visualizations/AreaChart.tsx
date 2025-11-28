@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function AreaChart({
   data,
@@ -61,8 +61,8 @@ export default function AreaChart({
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     svg.append('g')
-       .attr('transform', `translate(0,${height})`)
-       .call(d3.axisBottom(x).ticks(5));
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(x).ticks(5));
 
     svg.append('g').call(d3.axisLeft(y));
 
@@ -110,7 +110,7 @@ export default function AreaChart({
       .attr('y', 9)
       .attr('dy', '.35em')
       .style('text-anchor', 'end')
-      .text(d => d); // PAS traduit (metricName)
+      .text(d => d);
   }, [data, lowerBound, upperBound]);
 
   return <div ref={ref}></div>;

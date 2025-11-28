@@ -22,7 +22,7 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
         htmlFor="role"
         style={{ fontWeight: 500, marginBottom: 4, display: 'block' }}
       >
-        {t("You are a...")}
+        {t('You are a...')}
       </label>
 
       <select
@@ -39,9 +39,9 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
           fontSize: 16,
         }}
       >
-        <option value="patient">{t("Individual")}</option>
-        <option value="provider">{t("Healthcare provider")}</option>
-        <option value="administrator">{t("Administrator for a clinic")}</option>
+        <option value="patient">{t('Individual')}</option>
+        <option value="provider">{t('Healthcare provider')}</option>
+        <option value="administrator">{t('Administrator for a clinic')}</option>
       </select>
 
       <div
@@ -54,9 +54,9 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
           textAlign: 'left',
         }}
       >
-        {value === "patient" && t("Looking to manage or better understand their own health.")}
-        {value === "provider" && t("Not affiliated with an existing clinic in our system.")}
-        {value === "administrator" && t("You want to manage a clinic.")}
+        {value === "patient" && t('Looking to manage or better understand their own health.')}
+        {value === "provider" && t('Not affiliated with an existing clinic in our system.')}
+        {value === "administrator" && t('You want to manage a clinic.')}
       </div>
 
       <div style={{ marginTop: 8 }}>
@@ -71,7 +71,7 @@ const RoleSelect: React.FC<RoleSelectProps> = ({
           target="_blank"
           rel="noopener noreferrer"
         >
-          {t("If you are unsure, read more here.")}
+          {t('If you are unsure, read more here.')}
         </a>
       </div>
     </div>

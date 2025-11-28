@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import apiService from '../services/api';
 import { createErrorModalState } from './ErrorModal';
 import './NewConversationModal.css';
@@ -83,8 +83,8 @@ const NewConversationModal = ({
       if (!hasAPIKey) {
         onShowError(
           createErrorModalState(
-            t("openaiKeyRequiredTitle"),
-            t("openaiKeyRequiredMessage"),
+            t('openaiKeyRequiredTitle'),
+            t('openaiKeyRequiredMessage'),
             'settings'
           )
         );
@@ -119,8 +119,8 @@ const NewConversationModal = ({
         <div className="modal-content">
           <div className="modal-icon">💬</div>
 
-          <h2>{t("startNewConversation")}</h2>
-          <p className="modal-description">{t("chooseConversationMethod")}</p>
+          <h2>{t('startNewConversation')}</h2>
+          <p className="modal-description">{t('chooseConversationMethod')}</p>
 
           <div className="conversation-options">
             <div
@@ -129,8 +129,8 @@ const NewConversationModal = ({
             >
               <div className="option-icon">🤖</div>
               <div className="option-content">
-                <h3>{t("aiAssistant")}</h3>
-                <p>{t("aiAssistantDesc")}</p>
+                <h3>{t('aiAssistant')}</h3>
+                <p>{t('aiAssistantDesc')}</p>
               </div>
             </div>
 
@@ -140,8 +140,8 @@ const NewConversationModal = ({
             >
               <div className="option-icon">👥</div>
               <div className="option-content">
-                <h3>{t("findUser")}</h3>
-                <p>{t("findUserDesc")}</p>
+                <h3>{t('findUser')}</h3>
+                <p>{t('findUserDesc')}</p>
               </div>
             </div>
           </div>
@@ -150,13 +150,13 @@ const NewConversationModal = ({
             <div className="user-search-section">
               <div className="search-container">
                 <input
-                  type="text"
-                  placeholder={t("searchUsersPlaceholder")}
+                  type='text'
+                  placeholder={t('searchUsersPlaceholder')}
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
                   className="user-search-input"
                 />
-                {isSearching && <div className="search-loading">{t("searching")}</div>}
+                {isSearching && <div className="search-loading">{t('searching')}</div>}
               </div>
 
               {searchResults.length > 0 && (
@@ -175,7 +175,7 @@ const NewConversationModal = ({
 
               {searchQuery.length > 2 && searchResults.length === 0 && !isSearching && (
                 <div className="no-results">
-                  {t("noUsersFound", { query: searchQuery })}
+                  {t('noUsersFound', { query: searchQuery })}
                 </div>
               )}
             </div>
@@ -184,7 +184,7 @@ const NewConversationModal = ({
           {selectedOption === 'chatbot' && (
             <div className="modal-actions">
               <button className="start-chatbot-button" onClick={handleStartConversation}>
-                {t("startAIAssistantChat")}
+                {t('startAIAssistantChat')}
               </button>
             </div>
           )}

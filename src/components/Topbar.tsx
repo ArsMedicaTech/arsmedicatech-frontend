@@ -1,14 +1,14 @@
-import React, { useState, ChangeEvent } from "react";
-import { ArrowRightOnRectangleIcon } from "@heroicons/react/24/outline";
-import { Notification } from "../hooks/useNotifications";
-import { useSignupPopup } from "../hooks/useSignupPopup";
-import authService from "../services/auth";
-import NotificationIndicator from "./NotificationIndicator";
-import SignupPopup from "./SignupPopup";
-import "./Topbar.css";
-import { useUser } from "./UserContext";
+import React, { useState, ChangeEvent } from 'react';
+import { ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Notification } from '../hooks/useNotifications';
+import { useSignupPopup } from '../hooks/useSignupPopup';
+import authService from '../services/auth';
+import NotificationIndicator from './NotificationIndicator';
+import SignupPopup from './SignupPopup';
+import './Topbar.css';
+import { useUser } from './UserContext';
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   unreadCount: number;
@@ -24,8 +24,8 @@ export default function Topbar(props: Props) {
   const { isPopupOpen, showSignupPopup, hideSignupPopup } = useSignupPopup();
 
   const { i18n, t } = useTranslation();
-const [lang, setLang] = useState<string>(i18n.language || "en");
-    console.log("Langue actuelle :", i18n.language);
+  const [lang, setLang] = useState<string>(i18n.language || 'en');
+  console.log('Langue actuelle :', i18n.language);
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newLang = event.target.value;
@@ -37,19 +37,18 @@ const [lang, setLang] = useState<string>(i18n.language || "en");
     try {
       await authService.logout();
       setUser(null);
-      window.location.href = "/";
+      window.location.href = '/';
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
 
-  console.log("Langue actuelle :", i18n.language); // 🧠 Debug utile
+  console.log('Langue actuelle :', i18n.language);
 
   return (
     <>
       <header className="topbar">
         <div className="topbar-actions">
-          {/* 🔔 Indicateur de notifications */}
           {isAuthenticated && (
             <NotificationIndicator
               unreadCount={props.unreadCount}
@@ -61,7 +60,6 @@ const [lang, setLang] = useState<string>(i18n.language || "en");
             />
           )}
 
-          {/* 🌍 Sélecteur de langue */}
           <div className="language-container" style={{ marginRight: "12px" }}>
             <select
               value={lang}
@@ -81,25 +79,24 @@ const [lang, setLang] = useState<string>(i18n.language || "en");
             </select>
           </div>
 
-          {/* 👤 Authentification utilisateur */}
           <div className="auth-status">
             {isAuthenticated && user ? (
               <div className="profile-container">
                 <span className="user-name">
-                  {`${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+                  {`${user.first_name || ''} ${user.last_name || ''}`.trim() ||
                     user.username}
                 </span>
                 <span className="user-role">{user.role}</span>
                 <button onClick={handleLogout} className="logout-button">
                   <ArrowRightOnRectangleIcon className="logout-icon" />
-                  {t("logout")}
+                  {t('logout')}
                 </button>
               </div>
             ) : (
               <div className="guest-auth">
-                <span className="guest-label">{t("guestUser")}</span>
+                <span className="guest-label">{t('guestUser')}</span>
                 <button onClick={showSignupPopup} className="auth-button">
-                  {t("login")}
+                  {t('login')}
                 </button>
               </div>
             )}

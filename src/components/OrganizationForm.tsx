@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { organizationAPI } from '../services/api';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 interface OrganizationFormProps {
   onSuccess?: (org: any) => void;
@@ -60,7 +60,7 @@ const OrganizationForm: React.FC<OrganizationFormProps> = ({
           created_by: createdBy,
         };
         if (onSuccess) onSuccess(updated);
-        setSuccess(t("organizationUpdated"));
+        setSuccess(t('organizationUpdated'));
         setLoading(false);
         return;
       }
@@ -74,17 +74,17 @@ const OrganizationForm: React.FC<OrganizationFormProps> = ({
       });
 
       if (res.ok) {
-        setSuccess(t("organizationCreated"));
+        setSuccess(t('organizationCreated'));
         setName('');
         setOrgType(ORG_TYPES[0].value);
         setDescription('');
         setCountry('');
         if (onSuccess) onSuccess(res.organization);
       } else {
-        setError(res.error || t("organizationCreateFailed"));
+        setError(res.error || t('organizationCreateFailed'));
       }
     } catch (err: any) {
-      setError(err.message || t("networkError"));
+      setError(err.message || t('networkError'));
     } finally {
       setLoading(false);
     }
@@ -94,26 +94,26 @@ const OrganizationForm: React.FC<OrganizationFormProps> = ({
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-            {t("organizationName")}
+          <label htmlFor='name' className="block text-sm font-medium text-gray-700">
+            {t('organizationName')}
           </label>
           <input
-            id="name"
-            type="text"
+            id='name'
+            type='text'
             value={name}
             onChange={e => setName(e.target.value)}
             required
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-            placeholder={t("organizationNamePlaceholder")}
+            placeholder={t('organizationNamePlaceholder')}
           />
         </div>
 
         <div>
-          <label htmlFor="org_type" className="block text-sm font-medium text-gray-700">
-            {t("organizationType")}
+          <label htmlFor='org_type' className="block text-sm font-medium text-gray-700">
+            {t('organizationType')}
           </label>
           <select
-            id="org_type"
+            id='org_type'
             value={orgType}
             onChange={e => setOrgType(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"
@@ -127,44 +127,43 @@ const OrganizationForm: React.FC<OrganizationFormProps> = ({
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            {t("description")}
+          <label htmlFor='description' className="block text-sm font-medium text-gray-700">
+            {t('description')}
           </label>
           <textarea
-            id="description"
+            id='description'
             value={description}
             onChange={e => setDescription(e.target.value)}
             rows={4}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"
-            placeholder={t("organizationDescriptionPlaceholder")}
+            placeholder={t('organizationDescriptionPlaceholder')}
           />
         </div>
 
         <div>
-          <label htmlFor="country" className="block text-sm font-medium text-gray-700">
-            {t("country")}
+          <label htmlFor='country' className="block text-sm font-medium text-gray-700">
+            {t('country')}
           </label>
           <input
-            id="country"
-            type="text"
+            id='country'
+            type='text'
             value={country}
             onChange={e => setCountry(e.target.value)}
             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm sm:text-sm"
-            placeholder={t("countryPlaceholder")}
+            placeholder={t('countryPlaceholder')}
           />
         </div>
       </div>
 
       <div className="flex items-center justify-end space-x-3">
         <button
-          type="submit"
+          type='submit'
           disabled={loading}
           className="px-4 py-2 rounded-md bg-blue-600 text-white disabled:opacity-50"
         >
-          {loading 
-            ? (initialValues ? t("saving") : t("creating"))
-            : (initialValues ? t("saveChanges") : t("createOrganization"))
-          }
+          {loading
+            ? (initialValues ? t('saving') : t('creating'))
+            : (initialValues ? t('saveChanges') : t('createOrganization'))}
         </button>
       </div>
 

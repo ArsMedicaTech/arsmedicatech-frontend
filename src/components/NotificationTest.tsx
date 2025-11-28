@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { API_URL } from '../env_vars';
 
 const NotificationTest: React.FC = () => {
@@ -8,25 +8,25 @@ const NotificationTest: React.FC = () => {
 
   const testSSE = async () => {
     try {
-      setStatus(t("testingSSE"));
+      setStatus(t('testingSSE'));
       const response = await fetch(`${API_URL}/api/sse`, {
         method: 'GET',
         credentials: 'include',
       });
 
       if (response.ok) {
-        setStatus(t("sseTestSuccess"));
+        setStatus(t('sseTestSuccess'));
       } else {
-        setStatus(t("sseTestFailed"));
+        setStatus(t('sseTestFailed'));
       }
-    } catch (error) {
-      setStatus(`SSE error: ${error}`);
+    } catch (error: any) {
+      setStatus(`SSE error: ${error?.message ?? String(error)}`);
     }
   };
 
   const testAppointmentReminder = async () => {
     try {
-      setStatus(t("appointmentSending"));
+      setStatus(t('appointmentSending'));
       const response = await fetch(`${API_URL}/api/test/appointment-reminder`, {
         method: 'POST',
         credentials: 'include',
@@ -39,19 +39,19 @@ const NotificationTest: React.FC = () => {
       });
 
       if (response.ok) {
-        setStatus(t("appointmentSent"));
+        setStatus(t('appointmentSent'));
       } else {
-        setStatus(t("appointmentFailed"));
+        setStatus(t('appointmentFailed'));
       }
-    } catch (error) {
-      setStatus(`Error: ${error}`);
+    } catch (error: any) {
+      setStatus(`Error: ${error?.message ?? String(error)}`);
     }
   };
 
   return (
     <div style={{ padding: '20px', border: '1px solid #ccc', margin: '10px' }}>
-      <h3>{t("sseNotificationTest")}</h3>
-      <p>{t("useButtonsToTestSSE")}</p>
+      <h3>{t('sseNotificationTest')}</h3>
+      <p>{t('useButtonsToTestSSE')}</p>
 
       <div style={{ marginBottom: '10px' }}>
         <button
@@ -66,7 +66,7 @@ const NotificationTest: React.FC = () => {
             cursor: 'pointer',
           }}
         >
-          {t("testSSEMessage")}
+          {t('testSSEMessage')}
         </button>
 
         <button
@@ -80,7 +80,7 @@ const NotificationTest: React.FC = () => {
             cursor: 'pointer',
           }}
         >
-          {t("testAppointmentReminder")}
+          {t('testAppointmentReminder')}
         </button>
       </div>
 
@@ -93,16 +93,16 @@ const NotificationTest: React.FC = () => {
             borderRadius: '4px',
           }}
         >
-          <strong>{t("status")}:</strong> {status}
+          <strong>{t('status')}:</strong> {status}
         </div>
       )}
 
       <div style={{ marginTop: '15px', fontSize: '14px', color: '#666' }}>
-        <p><strong>{t("instructions")}</strong></p>
+        <p><strong>{t('instructions')}</strong></p>
         <ul>
-          <li>{t("makeSureLoggedIn")}</li>
-          <li>{t("openConsoleToSeeEvents")}</li>
-          <li>{t("checkMessagesRealTime")}</li>
+          <li>{t('makeSureLoggedIn')}</li>
+          <li>{t('openConsoleToSeeEvents')}</li>
+          <li>{t('checkMessagesRealTime')}</li>
         </ul>
       </div>
     </div>

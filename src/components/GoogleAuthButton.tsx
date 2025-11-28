@@ -17,7 +17,7 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
 
   return (
     <button
-      type="button"
+      type='button'
       onClick={onClick}
       className={className || 'popup-google-button'}
       style={{
@@ -31,8 +31,8 @@ const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({
         gap: 10,
       }}
     >
-      <img src={GOOGLE_LOGO} alt="Google" style={{ width: 22, height: 22 }} />
-      {children || t("continueWithGoogle")}
+      <img src={GOOGLE_LOGO} alt='Google' style={{ width: 22, height: 22 }} />
+      {children || t('continueWithGoogle')}
     </button>
   );
 };

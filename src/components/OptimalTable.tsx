@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export interface TableColumn {
   key: string;
@@ -98,7 +98,7 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
               ))}
               {showDeleteRow && (
                 <th className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                  {t("actions")}
+                  {t('actions')}
                 </th>
               )}
             </tr>
@@ -113,7 +113,7 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
                     {column.type === 'boolean' ? (
                       <div className="px-3 py-2">
                         <input
-                          type="checkbox"
+                          type='checkbox'
                           checked={row[column.key] || false}
                           onChange={e => handleCellChange(row.id, column.key, e.target.checked)}
                           className="w-4 h-4"
@@ -122,7 +122,7 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
                     ) : column.type === 'number' ? (
                       <div className="px-3 py-2">
                         <input
-                          type="number"
+                          type='number'
                           value={row[column.key] || ''}
                           onChange={e => handleCellChange(row.id, column.key, parseFloat(e.target.value) || 0)}
                           className="w-full px-2 py-1 border rounded"
@@ -131,7 +131,7 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
                     ) : (
                       <div className="px-3 py-2">
                         <input
-                          type="text"
+                          type='text'
                           value={row[column.key] || ''}
                           onChange={e => handleCellChange(row.id, column.key, e.target.value)}
                           className="w-full px-2 py-1 border rounded"
@@ -146,7 +146,7 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
                     <button
                       onClick={() => handleDeleteRow(row.id)}
                       className="text-red-600 hover:text-red-900"
-                      title={t("deleteRow")}
+                      title={t('deleteRow')}
                     >
                       ✕
                     </button>
@@ -161,14 +161,14 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
       {showAddRow && (!maxRows || tableData.length < maxRows) && (
         <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
           <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleAddRow}>
-            {t("addRow")}
+            {t('addRow')}
           </button>
         </div>
       )}
 
       {maxRows && tableData.length >= maxRows && (
         <div className="px-6 py-3 bg-yellow-50 border-t border-yellow-200">
-          <p className="text-sm text-yellow-700">{t("maxRowsReached", { count: maxRows })}</p>
+          <p className="text-sm text-yellow-700">{t('maxRowsReached', { count: maxRows })}</p>
         </div>
       )}
     </div>

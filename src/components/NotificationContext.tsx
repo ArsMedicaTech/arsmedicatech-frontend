@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext } from 'react';
+import React, { createContext, ReactNode, useContext, useMemo } from 'react';
 import useNotifications, { Notification } from '../hooks/useNotifications';
 
 interface NotificationContextType {
@@ -21,8 +21,12 @@ interface NotificationProviderProps {
 
 export const NotificationProvider: React.FC<NotificationProviderProps> = ({ children }) => {
   const notificationState = useNotifications();
+
+  // Memoize the provider value to prevent unnecessary re-renders in children
+  const value = useMemo(() => notificationState, [notificationState]);
+
   return (
-    <NotificationContext.Provider value={notificationState}>
+    <NotificationContext.Provider value={value}>
       {children}
     </NotificationContext.Provider>
   );
@@ -35,3 +39,5 @@ export const useNotificationContext = () => {
   }
   return context;
 };
+
+export default NotificationContext;

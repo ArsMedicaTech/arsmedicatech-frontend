@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { LIVE_KIT_SERVER_URL } from '../env_vars';
 import { videoAPI } from '../services/api';
 import { useUser } from './UserContext';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 function MyCustomControls({ roomName }: { roomName: string }) {
   const { t } = useTranslation();
@@ -57,7 +57,7 @@ function MyCustomControls({ roomName }: { roomName: string }) {
           onClick={handleStart}
           style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
         >
-          {t("Start Recording")}
+          {t('Start Recording')}
         </button>
 
         <button
@@ -65,7 +65,7 @@ function MyCustomControls({ roomName }: { roomName: string }) {
           disabled={!egressId}
           style={{ padding: '0.5rem 1rem', fontSize: '1rem' }}
         >
-          {t("Stop Recording")}
+          {t('Stop Recording')}
         </button>
       </div>
     </div>
@@ -95,7 +95,7 @@ export default function VideoRoom() {
         setToken(r.token);
       } catch (error) {
         if (!controller.signal.aborted) {
-          console.error("Failed to fetch token:", error);
+          console.error('Failed to fetch token:', error);
         }
       }
     };
@@ -106,7 +106,7 @@ export default function VideoRoom() {
   }, [isAuthenticated, user, roomName]);
 
   if (!token) {
-    return <div>{t("Getting token...")}</div>;
+    return <div>{t('Getting token...')}</div>;
   }
 
   return (

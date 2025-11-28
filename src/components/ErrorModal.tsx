@@ -57,12 +57,12 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
   const getActionButtonText = () => {
     switch (suggested_action) {
       case 'login':
-        return t("login");
+        return t('login');
       case 'register':
-        return t("signUp");
+        return t('signUp');
       case 'home':
       default:
-        return t("home");
+        return t('home');
     }
   };
 
@@ -85,7 +85,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
             </button>
           )}
           <button onClick={onClose} className="error-modal-dismiss-button">
-            {t("dismiss")}
+            {t('dismiss')}
           </button>
         </div>
       </div>

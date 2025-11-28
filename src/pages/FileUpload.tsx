@@ -36,7 +36,7 @@ const FileUpload: React.FC = () => {
       const res = await fileUploadAPI.getAll();
       setUploads(res);
     } catch (err) {
-      setError(t("ErrorLoadingResults"));
+      setError(t('ErrorLoadingResults'));
     }
   }, [t]);
 
@@ -61,10 +61,10 @@ const FileUpload: React.FC = () => {
       try {
         const res = await fileUploadAPI.create(formData);
         logger.debug('File uploaded successfully:', res);
-        setSuccess(t("FileUpload"));
+        setSuccess(t('FileUpload'));
         fetchUploads();
       } catch (err: any) {
-        setError(t("failed"));
+        setError(t('failed'));
       } finally {
         setUploading(false);
       }
@@ -86,7 +86,7 @@ const FileUpload: React.FC = () => {
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 24 }}>
       <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>
-        {t("FileUpload")}
+        {t('FileUpload')}
       </h2>
 
       <div
@@ -105,14 +105,14 @@ const FileUpload: React.FC = () => {
       >
         <input {...getInputProps()} />
         {isDragActive ? (
-          <p>{t("DragDrop")}</p>
+          <p>{t('DragDrop')}</p>
         ) : (
-          <p>{t("DragDrop")}</p>
+          <p>{t('DragDrop')}</p>
         )}
 
         {uploading && (
           <p style={{ color: '#60a5fa', marginTop: 8 }}>
-            {t("Uploading")}
+            {t('Uploading')}
           </p>
         )}
       </div>
@@ -121,7 +121,7 @@ const FileUpload: React.FC = () => {
       {success && <div style={{ color: '#22c55e', marginBottom: 12 }}>{success}</div>}
 
       <h3 style={{ fontSize: 20, fontWeight: 600, margin: '24px 0 12px' }}>
-        {t("uploads")}
+        {t('uploads')}
       </h3>
 
       <div
@@ -133,23 +133,23 @@ const FileUpload: React.FC = () => {
       >
         {uploads.length === 0 ? (
           <div style={{ padding: 24, color: '#888' }}>
-            {t("NoUploads")}
+            {t('NoUploads')}
           </div>
         ) : (
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ background: '#f3f4f6' }}>
                 <th style={{ padding: 10, textAlign: 'left', fontWeight: 500 }}>
-                  {t("FileUpload")}
+                  {t('FileUpload')}
                 </th>
                 <th style={{ padding: 10, textAlign: 'left', fontWeight: 500 }}>
-                  {t("Type")}
+                  {t('Type')}
                 </th>
                 <th style={{ padding: 10, textAlign: 'left', fontWeight: 500 }}>
-                  {t("Uploaded")}
+                  {t('Uploaded')}
                 </th>
                 <th style={{ padding: 10, textAlign: 'left', fontWeight: 500 }}>
-                  {t("Status")}
+                  {t('Status')}
                 </th>
               </tr>
             </thead>

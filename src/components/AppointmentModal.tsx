@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { patientAPI } from "../services/api";
+import React, { useEffect, useState } from 'react';
+import { patientAPI } from '../services/api';
 import {
   Appointment,
   CreateAppointmentData,
   appointmentService,
-} from "../services/appointments";
-import { useTranslation } from "react-i18next";
+} from '../services/appointments';
+import { useTranslation } from 'react-i18next';
 
 interface AppointmentModalProps {
   isOpen: boolean;
@@ -36,20 +36,20 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const { t } = useTranslation();
 
   const [formData, setFormData] = useState<CreateAppointmentData>({
-    patient_id: "",
+    patient_id: '',
     appointment_date: selectedDate
-      ? selectedDate.toISOString().split("T")[0]
-      : "",
-    start_time: selectedTime || "09:00",
-    end_time: "09:30",
-    appointment_type: "consultation",
-    notes: "",
-    location: "",
+      ? selectedDate.toISOString().split('T')[0]
+      : '',
+    start_time: selectedTime || '09:00',
+    end_time: '09:30',
+    appointment_type: 'consultation',
+    notes: '',
+    location: '',
   });
 
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [availableSlots, setAvailableSlots] = useState<
     Array<{ start_time: string; end_time: string }>
   >([]);
@@ -58,7 +58,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     if (isOpen) {
       loadPatients();
       if (selectedDate) {
-        loadAvailableSlots(selectedDate.toISOString().split("T")[0]);
+        loadAvailableSlots(selectedDate.toISOString().split('T')[0]);
       }
     }
   }, [isOpen, selectedDate]);
@@ -71,8 +71,8 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         start_time: appointment.start_time,
         end_time: appointment.end_time,
         appointment_type: appointment.appointment_type,
-        notes: appointment.notes || "",
-        location: appointment.location || "",
+        notes: appointment.notes || '',
+        location: appointment.location || '',
       });
     }
   }, [appointment]);
@@ -82,7 +82,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       const response = await patientAPI.getAll();
       setPatients(response.patients || []);
     } catch {
-      setError("Failed to load patients");
+      setError('Failed to load patients');
     }
   };
 
@@ -98,13 +98,13 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     value: string
   ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (field === "appointment_date") loadAvailableSlots(value);
+    if (field === 'appointment_date') loadAvailableSlots(value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
       if (appointment) {
@@ -116,8 +116,8 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         onAppointmentCreated?.(newAppointment);
       }
       onClose();
-    } catch (error: any) {
-      setError(error.message || "Failed to save appointment");
+    } catch (err: any) {
+      setError(err.message || 'Failed to save appointment');
     } finally {
       setLoading(false);
     }
@@ -127,7 +127,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     startTime: string,
     durationMinutes: number = 30
   ) => {
-    const [hours, minutes] = startTime.split(":").map(Number);
+    const [hours, minutes] = startTime.split(':').map(Number);
     const startDate = new Date();
     startDate.setHours(hours, minutes, 0, 0);
     startDate.setMinutes(startDate.getMinutes() + durationMinutes);
@@ -141,7 +141,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">
-            {appointment ? t("editAppointment") : t("newAppointment")}
+            {appointment ? t('editAppointment') : t('newAppointment')}
           </h2>
           <button
             onClick={onClose}
@@ -160,18 +160,18 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1">
-              {t("patient")} *
+              {t('patient')} *
             </label>
             <select
               value={formData.patient_id}
-              onChange={e => handleInputChange("patient_id", e.target.value)}
+              onChange={e => handleInputChange('patient_id', e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
             >
-              <option value="">{t("selectPatient")}</option>
+              <option value="">{t('selectPatient')}</option>
               {patients.map(patient => (
                 <option key={patient.id} value={patient.id}>
-                  {patient.first_name} {patient.last_name} (ID:{" "}
+                  {patient.first_name} {patient.last_name} (ID:{' '}
                   {patient.demographic_no})
                 </option>
               ))}
@@ -179,12 +179,12 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("date")} *</label>
+            <label className="block text-sm font-medium mb-1">{t('date')} *</label>
             <input
-              type="date"
+              type='date'
               value={formData.appointment_date}
               onChange={e =>
-                handleInputChange("appointment_date", e.target.value)
+                handleInputChange('appointment_date', e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md"
               required
@@ -194,14 +194,14 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">
-                {t("startTime")} *
+                {t('startTime')} *
               </label>
               <select
                 value={formData.start_time}
                 onChange={e => {
-                  handleInputChange("start_time", e.target.value);
+                  handleInputChange('start_time', e.target.value);
                   handleInputChange(
-                    "end_time",
+                    'end_time',
                     calculateEndTime(e.target.value)
                   );
                 }}
@@ -218,12 +218,12 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
             <div>
               <label className="block text-sm font-medium mb-1">
-                {t("endTime")} *
+                {t('endTime')} *
               </label>
               <input
-                type="time"
+                type='time'
                 value={formData.end_time}
-                onChange={e => handleInputChange("end_time", e.target.value)}
+                onChange={e => handleInputChange('end_time', e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
               />
@@ -231,41 +231,41 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("type")}</label>
+            <label className="block text-sm font-medium mb-1">{t('type')}</label>
             <select
               value={formData.appointment_type}
               onChange={e =>
-                handleInputChange("appointment_type", e.target.value)
+                handleInputChange('appointment_type', e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md"
             >
-              <option value="consultation">{t("consultation")}</option>
-              <option value="follow_up">{t("followUp")}</option>
-              <option value="emergency">{t("emergency")}</option>
-              <option value="routine">{t("routineCheck")}</option>
-              <option value="specialist">{t("specialistVisit")}</option>
+              <option value='consultation'>{t('consultation')}</option>
+              <option value='follow_up'>{t('followUp')}</option>
+              <option value='emergency'>{t('emergency')}</option>
+              <option value='routine'>{t('routineCheck')}</option>
+              <option value='specialist'>{t('specialistVisit')}</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">
-              {t("location")}
+              {t('location')}
             </label>
             <input
-              type="text"
-              placeholder={t("locationPlaceholder")}
+              type='text'
+              placeholder={t('locationPlaceholder')}
               value={formData.location}
-              onChange={e => handleInputChange("location", e.target.value)}
+              onChange={e => handleInputChange('location', e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("notes")}</label>
+            <label className="block text-sm font-medium mb-1">{t('notes')}</label>
             <textarea
-              placeholder={t("notesPlaceholder")}
+              placeholder={t('notesPlaceholder')}
               value={formData.notes}
-              onChange={e => handleInputChange("notes", e.target.value)}
+              onChange={e => handleInputChange('notes', e.target.value)}
               rows={3}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
@@ -273,18 +273,18 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
           <div className="flex justify-end space-x-3 pt-4">
             <button
-              type="button"
+              type='button'
               onClick={onClose}
               className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md"
             >
-              {t("cancel")}
+              {t('cancel')}
             </button>
             <button
-              type="submit"
+              type='submit'
               disabled={loading}
               className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
             >
-              {loading ? t("saving") : appointment ? t("update") : t("create")}
+              {loading ? t('saving') : appointment ? t('update') : t('create')}
             </button>
           </div>
         </form>

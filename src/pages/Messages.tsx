@@ -194,6 +194,7 @@ const Messages = () => {
     onAppointmentReminder: handleAppointmentReminder,
     onSystemNotification: handleSystemNotification,
   });
+
   useEffect(() => {
     let isMounted = true;
 
@@ -343,7 +344,6 @@ const Messages = () => {
       console.error('Error sending message:', error);
 
       alert(t('error_sending_message'));
-
     } finally {
       setIsSendingMessage(false);
     }
@@ -427,6 +427,7 @@ const Messages = () => {
     }
     showModal();
   };
+
   return (
     <>
       {isAuthChecking ? (
@@ -453,9 +454,7 @@ const Messages = () => {
           {/* Left sidebar */}
           <div className="conversations-list">
             <div className="conversation-list-header">
-              <h3 className="conversation-list-title">
-                {t('conversations')}
-              </h3>
+              <h3 className="conversation-list-title">{t('conversations')}</h3>
               <div className="conversation-header-buttons">
                 <button
                   className="new-conversation-button"
@@ -506,11 +505,7 @@ const Messages = () => {
                         : 'conversation'
                     }
                   >
-                    <img
-                      className="avatar"
-                      src={conv.avatar}
-                      alt={conv.name}
-                    />
+                    <img className="avatar" src={conv.avatar} alt={conv.name} />
                     <div className="conversation-info">
                       <p className="conversation-name">{conv.name}</p>
                       <p className="conversation-last">
@@ -539,9 +534,10 @@ const Messages = () => {
                   {selectedMessages.map((msg, index) => (
                     <div
                       key={index}
-                      className={msg.sender === t('me')
-                        ? 'message me'
-                        : 'message'
+                      className={
+                        msg.sender === t('me')
+                          ? 'message me'
+                          : 'message'
                       }
                     >
                       <div className="message-sender">
@@ -573,13 +569,9 @@ const Messages = () => {
 
                   {isLoading && (
                     <div className="message">
-                      <div className="message-sender">
-                        {t('ai_assistant')}
-                      </div>
+                      <div className="message-sender">{t('ai_assistant')}</div>
                       <div className="message-text">
-                        <div className="loading-indicator">
-                          {t('thinking')}
-                        </div>
+                        <div className="loading-indicator">{t('thinking')}</div>
                       </div>
                     </div>
                   )}
@@ -611,9 +603,7 @@ const Messages = () => {
                     onClick={handleSendMessage}
                     disabled={isSendingMessage || !newMessage.trim()}
                   >
-                    {isSendingMessage
-                      ? t('sending')
-                      : t('send')}
+                    {isSendingMessage ? t('sending') : t('send')}
                   </button>
                 </div>
               </>

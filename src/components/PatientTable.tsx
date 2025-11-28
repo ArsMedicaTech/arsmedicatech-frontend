@@ -4,7 +4,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import React from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { EncounterType, PatientType } from '../types';
 
 export function SearchResultsTable({
@@ -23,7 +23,7 @@ export function SearchResultsTable({
     () => [
       {
         id: 'patient_name',
-        header: t("patientName"),
+        header: t('patientName'),
         cell: (ctx: any) => {
           const item = ctx.row.original;
           if ('patient' in item && item.patient) {
@@ -40,7 +40,7 @@ export function SearchResultsTable({
       },
       {
         id: 'patient_dob',
-        header: t("dob"),
+        header: t('dob'),
         cell: (ctx: any) => {
           const item = ctx.row.original;
           const dob =
@@ -50,7 +50,7 @@ export function SearchResultsTable({
       },
       {
         id: 'visit_date',
-        header: t("visitDate"),
+        header: t('visitDate'),
         cell: (ctx: any) =>
           'date_created' in ctx.row.original
             ? (ctx.row.original.date_created
@@ -60,7 +60,7 @@ export function SearchResultsTable({
       },
       {
         accessorKey: 'highlighted_note',
-        header: t("snippet"),
+        header: t('snippet'),
         cell: (ctx: any): JSX.Element => (
           <div dangerouslySetInnerHTML={{ __html: ctx.getValue() || '' }} />
         ),
@@ -75,7 +75,7 @@ export function SearchResultsTable({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  if (isLoading) return <p className="p-4">{t("loading")}</p>;
+  if (isLoading) return <p className="p-4">{t('loading')}</p>;
 
   return (
     <table className="min-w-full text-sm">
@@ -132,42 +132,42 @@ export function PatientTable({
 
   const columns = React.useMemo(
     () => [
-      { accessorKey: 'demographic_no', header: t("id") },
-      { accessorKey: 'first_name', header: t("firstName") },
-      { accessorKey: 'last_name', header: t("lastName") },
+      { accessorKey: 'demographic_no', header: t('id') },
+      { accessorKey: 'first_name', header: t('firstName') },
+      { accessorKey: 'last_name', header: t('lastName') },
       {
         accessorKey: 'date_of_birth',
-        header: t("dob"),
+        header: t('dob'),
         cell: (ctx: any) =>
           ctx.getValue() ? new Date(ctx.getValue()).toLocaleDateString() : '-',
       },
-      { accessorKey: 'phone', header: t("phone") },
-      { accessorKey: 'email', header: t("email") },
+      { accessorKey: 'phone', header: t('phone') },
+      { accessorKey: 'email', header: t('email') },
       {
         id: 'actions',
-        header: t("actions"),
+        header: t('actions'),
         cell: (ctx: any) => {
           const patient = ctx.row.original;
           return (
             <div className="flex space-x-2">
               {onSelect && (
                 <button onClick={(e) => { e.stopPropagation(); onSelect(patient); }} className="btn-green">
-                  {t("select")}
+                  {t('select')}
                 </button>
               )}
               {onView && (
                 <button onClick={(e) => { e.stopPropagation(); onView(patient); }} className="btn-blue">
-                  {t("view")}
+                  {t('view')}
                 </button>
               )}
               {onEdit && (
                 <button onClick={(e) => { e.stopPropagation(); onEdit(patient); }} className="btn-yellow">
-                  {t("edit")}
+                  {t('edit')}
                 </button>
               )}
               {onDelete && (
                 <button onClick={(e) => { e.stopPropagation(); onDelete(patient); }} className="btn-red">
-                  {t("delete")}
+                  {t('delete')}
                 </button>
               )}
             </div>
@@ -180,8 +180,8 @@ export function PatientTable({
 
   const table = useReactTable({ data: patients, columns, getCoreRowModel: getCoreRowModel() });
 
-  if (isLoading) return <p className="p-4">{t("loading")}</p>;
-  if (!patients.length) return <p className="p-4 text-gray-500">{t("empty")}</p>;
+  if (isLoading) return <p className="p-4">{t('loading')}</p>;
+  if (!patients.length) return <p className="p-4 text-gray-500">{t('empty')}</p>;
 
   return (
     <div className="overflow-x-auto">

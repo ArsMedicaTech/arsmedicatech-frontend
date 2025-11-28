@@ -4,7 +4,7 @@ import authService from '../services/auth';
 import GoogleAuthButton from './GoogleAuthButton';
 import RoleSelect from './RoleSelect';
 import './SignupPopup.css';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 interface SignupPopupProps {
   isOpen: boolean;
@@ -52,28 +52,28 @@ const SignupPopup = ({
         <div className="popup-content">
           <div className="popup-icon">🔒</div>
 
-          <h2>{t("Sign Up to Continue")}</h2>
+          <h2>{t('Sign Up to Continue')}</h2>
 
           <p className="popup-description">
-           {t("signupRequiredMessage")}
+           {t('signupRequiredMessage')}
           </p>
 
           <div className="popup-benefits">
             <div className="benefit-item">
               <span className="benefit-icon">✓</span>
-              <span>{t("Create and manage patient records")}</span>
+              <span>{t('Create and manage patient records')}</span>
             </div>
             <div className="benefit-item">
               <span className="benefit-icon">✓</span>
-              <span>{t("Send and receive messages")}</span>
+              <span>{t('Send and receive messages')}</span>
             </div>
             <div className="benefit-item">
               <span className="benefit-icon">✓</span>
-              <span>{t("Schedule appointments")}</span>
+              <span>{t('Schedule appointments')}</span>
             </div>
             <div className="benefit-item">
               <span className="benefit-icon">✓</span>
-              <span>{t("Access advanced features")}</span>
+              <span>{t('Access advanced features')}</span>
             </div>
           </div>
 
@@ -81,17 +81,17 @@ const SignupPopup = ({
             <RoleSelect value={role} onChange={handleRoleChange} />
 
             <GoogleAuthButton onClick={handleGoogleSignup}>
-              {t("Sign up with Google")}
+              {t('Sign up with Google')}
             </GoogleAuthButton>
 
             <button className="popup-signup-button" onClick={handleSignupClick}>
-              {t("Sign Up Now")}
+              {t('Sign Up Now')}
             </button>
 
             <div className="popup-login-link">
-              {t("Already have an account?")}{" "}
+              {t('Already have an account?')}{' '}
               <button className="popup-login-button" onClick={handleLoginClick}>
-                {t("Sign In")}
+                {t('Sign In')}
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { metricsAPI } from '../services/api';
 import { Button, Card, Input, Label } from './FormComponents';
 import { useUser } from './UserContext';
@@ -75,11 +75,10 @@ function HealthMetricVisualization() {
           setSelectedMetrics(names);
 
         if (!filtered.length)
-          setError(t("noDataRange"));
+          setError(t('noDataRange'));
       })
-      .catch(() => setError(t("fetchError")))
+      .catch(() => setError(t('fetchError')))
       .finally(() => setLoading(false));
-
   }, [user?.id, startDate, endDate, t, selectedMetrics.length]);
 
   const handleMetricToggle = (metric: string) => {
@@ -103,81 +102,92 @@ function HealthMetricVisualization() {
     }));
   }, [metrics, selectedMetrics]);
 
-  if (userLoading) return <div>{t("loadingUser")}</div>;
+  if (userLoading) return <div>{t('loadingUser')}</div>;
 
   return (
     <Card className="p-6 space-y-4 w-full max-w-4xl mx-auto mt-8">
-
-      <h2 className="text-xl font-semibold">{t("visualizationTitle")}</h2>
+      <h2 className="text-xl font-semibold">{t('visualizationTitle')}</h2>
 
       {error && <div className="text-red-600">{error}</div>}
 
       <div className="flex flex-col md:flex-row gap-4 items-center">
-
         <div>
-          <Label>{t("startDate")}</Label>
-          <Input type="date" value={startDate}
-                 onChange={e => setStartDate(e.target.value)} />
+          <Label>{t('startDate')}</Label>
+          <Input
+            type='date'
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
         </div>
 
         <div>
-          <Label>{t("endDate")}</Label>
-          <Input type="date" value={endDate}
-                 onChange={e => setEndDate(e.target.value)} />
+          <Label>{t('endDate')}</Label>
+          <Input
+            type='date'
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
         </div>
 
         <div>
-          <Label>{t("visualizationType")}</Label>
-          <select className="border rounded px-2 py-1"
-                  value={visualizationType}
-                  onChange={e => setVisualizationType(e.target.value as any)}>
-            <option value="line">{t("chartLine")}</option>
-            <option value="bar">{t("chartBar")}</option>
-            <option value="scatter">{t("chartScatter")}</option>
-            <option value="area">{t("chartArea")}</option>
-            <option value="radar">{t("chartRadar")}</option>
-            <option value="heatmap">{t("chartHeatmap")}</option>
-            <option value="calendar">{t("chartCalendar")}</option>
+          <Label>{t('visualizationType')}</Label>
+          <select
+            className="border rounded px-2 py-1"
+            value={visualizationType}
+            onChange={e => setVisualizationType(e.target.value as any)}
+          >
+            <option value='line'>{t('chartLine')}</option>
+            <option value='bar'>{t('chartBar')}</option>
+            <option value='scatter'>{t('chartScatter')}</option>
+            <option value='area'>{t('chartArea')}</option>
+            <option value='radar'>{t('chartRadar')}</option>
+            <option value='heatmap'>{t('chartHeatmap')}</option>
+            <option value='calendar'>{t('chartCalendar')}</option>
           </select>
         </div>
 
         <div>
-          <Label>{t("lowerBound")}</Label>
-          <Input type="number"
-                 placeholder={t("auto")}
-                 value={lowerBound}
-                 onChange={e => setLowerBound(e.target.value === '' ? '' : Number(e.target.value))} />
+          <Label>{t('lowerBound')}</Label>
+          <Input
+            type='number'
+            placeholder={t('auto')}
+            value={lowerBound}
+            onChange={e => setLowerBound(e.target.value === '' ? '' : Number(e.target.value))}
+          />
         </div>
 
         <div>
-          <Label>{t("upperBound")}</Label>
-          <Input type="number"
-                 placeholder={t("auto")}
-                 value={upperBound}
-                 onChange={e => setUpperBound(e.target.value === '' ? '' : Number(e.target.value))} />
+          <Label>{t('upperBound')}</Label>
+          <Input
+            type='number'
+            placeholder={t('auto')}
+            value={upperBound}
+            onChange={e => setUpperBound(e.target.value === '' ? '' : Number(e.target.value))}
+          />
         </div>
 
         <div>
-          <Label>{t("selectMetrics")}</Label>
+          <Label>{t('selectMetrics')}</Label>
           <div className="flex flex-col max-h-40 overflow-y-auto border rounded p-2 bg-gray-50">
             {metricNames.map(name => (
               <label key={name} className="flex items-center space-x-2">
-                <input type="checkbox"
-                       checked={selectedMetrics.includes(name)}
-                       onChange={() => handleMetricToggle(name)} />
+                <input
+                  type='checkbox'
+                  checked={selectedMetrics.includes(name)}
+                  onChange={() => handleMetricToggle(name)}
+                />
                 <span>{name}</span>
               </label>
             ))}
           </div>
         </div>
-
       </div>
 
       <div className="mt-8">
         {loading ? (
-          <div>{t("loadingChart")}</div>
+          <div>{t('loadingChart')}</div>
         ) : chartData.length === 0 || selectedMetrics.length === 0 ? (
-          <div>{t("noDataSelected")}</div>
+          <div>{t('noDataSelected')}</div>
         ) : visualizationType === 'line' ? (
           <LineChart data={chartData} lowerBound={lowerBound} upperBound={upperBound} />
         ) : visualizationType === 'bar' ? (
@@ -194,7 +204,6 @@ function HealthMetricVisualization() {
           <CalendarChart data={chartData} />
         )}
       </div>
-
     </Card>
   );
 }
@@ -204,7 +213,6 @@ function HealthMetricVisualization() {
 --------------------------------------------------------- */
 
 function HealthMetricTracker() {
-
   const { t } = useTranslation();
   const { user, isLoading: userLoading } = useUser();
 
@@ -231,7 +239,6 @@ function HealthMetricTracker() {
       .catch(() =>
         setMetrics([{ metric_name: '', metric_value: '', metric_unit: '' }])
       );
-
   }, [user?.id, date]);
 
   const handleMetricChange = (index: number, field: keyof Metric, value: string) => {
@@ -261,40 +268,40 @@ function HealthMetricTracker() {
     try {
       const iso = date.toISOString().slice(0, 10);
       await metricsAPI.upsertForUserByDate(user.id, iso, metrics);
-      setSuccess(t("metricsSaved"));
+      setSuccess(t('metricsSaved'));
     } catch {
-      setError(t("saveFailed"));
+      setError(t('saveFailed'));
     } finally {
       setLoading(false);
     }
   };
 
-  if (userLoading) return <div>{t("loadingUser")}</div>;
+  if (userLoading) return <div>{t('loadingUser')}</div>;
 
   return (
     <Card className="p-6 space-y-4 w-full max-w-4xl mx-auto mt-8">
-
-      <h2 className="text-xl font-semibold">{t("trackerTitle")}</h2>
+      <h2 className="text-xl font-semibold">{t('trackerTitle')}</h2>
 
       {error && <div className="text-red-600">{error}</div>}
       {success && <div className="text-green-600">{success}</div>}
 
       <div>
-        <Label>{t("selectDate")}</Label>
-        <Input type="date"
-               value={date?.toISOString().slice(0, 10)}
-               onChange={e => setDate(new Date(e.target.value))} />
+        <Label>{t('selectDate')}</Label>
+        <Input
+          type='date'
+          value={date?.toISOString().slice(0, 10)}
+          onChange={e => setDate(new Date(e.target.value))}
+        />
       </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border border-gray-300 rounded-md text-sm">
-
           <thead>
             <tr className="bg-gray-100">
-              <th className="p-2 border">{t("metricName")}</th>
-              <th className="p-2 border">{t("metricValue")}</th>
-              <th className="p-2 border">{t("metricUnit")}</th>
-              <th className="p-2 border">{t("actions")}</th>
+              <th className="p-2 border">{t('metricName')}</th>
+              <th className="p-2 border">{t('metricValue')}</th>
+              <th className="p-2 border">{t('metricUnit')}</th>
+              <th className="p-2 border">{t('actions')}</th>
             </tr>
           </thead>
 
@@ -305,7 +312,7 @@ function HealthMetricTracker() {
                   <Input
                     value={metric.metric_name}
                     onChange={e => handleMetricChange(index, 'metric_name', e.target.value)}
-                    placeholder={t("metricName")}
+                    placeholder={t('metricName')}
                   />
                 </td>
 
@@ -313,7 +320,7 @@ function HealthMetricTracker() {
                   <Input
                     value={metric.metric_value}
                     onChange={e => handleMetricChange(index, 'metric_value', e.target.value)}
-                    placeholder={t("metricValue")}
+                    placeholder={t('metricValue')}
                   />
                 </td>
 
@@ -321,7 +328,7 @@ function HealthMetricTracker() {
                   <Input
                     value={metric.metric_unit}
                     onChange={e => handleMetricChange(index, 'metric_unit', e.target.value)}
-                    placeholder={t("metricUnit")}
+                    placeholder={t('metricUnit')}
                   />
                 </td>
 
@@ -329,37 +336,33 @@ function HealthMetricTracker() {
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white"
                           disabled={metrics.length === 1}
                           onClick={() => removeRow(index)}>
-                    {t("remove")}
+                    {t('remove')}
                   </Button>
                 </td>
-
               </tr>
             ))}
           </tbody>
-
         </table>
       </div>
 
       <div className="flex justify-between pt-4">
-
         <Button className="bg-blue-600 hover:bg-blue-700 text-white"
                 disabled={loading}
                 onClick={addRow}>
-          + {t("addMetric")}
+          + {t('addMetric')}
         </Button>
 
         <Button className="bg-green-600 hover:bg-green-700 text-white"
                 disabled={loading}
                 onClick={handleSubmit}>
-          {loading ? t("saving") : t("submit")}
+          {loading ? t('saving') : t('submit')}
         </Button>
       </div>
 
       <Button className="bg-blue-600 hover:bg-blue-700 text-white"
               onClick={() => (window.location.href = '/health-metrics-visualization')}>
-        {t("visualizationTitle")}
+        {t('visualizationTitle')}
       </Button>
-
     </Card>
   );
 }

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { organizationAPI } from "../services/api";
-import { useTranslation } from "react-i18next";
+import React, { useEffect, useState } from 'react';
+import { organizationAPI } from '../services/api';
+import { useTranslation } from 'react-i18next';
 
 interface Clinic {
   id: string;
@@ -28,7 +28,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
   const [clinics, setClinics] = useState<Clinic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newClinicId, setNewClinicId] = useState("");
+  const [newClinicId, setNewClinicId] = useState('');
   const [addingClinic, setAddingClinic] = useState(false);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
       const response = await organizationAPI.getClinics(organizationId);
       setClinics(response?.clinics || []);
     } catch (err: any) {
-      setError(err.message || "");
+      setError(err.message || '');
     } finally {
       setLoading(false);
     }
@@ -53,24 +53,24 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
     try {
       setAddingClinic(true);
       await organizationAPI.addClinic(organizationId, newClinicId.trim());
-      setNewClinicId("");
+      setNewClinicId('');
       await loadClinics();
       onUpdate?.();
     } catch (err: any) {
-      setError(err.message || "");
+      setError(err.message || '');
     } finally {
       setAddingClinic(false);
     }
   };
 
   const handleRemoveClinic = async (clinicId: string) => {
-    if (!confirm(t("confirmRemoveClinic"))) return;
+    if (!confirm(t('confirmRemoveClinic'))) return;
     try {
       await organizationAPI.removeClinic(organizationId, clinicId);
       await loadClinics();
       onUpdate?.();
     } catch (err: any) {
-      setError(err.message || "");
+      setError(err.message || '');
     }
   };
 
@@ -85,8 +85,8 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-medium text-gray-900">{t("clinics")}</h3>
-        <span className="text-sm text-gray-500">{t("clinicCount", { count: clinics.length })}</span>
+        <h3 className="text-lg font-medium text-gray-900">{t('clinics')}</h3>
+        <span className="text-sm text-gray-500">{t('clinicCount', { count: clinics.length })}</span>
       </div>
 
       <form onSubmit={handleAddClinic} className="flex gap-2">
@@ -94,7 +94,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
           type="text"
           value={newClinicId}
           onChange={e => setNewClinicId(e.target.value)}
-          placeholder={t("enterClinicId")}
+          placeholder={t('enterClinicId')}
           className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
         />
         <button
@@ -102,7 +102,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
           disabled={addingClinic || !newClinicId.trim()}
           className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
         >
-          {addingClinic ? t("addingClinic") : t("addClinic")}
+          {addingClinic ? t('addingClinic') : t('addClinic')}
         </button>
       </form>
 
@@ -114,8 +114,8 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
 
       {clinics.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          <h3 className="text-sm font-medium">{t("noClinics")}</h3>
-          <p className="text-sm">{t("noClinicsDesc")}</p>
+          <h3 className="text-sm font-medium">{t('noClinics')}</h3>
+          <p className="text-sm">{t('noClinicsDesc')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -130,7 +130,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
                   <p className="text-sm text-gray-500 mt-1">{clinic.address.country}</p>
                   {clinic.location && (
                     <p className="text-xs text-gray-400 mt-1">
-                      {t("location")}: {clinic.location.coordinates[1].toFixed(4)}, {clinic.location.coordinates[0].toFixed(4)}
+                      {t('location')}: {clinic.location.coordinates[1].toFixed(4)}, {clinic.location.coordinates[0].toFixed(4)}
                     </p>
                   )}
                 </div>
@@ -138,7 +138,7 @@ const ClinicList: React.FC<ClinicListProps> = ({ organizationId, onUpdate }) => 
                   onClick={() => handleRemoveClinic(clinic.id)}
                   className="px-3 py-1 border border-red-300 text-red-700 rounded-md hover:bg-red-50"
                 >
-                  {t("remove")}
+                  {t('remove')}
                 </button>
               </div>
             </div>

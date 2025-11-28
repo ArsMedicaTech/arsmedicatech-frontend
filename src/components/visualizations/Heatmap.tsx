@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function Heatmap({
   data,
@@ -147,7 +147,7 @@ export default function Heatmap({
       .attr('y', legendHeight + 24)
       .attr('text-anchor', 'middle')
       .attr('font-size', 12)
-      .text(metric); // non traduit
+      .text(metric);
 
   }, [data]);
 

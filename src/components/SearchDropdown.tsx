@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function SearchDropdown({
   show,
@@ -36,7 +36,7 @@ export default function SearchDropdown({
   return (
     <div ref={ref} className="search-results-dropdown">
       {loading ? (
-        <div className="loading-message">{t("Searching…")}</div>
+        <div className="loading-message">{t('Searching…')}</div>
       ) : results.length ? (
         results.map(r => (
           <div key={r.id} className="search-result-item">
@@ -50,7 +50,7 @@ export default function SearchDropdown({
           </div>
         ))
       ) : (
-        <div className="no-results-message">{t("No matches")}</div>
+        <div className="no-results-message">{t('No matches')}</div>
       )}
     </div>
   );

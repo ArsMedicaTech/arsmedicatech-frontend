@@ -142,7 +142,7 @@ const NotificationsPage: React.FC<NotificationsPageProps> = ({
             <h3>No notifications</h3>
             <p>
               {filter === 'all'
-                ? "You're all caught up! No notifications to show."
+                ? 'You\'re all caught up! No notifications to show.'
                 : `No ${filter} notifications to show.`}
             </p>
           </div>

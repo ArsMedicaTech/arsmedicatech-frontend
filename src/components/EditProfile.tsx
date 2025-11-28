@@ -4,9 +4,9 @@ import {
   MapPinIcon,
   PhoneIcon,
   UserIcon,
-} from "@heroicons/react/24/outline";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface UserProfile {
   id: string;
@@ -37,28 +37,28 @@ const EditProfile: React.FC<EditProfileProps> = ({
   const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
-    first_name: profile.first_name || "",
-    last_name: profile.last_name || "",
-    phone: profile.phone || "",
-    specialty: profile.specialty || "",
-    clinic_name: profile.clinic_name || "",
-    clinic_address: profile.clinic_address || "",
+    first_name: profile.first_name || '',
+    last_name: profile.last_name || '',
+    phone: profile.phone || '',
+    specialty: profile.specialty || '',
+    clinic_name: profile.clinic_name || '',
+    clinic_address: profile.clinic_address || '',
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const isProvider = profile.role === "provider" || profile.role === "admin";
+  const isProvider = profile.role === 'provider' || profile.role === 'admin';
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
     if (formData.phone && formData.phone.trim()) {
       const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
-      const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, "");
+      const cleanPhone = formData.phone.replace(/[\s\-\(\)]/g, '');
       if (!phoneRegex.test(cleanPhone)) {
-        newErrors.phone = t("invalidPhone");
+        newErrors.phone = t('invalidPhone');
       }
     }
 
@@ -68,7 +68,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: "" }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -91,7 +91,7 @@ const EditProfile: React.FC<EditProfileProps> = ({
       }
 
       if (Object.keys(updates).length === 0) {
-        setMessage({ type: "error", text: t("noChanges") });
+        setMessage({ type: 'error', text: t('noChanges') });
         setSaving(false);
         return;
       }
@@ -99,13 +99,13 @@ const EditProfile: React.FC<EditProfileProps> = ({
       const success = await onSave(updates);
 
       if (success) {
-        setMessage({ type: "success", text: t("updateSuccess") });
+        setMessage({ type: 'success', text: t('updateSuccess') });
         setTimeout(() => setMessage(null), 3000);
       } else {
-        setMessage({ type: "error", text: t("updateError") });
+        setMessage({ type: 'error', text: t('updateError') });
       }
     } catch {
-      setMessage({ type: "error", text: t("updateError") });
+      setMessage({ type: 'error', text: t('updateError') });
     } finally {
       setSaving(false);
     }
@@ -116,8 +116,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
   return (
     <div className="edit-profile-container">
       <div className="edit-profile-header">
-        <h1>{t("editProfile")}</h1>
-        <p>{t("updateInfo")}</p>
+        <h1>{t('editProfile')}</h1>
+        <p>{t('updateInfo')}</p>
       </div>
 
       {message && (
@@ -129,48 +129,48 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
       <form onSubmit={handleSubmit} className="edit-profile-form">
         <div className="form-section">
-          <h2>{t("personalInformation")}</h2>
+          <h2>{t('personalInformation')}</h2>
 
           <div className="form-grid">
             <div className="form-group">
               <label htmlFor="first_name">
                 <UserIcon className="w-4 h-4" />
-                {t("firstName")}
+                {t('firstName')}
               </label>
               <input
-                type="text"
-                id="first_name"
+                type='text'
+                id='first_name'
                 value={formData.first_name}
-                onChange={e => handleInputChange("first_name", e.target.value)}
-                className={`form-input ${errors.first_name ? "error" : ""}`}
+                onChange={e => handleInputChange('first_name', e.target.value)}
+                className={`form-input ${errors.first_name ? 'error' : ''}`}
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="last_name">
                 <UserIcon className="w-4 h-4" />
-                {t("lastName")}
+                {t('lastName')}
               </label>
               <input
-                type="text"
-                id="last_name"
+                type='text'
+                id='last_name'
                 value={formData.last_name}
-                onChange={e => handleInputChange("last_name", e.target.value)}
-                className={`form-input ${errors.last_name ? "error" : ""}`}
+                onChange={e => handleInputChange('last_name', e.target.value)}
+                className={`form-input ${errors.last_name ? 'error' : ''}`}
               />
             </div>
 
             <div className="form-group">
               <label htmlFor="phone">
                 <PhoneIcon className="w-4 h-4" />
-                {t("phoneNumber")}
+                {t('phoneNumber')}
               </label>
               <input
-                type="tel"
-                id="phone"
+                type='tel'
+                id='phone'
                 value={formData.phone}
-                onChange={e => handleInputChange("phone", e.target.value)}
-                className={`form-input ${errors.phone ? "error" : ""}`}
+                onChange={e => handleInputChange('phone', e.target.value)}
+                className={`form-input ${errors.phone ? 'error' : ''}`}
               />
               {errors.phone && <span className="error-message">{errors.phone}</span>}
             </div>
@@ -178,48 +178,48 @@ const EditProfile: React.FC<EditProfileProps> = ({
             <div className="form-group">
               <label htmlFor="email">
                 <EnvelopeIcon className="w-4 h-4" />
-                {t("emailAddress")}
+                {t('emailAddress')}
               </label>
-              <input type="email" id="email" value={profile.email} disabled className="form-input disabled" />
-              <small className="form-help">{t("emailNotEditable")}</small>
+              <input type='email' id='email' value={profile.email} disabled className="form-input disabled" />
+              <small className="form-help">{t('emailNotEditable')}</small>
             </div>
           </div>
         </div>
 
         {isProvider && (
           <div className="form-section">
-            <h2>{t("professionalInformation")}</h2>
+            <h2>{t('professionalInformation')}</h2>
 
             <div className="form-grid">
               <div className="form-group">
-                <label htmlFor="specialty">{t("medicalSpecialty")}</label>
+                <label htmlFor="specialty">{t('medicalSpecialty')}</label>
                 <input
-                  type="text"
-                  id="specialty"
+                  type='text'
+                  id='specialty'
                   value={formData.specialty}
-                  onChange={e => handleInputChange("specialty", e.target.value)}
-                  className={`form-input ${errors.specialty ? "error" : ""}`}
+                  onChange={e => handleInputChange('specialty', e.target.value)}
+                  className={`form-input ${errors.specialty ? 'error' : ''}`}
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="clinic_name">{t("clinicName")}</label>
+                <label htmlFor="clinic_name">{t('clinicName')}</label>
                 <input
-                  type="text"
-                  id="clinic_name"
+                  type='text'
+                  id='clinic_name'
                   value={formData.clinic_name}
-                  onChange={e => handleInputChange("clinic_name", e.target.value)}
-                  className={`form-input ${errors.clinic_name ? "error" : ""}`}
+                  onChange={e => handleInputChange('clinic_name', e.target.value)}
+                  className={`form-input ${errors.clinic_name ? 'error' : ''}`}
                 />
               </div>
 
               <div className="form-group full-width">
-                <label htmlFor="clinic_address">{t("clinicAddress")}</label>
+                <label htmlFor="clinic_address">{t('clinicAddress')}</label>
                 <textarea
-                  id="clinic_address"
+                  id='clinic_address'
                   value={formData.clinic_address}
-                  onChange={e => handleInputChange("clinic_address", e.target.value)}
-                  className={`form-textarea ${errors.clinic_address ? "error" : ""}`}
+                  onChange={e => handleInputChange('clinic_address', e.target.value)}
+                  className={`form-textarea ${errors.clinic_address ? 'error' : ''}`}
                   rows={3}
                 />
               </div>
@@ -229,10 +229,10 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
         <div className="form-actions">
           <button type="button" onClick={onCancel} className="btn btn-secondary" disabled={saving}>
-            {t("cancel")}
+            {t('cancel')}
           </button>
           <button type="submit" className="btn btn-primary" disabled={saving}>
-            {saving ? t("saving") : t("saveChanges")}
+            {saving ? t('saving') : t('saveChanges')}
           </button>
         </div>
       </form>

@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { sanitizeForSelector } from '../../utils';
 
 export default function LineChart({

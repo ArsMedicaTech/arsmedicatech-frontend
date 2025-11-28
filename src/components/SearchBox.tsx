@@ -1,6 +1,6 @@
 import { MagnifyingGlassCircleIcon } from '@heroicons/react/24/outline';
 import Spinner from 'react-bootstrap/Spinner';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function SearchBox({
   value,
@@ -21,7 +21,7 @@ export default function SearchBox({
 
       <input
         type="text"
-        placeholder={t("Search patients and encounters...")}
+        placeholder={t('Search patients and encounters...')}
         className="search-input"
         value={value}
         onChange={e => onChange(e.target.value)}

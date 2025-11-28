@@ -5,7 +5,7 @@ import EditProfile from './EditProfile';
 import Profile from './Profile';
 import './Settings.css';
 import { useUser } from './UserContext';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 interface UserSettings {
   user_id: string;
@@ -65,60 +65,46 @@ const Settings: React.FC = () => {
     loadProfile();
   }, []);
 
-  /* -------------------------------------------------------
-     LOAD SETTINGS
-  -------------------------------------------------------- */
   const loadSettings = async () => {
     try {
       setLoading(true);
       const response = await apiService.getAPI('/settings');
 
       if (response.success) setSettings(response.settings);
-      else setMessage({ type: 'error', text: t("loadFailed") });
+      else setMessage({ type: 'error', text: t('loadFailed') });
 
     } catch (error) {
-      setMessage({ type: 'error', text: t("loadFailed") });
+      setMessage({ type: 'error', text: t('loadFailed') });
     } finally {
       setLoading(false);
     }
   };
 
-  /* -------------------------------------------------------
-     LOAD PROFILE
-  -------------------------------------------------------- */
   const loadProfile = async () => {
     try {
       setProfileLoading(true);
       const response = await apiService.getAPI('/profile');
 
       if (response.success) setProfile(response.profile);
-      else setMessage({ type: 'error', text: t("loadFailed") });
+      else setMessage({ type: 'error', text: t('loadFailed') });
 
     } catch {
-      setMessage({ type: 'error', text: t("loadFailed") });
+      setMessage({ type: 'error', text: t('loadFailed') });
     } finally {
       setProfileLoading(false);
     }
   };
 
-  /* -------------------------------------------------------
-     LOAD USAGE STATS
-  -------------------------------------------------------- */
   const loadUsageStats = async () => {
     try {
       const response = await apiService.getAPI('/usage');
       if (response.success) setUsageStats(response.usage);
-    } catch {
-      /* not critical */
-    }
+    } catch {}
   };
 
-  /* -------------------------------------------------------
-     SAVE OPENAI API KEY
-  -------------------------------------------------------- */
   const handleSaveApiKey = async () => {
     if (!openaiApiKey.trim()) {
-      setMessage({ type: 'error', text: t("enterApiKey") });
+      setMessage({ type: 'error', text: t('enterApiKey') });
       return;
     }
 
@@ -129,51 +115,45 @@ const Settings: React.FC = () => {
       });
 
       if (response.success) {
-        setMessage({ type: 'success', text: t("apiSaved") });
+        setMessage({ type: 'success', text: t('apiSaved') });
         setOpenaiApiKey('');
         setShowApiKey(false);
         await loadSettings();
       } else {
-        setMessage({ type: 'error', text: response.data.error || t("apiSaveFailed") });
+        setMessage({ type: 'error', text: response.data.error || t('apiSaveFailed') });
       }
 
     } catch {
-      setMessage({ type: 'error', text: t("apiSaveFailed") });
+      setMessage({ type: 'error', text: t('apiSaveFailed') });
     } finally {
       setSaving(false);
     }
   };
 
-  /* -------------------------------------------------------
-     REMOVE OPENAI API KEY
-  -------------------------------------------------------- */
   const handleRemoveApiKey = async () => {
-    if (!confirm(t("removeOpenaiConfirm"))) return;
+    if (!confirm(t('removeOpenaiConfirm'))) return;
 
     try {
       setSaving(true);
       const response = await apiService.postAPI('/settings', { openai_api_key: '' });
 
       if (response.success) {
-        setMessage({ type: 'success', text: t("apiRemoved") });
+        setMessage({ type: 'success', text: t('apiRemoved') });
         await loadSettings();
       } else {
-        setMessage({ type: 'error', text: t("apiRemoveFailed") });
+        setMessage({ type: 'error', text: t('apiRemoveFailed') });
       }
 
     } catch {
-      setMessage({ type: 'error', text: t("apiRemoveFailed") });
+      setMessage({ type: 'error', text: t('apiRemoveFailed') });
     } finally {
       setSaving(false);
     }
   };
 
-  /* -------------------------------------------------------
-     SAVE OPTIMAL API KEY
-  -------------------------------------------------------- */
   const handleSaveOptimalApiKey = async () => {
     if (!optimalApiKey.trim()) {
-      setMessage({ type: 'error', text: t("enterOptimalApiKey") });
+      setMessage({ type: 'error', text: t('enterOptimalApiKey') });
       return;
     }
 
@@ -185,26 +165,23 @@ const Settings: React.FC = () => {
       });
 
       if (response.success) {
-        setMessage({ type: 'success', text: t("optimalSaved") });
+        setMessage({ type: 'success', text: t('optimalSaved') });
         setOptimalApiKey('');
         setShowOptimalApiKey(false);
         await loadSettings();
       } else {
-        setMessage({ type: 'error', text: t("optimalSaveFailed") });
+        setMessage({ type: 'error', text: t('optimalSaveFailed') });
       }
 
     } catch {
-      setMessage({ type: 'error', text: t("optimalSaveFailed") });
+      setMessage({ type: 'error', text: t('optimalSaveFailed') });
     } finally {
       setSaving(false);
     }
   };
 
-  /* -------------------------------------------------------
-     REMOVE OPTIMAL API KEY
-  -------------------------------------------------------- */
   const handleRemoveOptimalApiKey = async () => {
-    if (!confirm(t("removeOptimalConfirm"))) return;
+    if (!confirm(t('removeOptimalConfirm'))) return;
 
     try {
       setSaving(true);
@@ -214,22 +191,19 @@ const Settings: React.FC = () => {
       });
 
       if (response.success) {
-        setMessage({ type: 'success', text: t("optimalRemoved") });
+        setMessage({ type: 'success', text: t('optimalRemoved') });
         await loadSettings();
       } else {
-        setMessage({ type: 'error', text: t("optimalRemoveFailed") });
+        setMessage({ type: 'error', text: t('optimalRemoveFailed') });
       }
 
     } catch {
-      setMessage({ type: 'error', text: t("optimalRemoveFailed") });
+      setMessage({ type: 'error', text: t('optimalRemoveFailed') });
     } finally {
       setSaving(false);
     }
   };
 
-  /* -------------------------------------------------------
-     UPDATE PROFILE
-  -------------------------------------------------------- */
   const handleSaveProfile = async (
     updates: Partial<UserProfile>,
   ): Promise<boolean> => {
@@ -238,17 +212,17 @@ const Settings: React.FC = () => {
       const response = await apiService.postAPI('/profile', updates);
 
       if (response.success) {
-        setMessage({ type: 'success', text: t("updated") });
+        setMessage({ type: 'success', text: t('updated') });
         await loadProfile();
         setActiveTab('profile');
         return true;
       } else {
-        setMessage({ type: 'error', text: t("updateFailed") });
+        setMessage({ type: 'error', text: t('updateFailed') });
         return false;
       }
 
     } catch {
-      setMessage({ type: 'error', text: t("updateFailed") });
+      setMessage({ type: 'error', text: t('updateFailed') });
       return false;
     } finally {
       setSaving(false);
@@ -257,21 +231,18 @@ const Settings: React.FC = () => {
 
   const clearMessage = () => setMessage(null);
 
-  /* -------------------------------------------------------
-     RENDER TAB CONTENT
-  -------------------------------------------------------- */
   const renderTabContent = () => {
     if (activeTab === 'profile') {
-      if (profileLoading) return <div className="settings-loading"><p>{t("loading")}</p></div>;
+      if (profileLoading) return <div className="settings-loading"><p>{t('loading')}</p></div>;
       return profile ? (
         <Profile profile={profile} />
       ) : (
-        <p>{t("profile.noData")}</p>
+        <p>{t('profile.noData')}</p>
       );
     }
 
     if (activeTab === 'edit-profile') {
-      if (profileLoading) return <div className="settings-loading"><p>{t("loading")}</p></div>;
+      if (profileLoading) return <div className="settings-loading"><p>{t('loading')}</p></div>;
       return profile ? (
         <EditProfile
           profile={profile}
@@ -279,24 +250,21 @@ const Settings: React.FC = () => {
           onCancel={() => setActiveTab('profile')}
         />
       ) : (
-        <p>{t("noData")}</p>
+        <p>{t('noData')}</p>
       );
     }
 
     return renderSettingsContent();
   };
 
-  /* -------------------------------------------------------
-     SETTINGS TAB CONTENT
-  -------------------------------------------------------- */
   const renderSettingsContent = () => {
-    if (loading) return <div className="settings-loading"><p>{t("loading")}</p></div>;
+    if (loading) return <div className="settings-loading"><p>{t('loading')}</p></div>;
 
     return (
       <>
         <div className="settings-header">
-          <h1>{t("title")}</h1>
-          <p>{t("description")}</p>
+          <h1>{t('title')}</h1>
+          <p>{t('description')}</p>
         </div>
 
         {message && (
@@ -306,42 +274,40 @@ const Settings: React.FC = () => {
           </div>
         )}
 
-        {/* USER INFO */}
         <div className="settings-section">
-          <h2>{t("userInfo")}</h2>
+          <h2>{t('userInfo')}</h2>
           <div className="user-info">
-            <div className="info-row"><label>{t("Username")}:</label> <span>{user?.username}</span></div>
-            <div className="info-row"><label>{t("Email")}:</label> <span>{user?.email}</span></div>
-            <div className="info-row"><label>{t("Role")}:</label> <span className="role-badge">{t(user?.role || "")}</span></div>
+            <div className="info-row"><label>{t('Username')}:</label> <span>{user?.username}</span></div>
+            <div className="info-row"><label>{t('Email')}:</label> <span>{user?.email}</span></div>
+            <div className="info-row"><label>{t('Role')}:</label> <span className="role-badge">{t(user?.role || '')}</span></div>
           </div>
         </div>
 
-        {/* OPENAI API KEY */}
         <div className="settings-section">
-          <h2>{t("openaiTitle")}</h2>
-          <p className="section-description">{t("openaiDescription")}</p>
+          <h2>{t('openaiTitle')}</h2>
+          <p className="section-description">{t('openaiDescription')}</p>
 
           {settings?.has_openai_api_key ? (
             <div className="api-key-status">
               <div className="status-indicator success">
                 <span className="status-dot"></span>
-                {t("apiConfigured")}
+                {t('apiConfigured')}
               </div>
 
               <div className="api-key-actions">
                 <button className="btn btn-secondary" onClick={() => setShowApiKey(!showApiKey)}>
-                  {showApiKey ? t("Hide") : t("Show")} API Key
+                  {showApiKey ? t('Hide') : t('Show')} API Key
                 </button>
 
                 <button className="btn btn-danger" onClick={handleRemoveApiKey} disabled={saving}>
-                  {saving ? t("Removing...") : t("removeOpenai")}
+                  {saving ? t('Removing...') : t('removeOpenai')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="api-key-form">
               <div className="form-group">
-                <label>{t("openaiTitle")}</label>
+                <label>{t('openaiTitle')}</label>
                 <div className="input-group">
                   <input
                     type={showApiKey ? "text" : "password"}
@@ -357,44 +323,43 @@ const Settings: React.FC = () => {
               </div>
 
               <button className="btn btn-primary" onClick={handleSaveApiKey} disabled={saving || !openaiApiKey.trim()}>
-                {saving ? t("Saving...") : t("saveOpenai")}
+                {saving ? t('Saving...') : t('saveOpenai')}
               </button>
             </div>
           )}
         </div>
 
-        {/* OPTIMAL API KEY */}
         <div className="settings-section">
-          <h2>{t("optimalTitle")}</h2>
-          <p className="section-description">{t("optimalDescription")}</p>
+          <h2>{t('optimalTitle')}</h2>
+          <p className="section-description">{t('optimalDescription')}</p>
 
           {settings?.has_optimal_api_key ? (
             <div className="api-key-status">
               <div className="status-indicator success">
                 <span className="status-dot"></span>
-                {t("optimalConfigured")}
+                {t('optimalConfigured')}
               </div>
 
               <div className="api-key-actions">
                 <button className="btn btn-secondary" onClick={() => setShowOptimalApiKey(!showOptimalApiKey)}>
-                  {showOptimalApiKey ? t("Hide") : t("Show")} API Key
+                  {showOptimalApiKey ? t('Hide') : t('Show')} API Key
                 </button>
 
                 <button className="btn btn-danger" onClick={handleRemoveOptimalApiKey} disabled={saving}>
-                  {saving ? t("Removing...") : t("removeOptimal")}
+                  {saving ? t('Removing...') : t('removeOptimal')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="api-key-form">
               <div className="form-group">
-                <label>{t("optimalTitle")}</label>
+                <label>{t('optimalTitle')}</label>
                 <div className="input-group">
                   <input
                     type={showOptimalApiKey ? "text" : "password"}
                     value={optimalApiKey}
                     onChange={e => setOptimalApiKey(e.target.value)}
-                    placeholder={t("optimalPlaceholder")}
+                    placeholder={t('optimalPlaceholder')}
                     className="form-input"
                   />
                   <button type="button" className="input-toggle" onClick={() => setShowOptimalApiKey(!showOptimalApiKey)}>
@@ -404,26 +369,25 @@ const Settings: React.FC = () => {
               </div>
 
               <button className="btn btn-primary" onClick={handleSaveOptimalApiKey} disabled={saving || !optimalApiKey.trim()}>
-                {saving ? t("Saving...") : t("saveOptimal")}
+                {saving ? t('Saving...') : t('saveOptimal')}
               </button>
             </div>
           )}
         </div>
 
-        {/* USAGE */}
         <div className="settings-section">
-          <h2>{t("apiUsage")}</h2>
-          <p className="section-description">{t("apiUsageDesc")}</p>
+          <h2>{t('apiUsage')}</h2>
+          <p className="section-description">{t('apiUsageDesc')}</p>
 
           {usageStats && (
             <div className="usage-info">
               <div className="info-row">
-                <label>{t("requests")}</label>
+                <label>{t('requests')}</label>
                 <span>{usageStats.requests_this_hour} / {usageStats.max_requests_per_hour}</span>
               </div>
 
               <div className="info-row">
-                <label>{t("resetWindow")}</label>
+                <label>{t('resetWindow')}</label>
                 <span>
                   {new Date(usageStats.window_start * 1000 + 3600000).toLocaleTimeString()}
                 </span>
@@ -432,19 +396,18 @@ const Settings: React.FC = () => {
           )}
         </div>
 
-        {/* SECURITY */}
         <div className="settings-section">
-          <h2>{t("security")}</h2>
-          <p className="section-description">{t("securityDescription")}</p>
+          <h2>{t('security')}</h2>
+          <p className="section-description">{t('securityDescription')}</p>
 
           <div className="security-info">
             <div className="info-row">
-              <label>{t("createdAt")}</label>
+              <label>{t('createdAt')}</label>
               <span>{settings?.created_at ? new Date(settings.created_at).toLocaleDateString() : 'N/A'}</span>
             </div>
 
             <div className="info-row">
-              <label>{t("updatedAt")}</label>
+              <label>{t('updatedAt')}</label>
               <span>{settings?.updated_at ? new Date(settings.updated_at).toLocaleDateString() : 'N/A'}</span>
             </div>
           </div>
@@ -457,14 +420,14 @@ const Settings: React.FC = () => {
     <div className="settings-container">
       <div className="settings-tabs">
         <button className={`tab-button ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
-          {t("Settings")}
+          {t('Settings')}
         </button>
         <button className={`tab-button ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => setActiveTab('profile')}>
-          {t("Profile")}
+          {t('Profile')}
         </button>
         {activeTab === 'edit-profile' && (
           <button className="tab-button active" onClick={() => setActiveTab('edit-profile')}>
-            {t("Edit Profile")}
+            {t('Edit Profile')}
           </button>
         )}
       </div>
@@ -474,7 +437,7 @@ const Settings: React.FC = () => {
       {activeTab === 'profile' && profile && (
         <div className="profile-actions">
           <button onClick={() => setActiveTab('edit-profile')} className="btn btn-primary">
-            {t("Edit Profile")}
+            {t('Edit Profile')}
           </button>
         </div>
       )}

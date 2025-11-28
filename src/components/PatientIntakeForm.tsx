@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { MdArrowBack, MdArrowForward, MdWarning } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { API_URL } from '../env_vars';
 import logger from '../services/logging';
 import {
@@ -15,9 +15,7 @@ import {
   RequiredAsterisk,
 } from './FormComponents';
 
-function useSimpleMutation<TPayload>(
-  submitFn: (payload: TPayload) => Promise<any>
-) {
+function useSimpleMutation<TPayload>(submitFn: (payload: TPayload) => Promise<any>) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<null | Error>(null);
 
@@ -105,16 +103,16 @@ export default function PatientIntakeForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error(t("saveError"));
+      if (!res.ok) throw new Error(t('saveError'));
     }
   );
 
   const stepLabels = [
-    t("personalInformation"),
-    t("addressInsurance"),
-    t("medicalHistory"),
-    t("visitDetails"),
-    t("consentReview"),
+    t('personalInformation'),
+    t('addressInsurance'),
+    t('medicalHistory'),
+    t('visitDetails'),
+    t('consentReview'),
   ] as const;
 
   const stepFieldMap: Record<Step, (keyof PatientIntakeFormValues)[]> = {
@@ -145,8 +143,8 @@ export default function PatientIntakeForm() {
   ) => {
     return stepFields.every(field => {
       const value = values[field];
-      if (field === "consent") return Boolean(value);
-      return value && value.toString().trim() !== "";
+      if (field === 'consent') return Boolean(value);
+      return value && value.toString().trim() !== '';
     });
   };
 
@@ -165,62 +163,62 @@ export default function PatientIntakeForm() {
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("firstName")} <RequiredAsterisk />
+                {t('firstName')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("firstName")}
+                placeholder={t('firstName')}
                 {...register('firstName', { required: true })}
               />
-              {errors.firstName && <p className="text-red-500 text-xs">{t("required")}</p>}
+              {errors.firstName && <p className="text-red-500 text-xs">{t('required')}</p>}
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("lastName")} <RequiredAsterisk />
+                {t('lastName')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("lastName")}
+                placeholder={t('lastName')}
                 {...register('lastName', { required: true })}
               />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("dateOfBirth")} <RequiredAsterisk />
+                {t('dateOfBirth')} <RequiredAsterisk />
               </label>
               <Input
-                type="date"
+                type='date'
                 {...register('date_of_birth', { required: true })}
               />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("gender")} <RequiredAsterisk />
+                {t('gender')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("gender")}
+                placeholder={t('gender')}
                 {...register('gender', { required: true })}
               />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("phone")} <RequiredAsterisk />
+                {t('phone')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("phone")}
+                placeholder={t('phone')}
                 {...register('phone', { required: true })}
               />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("email")} <RequiredAsterisk />
+                {t('email')} <RequiredAsterisk />
               </label>
               <Input
-                type="email"
-                placeholder={t("email")}
+                type='email'
+                placeholder={t('email')}
                 {...register('email', { required: true })}
               />
             </div>
@@ -234,48 +232,48 @@ export default function PatientIntakeForm() {
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("address")} <RequiredAsterisk />
+                {t('address')} <RequiredAsterisk />
               </label>
-              <Input placeholder={t("address")} {...register('address', { required: true })} />
+              <Input placeholder={t('address')} {...register('address', { required: true })} />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("city")} <RequiredAsterisk />
+                {t('city')} <RequiredAsterisk />
               </label>
-              <Input placeholder={t("city")} {...register('city', { required: true })} />
+              <Input placeholder={t('city')} {...register('city', { required: true })} />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("province")} <RequiredAsterisk />
+                {t('province')} <RequiredAsterisk />
               </label>
-              <Input placeholder={t("province")} {...register('province', { required: true })} />
+              <Input placeholder={t('province')} {...register('province', { required: true })} />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("postalCode")} <RequiredAsterisk />
+                {t('postalCode')} <RequiredAsterisk />
               </label>
-              <Input placeholder={t("postalCode")} {...register('postalCode', { required: true })} />
+              <Input placeholder={t('postalCode')} {...register('postalCode', { required: true })} />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("insuranceProvider")} <RequiredAsterisk />
+                {t('insuranceProvider')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("insuranceProvider")}
+                placeholder={t('insuranceProvider')}
                 {...register('insuranceProvider', { required: true })}
               />
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("insuranceNumber")} <RequiredAsterisk />
+                {t('insuranceNumber')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("insuranceNumber")}
+                placeholder={t('insuranceNumber')}
                 {...register('insuranceNumber', { required: true })}
               />
             </div>
@@ -288,18 +286,18 @@ export default function PatientIntakeForm() {
           <CardContent className="grid gap-6">
 
             <div>
-              <label className="block mb-1 font-medium">{t("medicalConditions")}</label>
-              <Input placeholder={t("medicalConditions")} {...register('medicalConditions')} />
+              <label className="block mb-1 font-medium">{t('medicalConditions')}</label>
+              <Input placeholder={t('medicalConditions')} {...register('medicalConditions')} />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">{t("medications")}</label>
-              <Input placeholder={t("medications")} {...register('medications')} />
+              <label className="block mb-1 font-medium">{t('medications')}</label>
+              <Input placeholder={t('medications')} {...register('medications')} />
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">{t("allergies")}</label>
-              <Input placeholder={t("allergies")} {...register('allergies')} />
+              <label className="block mb-1 font-medium">{t('allergies')}</label>
+              <Input placeholder={t('allergies')} {...register('allergies')} />
             </div>
 
           </CardContent>
@@ -311,29 +309,29 @@ export default function PatientIntakeForm() {
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("reasonForVisit")} <RequiredAsterisk />
+                {t('reasonForVisit')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("reasonForVisit")}
+                placeholder={t('reasonForVisit')}
                 {...register('reasonForVisit', { required: true })}
               />
-              {errors.reasonForVisit && <p className="text-red-500 text-xs">{t("required")}</p>}
+              {errors.reasonForVisit && <p className="text-red-500 text-xs">{t('required')}</p>}
             </div>
 
             <div>
               <label className="block mb-1 font-medium">
-                {t("symptoms")} <RequiredAsterisk />
+                {t('symptoms')} <RequiredAsterisk />
               </label>
               <Input
-                placeholder={t("symptoms")}
+                placeholder={t('symptoms')}
                 {...register('symptoms', { required: true })}
               />
-              {errors.symptoms && <p className="text-red-500 text-xs">{t("required")}</p>}
+              {errors.symptoms && <p className="text-red-500 text-xs">{t('required')}</p>}
             </div>
 
             <div>
-              <label className="block mb-1 font-medium">{t("symptomOnset")}</label>
-              <Input type="date" {...register('symptomOnset')} />
+              <label className="block mb-1 font-medium">{t('symptomOnset')}</label>
+              <Input type='date' {...register('symptomOnset')} />
             </div>
 
           </CardContent>
@@ -344,17 +342,17 @@ export default function PatientIntakeForm() {
           <CardContent className="space-y-4">
 
             <p className="text-sm leading-relaxed">
-              {t("reviewAndConsent")}
+              {t('reviewAndConsent')}
             </p>
 
             <div className="flex items-center space-x-2">
-              <Checkbox id="consent" {...register('consent', { required: true })} />
-              <label htmlFor="consent" className="text-sm">
-                {t("consentText")} <RequiredAsterisk />
+              <Checkbox id='consent' {...register('consent', { required: true })} />
+              <label htmlFor='consent' className="text-sm">
+                {t('consentText')} <RequiredAsterisk />
               </label>
             </div>
 
-            {errors.consent && <p className="text-red-500 text-xs">{t("required")}</p>}
+            {errors.consent && <p className="text-red-500 text-xs">{t('required')}</p>}
           </CardContent>
         )}
 
@@ -362,7 +360,7 @@ export default function PatientIntakeForm() {
         <div className="flex justify-between pt-4 items-center">
           <IconButton
             icon={<MdArrowBack size={24} />}
-            type="button"
+            type='button'
             onClick={back}
             disabled={step === 0}
           />
@@ -370,15 +368,15 @@ export default function PatientIntakeForm() {
           {step < 4 ? (
             <IconButton
               icon={<MdArrowForward size={24} />}
-              type="button"
+              type='button'
               onClick={next}
             />
           ) : (
             <Button
-              type="submit"
+              type='submit'
               disabled={!getValues().consent}
             >
-              {t("submit")}
+              {t('submit')}
             </Button>
           )}
         </div>

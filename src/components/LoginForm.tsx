@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import authService from '../services/auth';
 import logger from '../services/logging';
 import GoogleAuthButton from './GoogleAuthButton';
 import './LoginForm.css';
 
+// ...existing code...
 const LoginForm = ({
   onLogin,
   onSwitchToRegister,
@@ -14,7 +15,6 @@ const LoginForm = ({
   onSwitchToRegister: () => void;
   onClose: () => void;
 }): JSX.Element => {
-
   const { t } = useTranslation();
 
   const [formData, setFormData] = useState({
@@ -54,11 +54,11 @@ const LoginForm = ({
     const newErrors: Errors = {};
 
     if (!formData.username.trim()) {
-      newErrors.username = t("usernameRequired");
+      newErrors.username = t('usernameRequired');
     }
 
     if (!formData.password) {
-      newErrors.password = t("passwordRequired");
+      newErrors.password = t('passwordRequired');
     }
 
     setErrors(newErrors);
@@ -89,11 +89,11 @@ const LoginForm = ({
         const userData = result.data.user || result.data;
         onLogin(userData);
       } else {
-        setGeneralError(result.error || t("unexpectedError"));
+        setGeneralError(result.error || t('unexpectedError'));
       }
     } catch (error) {
       console.error('Login error:', error);
-      setGeneralError(t("unexpectedError"));
+      setGeneralError(t('unexpectedError'));
     } finally {
       setIsLoading(false);
     }
@@ -113,8 +113,8 @@ const LoginForm = ({
           </button>
         )}
 
-        <h2>{t("welcomeBack")}</h2>
-        <p className="login-subtitle">{t("signInToAccount")}</p>
+        <h2>{t('welcomeBack')}</h2>
+        <p className="login-subtitle">{t('signInToAccount')}</p>
 
         {generalError && (
           <div className="error-message general-error">{generalError}</div>
@@ -122,15 +122,15 @@ const LoginForm = ({
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="username">{t("username")}</label>
+            <label htmlFor='username'>{t('username')}</label>
             <input
-              type="text"
-              id="username"
-              name="username"
+              type='text'
+              id='username'
+              name='username'
               value={formData.username}
               onChange={handleChange}
               className={errors.username ? 'error' : ''}
-              placeholder={t("enterUsername")}
+              placeholder={t('enterUsername')}
               disabled={isLoading}
             />
             {errors.username && (
@@ -139,15 +139,15 @@ const LoginForm = ({
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">{t("password")}</label>
+            <label htmlFor='password'>{t('password')}</label>
             <input
-              type="password"
-              id="password"
-              name="password"
+              type='password'
+              id='password'
+              name='password'
               value={formData.password}
               onChange={handleChange}
               className={errors.password ? 'error' : ''}
-              placeholder={t("enterPassword")}
+              placeholder={t('enterPassword')}
               disabled={isLoading}
             />
             {errors.password && (
@@ -156,32 +156,31 @@ const LoginForm = ({
           </div>
 
           <GoogleAuthButton onClick={handleGoogleSignin}>
-            {t("signInWithGoogle")}
+            {t('signInWithGoogle')}
           </GoogleAuthButton>
 
           <button
-            type="submit"
+            type='submit'
             className="login-button"
             disabled={isLoading}
-            data-testid="login-submit"
+            data-testid='login-submit'
           >
-            {isLoading ? t("signingIn") : t("signIn")}
+            {isLoading ? t('signingIn') : t('signIn')}
           </button>
         </form>
 
         <div className="login-footer">
           <p>
-            {t("noAccount")}{' '}
+            {t('noAccount')}{' '}
             <button
-              type="button"
+              type='button'
               className="link-button"
               onClick={onSwitchToRegister}
             >
-              {t("signUp")}
+              {t('signUp')}
             </button>
           </p>
         </div>
-
       </div>
     </div>
   );

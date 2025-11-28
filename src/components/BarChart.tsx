@@ -1,15 +1,15 @@
-import * as d3 from "d3";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import * as d3 from 'd3';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const BarChart = () => {
   const { t } = useTranslation();
 
   const [data] = useState([
-    { name: "A", value: 50 },
-    { name: "B", value: 20 },
-    { name: "C", value: 40 },
-    { name: "D", value: 70 },
+    { name: 'A', value: 50 },
+    { name: 'B', value: 20 },
+    { name: 'C', value: 40 },
+    { name: 'D', value: 70 },
   ]);
 
   useEffect(() => {
@@ -23,34 +23,34 @@ const BarChart = () => {
     const y = d3.scaleLinear().range([height, 0]);
 
     const svg = d3
-      .select(".bar-chart")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .select('.bar-chart')
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
     x.domain(data.map(d => d.name));
     y.domain([0, d3.max(data, d => d.value) ?? 0]);
 
     svg
-      .selectAll(".bar")
+      .selectAll('.bar')
       .data(data)
       .enter()
-      .append("rect")
-      .attr("class", "bar")
-      .attr("x", d => x(d.name) ?? 0)
-      .attr("width", x.bandwidth())
-      .attr("y", d => y(d.value))
-      .attr("height", d => height - y(d.value));
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', d => x(d.name) ?? 0)
+      .attr('width', x.bandwidth())
+      .attr('y', d => y(d.value))
+      .attr('height', d => height - y(d.value));
 
-    svg.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(x));
-    svg.append("g").call(d3.axisLeft(y));
+    svg.append('g').attr('transform', 'translate(0,' + height + ')').call(d3.axisBottom(x));
+    svg.append('g').call(d3.axisLeft(y));
   }, [data]);
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">{t("chartTitle")}</h2>
+      <h2 className="text-xl font-semibold mb-4">{t('chartTitle')}</h2>
       <div className="bar-chart"></div>
     </div>
   );

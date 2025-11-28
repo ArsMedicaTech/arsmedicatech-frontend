@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { patientAPI } from '../services/api';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const PatientForm = () => {
   const { t } = useTranslation();
@@ -42,7 +42,7 @@ const PatientForm = () => {
         location: patient.location || ['', '', '', ''],
       });
     } catch (err) {
-      setError(t("loadPatientError"));
+      setError(t('loadPatientError'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -76,7 +76,7 @@ const PatientForm = () => {
       }
       navigate('/patients');
     } catch (err: any) {
-      setError(err?.response?.data?.error || t("genericError"));
+      setError(err?.response?.data?.error || t('genericError'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -86,13 +86,13 @@ const PatientForm = () => {
   const handleCancel = () => navigate('/patients');
 
   if (loading && isEditing) {
-    return <div>{t("loadingPatient")}</div>;
+    return <div>{t('loadingPatient')}</div>;
   }
 
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">
-        {isEditing ? t("editPatient") : t("addNewPatient")}
+        {isEditing ? t('editPatient') : t('addNewPatient')}
       </h1>
 
       {error && (
@@ -106,10 +106,10 @@ const PatientForm = () => {
         {/* First & Last Name */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">{t("firstName")} *</label>
+            <label className="block text-sm font-medium mb-1">{t('firstName')} *</label>
             <input
-              type="text"
-              name="first_name"
+              type='text'
+              name='first_name'
               value={formData.first_name}
               onChange={handleInputChange}
               required
@@ -117,10 +117,10 @@ const PatientForm = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">{t("lastName")} *</label>
+            <label className="block text-sm font-medium mb-1">{t('lastName')} *</label>
             <input
-              type="text"
-              name="last_name"
+              type='text'
+              name='last_name'
               value={formData.last_name}
               onChange={handleInputChange}
               required
@@ -132,27 +132,27 @@ const PatientForm = () => {
         {/* Birth & Sex */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">{t("dateOfBirth")}</label>
+            <label className="block text-sm font-medium mb-1">{t('dateOfBirth')}</label>
             <input
-              type="date"
-              name="date_of_birth"
+              type='date'
+              name='date_of_birth'
               value={formData.date_of_birth}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">{t("sex")}</label>
+            <label className="block text-sm font-medium mb-1">{t('sex')}</label>
             <select
-              name="sex"
+              name='sex'
               value={formData.sex}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
             >
-              <option value="">{t("select")}</option>
-              <option value="M">{t("male")}</option>
-              <option value="F">{t("female")}</option>
-              <option value="O">{t("other")}</option>
+              <option value=''>{t('select')}</option>
+              <option value='M'>{t('male')}</option>
+              <option value='F'>{t('female')}</option>
+              <option value='O'>{t('other')}</option>
             </select>
           </div>
         </div>
@@ -160,20 +160,20 @@ const PatientForm = () => {
         {/* Contact */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1">{t("phone")}</label>
+            <label className="block text-sm font-medium mb-1">{t('phone')}</label>
             <input
-              type="tel"
-              name="phone"
+              type='tel'
+              name='phone'
               value={formData.phone}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1">{t("email")}</label>
+            <label className="block text-sm font-medium mb-1">{t('email')}</label>
             <input
-              type="email"
-              name="email"
+              type='email'
+              name='email'
               value={formData.email}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
@@ -183,22 +183,22 @@ const PatientForm = () => {
 
         {/* Address */}
         <div>
-          <label className="block text-sm font-medium mb-2">{t("address")}</label>
+          <label className="block text-sm font-medium mb-2">{t('address')}</label>
           <div className="grid grid-cols-2 gap-4">
-            <input placeholder={t("city")} value={formData.location[0] || ''} onChange={e => handleLocationChange(0, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
-            <input placeholder={t("state")} value={formData.location[1] || ''} onChange={e => handleLocationChange(1, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
-            <input placeholder={t("country")} value={formData.location[2] || ''} onChange={e => handleLocationChange(2, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
-            <input placeholder={t("zip")} value={formData.location[3] || ''} onChange={e => handleLocationChange(3, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
+            <input placeholder={t('city')} value={formData.location[0] || ''} onChange={e => handleLocationChange(0, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
+            <input placeholder={t('state')} value={formData.location[1] || ''} onChange={e => handleLocationChange(1, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
+            <input placeholder={t('country')} value={formData.location[2] || ''} onChange={e => handleLocationChange(2, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
+            <input placeholder={t('zip')} value={formData.location[3] || ''} onChange={e => handleLocationChange(3, e.target.value)} className="px-3 py-2 border rounded-md focus:ring-blue-500" />
           </div>
         </div>
 
         {/* Actions */}
         <div className="flex justify-end space-x-4 pt-4">
-          <button type="button" onClick={handleCancel} className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
-            {t("cancel")}
+          <button type='button' onClick={handleCancel} className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
+            {t('cancel')}
           </button>
-          <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
-            {loading ? t("saving") : isEditing ? t("updatePatient") : t("createPatient")}
+          <button type='submit' disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+            {loading ? t('saving') : isEditing ? t('updatePatient') : t('createPatient')}
           </button>
         </div>
       </form>

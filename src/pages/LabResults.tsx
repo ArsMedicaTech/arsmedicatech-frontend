@@ -209,7 +209,7 @@ const LabResultsTable: React.FC<LabResultsTableProps> = ({ title, data }) => {
   return (
     <div className="mb-8">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b border-gray-200 pb-2">
-        {t(`${title}`)}
+        {t(title)}
       </h2>
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">

@@ -3,9 +3,8 @@ import { MDXEditor } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import React, { useEffect, useState } from 'react';
 import { userNotesAPI } from '../services/api';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
-// Import all the plugins we need
 import {
   BoldItalicUnderlineToggles,
   CreateLink,
@@ -85,7 +84,6 @@ const UserNotes: React.FC<{
       let savedNote: UserNote;
 
       if (note?.id) {
-        // Update existing note
         const response = await userNotesAPI.update(note.id, noteData);
         if (response.success) {
           savedNote = response.note;
@@ -93,7 +91,6 @@ const UserNotes: React.FC<{
           throw new Error(response.error || t('Failed to update note'));
         }
       } else {
-        // Create new note
         const response = await userNotesAPI.create(noteData);
         if (response.success) {
           savedNote = response.note;
@@ -119,7 +116,7 @@ const UserNotes: React.FC<{
         <div className="flex-1 mr-4">
           <input
             type="text"
-            placeholder={t("Note title...")}
+            placeholder={t('Note title...')}
             value={title}
             onChange={e => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-semibold"
@@ -133,14 +130,14 @@ const UserNotes: React.FC<{
               disabled={isSaving}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-blue-400"
             >
-              {isSaving ? t("Saving...") : t("Save")}
+              {isSaving ? t('Saving...') : t('Save')}
             </button>
           )}
           <button
             onClick={() => setIsEditing(!isEditing)}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
           >
-            {isEditing ? t("View") : t("Edit")}
+            {isEditing ? t('View') : t('Edit')}
           </button>
         </div>
       </div>
@@ -148,7 +145,7 @@ const UserNotes: React.FC<{
       {isEditing && (
         <div className="mb-4 flex space-x-4">
           <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">{t("Type")}:</label>
+            <label className="text-sm font-medium text-gray-700">{t('Type')}:</label>
             <select
               value={noteType}
               onChange={e =>
@@ -156,15 +153,15 @@ const UserNotes: React.FC<{
               }
               className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="private">{t("Private")}</option>
-              <option value="shared">{t("Shared")}</option>
+              <option value="private">{t('Private')}</option>
+              <option value="shared">{t('Shared')}</option>
             </select>
           </div>
           <div className="flex items-center space-x-2">
-            <label className="text-sm font-medium text-gray-700">{t("Tags")}:</label>
+            <label className="text-sm font-medium text-gray-700">{t('Tags')}:</label>
             <input
               type="text"
-              placeholder={t("tag1, tag2, tag3...")}
+              placeholder={t('tag1, tag2, tag3...')}
               value={tags.join(', ')}
               onChange={e =>
                 setTags(
@@ -243,7 +240,7 @@ const UserNotesScreen: React.FC = () => {
       } else {
         setError(t('Failed to load notes'));
       }
-    } catch (err) {
+    } catch {
       setError(t('Error loading notes'));
     } finally {
       setIsLoading(false);
@@ -282,7 +279,7 @@ const UserNotesScreen: React.FC = () => {
           setShowNewNote(false);
         }
       }
-    } catch (err) {
+    } catch {
       setError(t('Error saving note'));
     }
   };
@@ -298,7 +295,7 @@ const UserNotesScreen: React.FC = () => {
           setSelectedNote(null);
         }
       }
-    } catch (err) {
+    } catch {
       setError(t('Error deleting note'));
     }
   };
@@ -314,22 +311,21 @@ const UserNotesScreen: React.FC = () => {
 
   return (
     <div className="flex h-full">
-      {/* Notes List */}
       <div className="w-1/3 border-r border-gray-200 p-4">
         <div className="mb-4">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-800">{t("My Notes")}</h1>
+            <h1 className="text-2xl font-bold text-gray-800">{t('My Notes')}</h1>
             <button
               onClick={handleNewNote}
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
             >
-              {t("New Note")}
+              {t('New Note')}
             </button>
           </div>
 
           <input
             type="text"
-            placeholder={t("Search notes...")}
+            placeholder={t('Search notes...')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -337,7 +333,7 @@ const UserNotesScreen: React.FC = () => {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-8">{t("Loading notes...")}</div>
+          <div className="text-center py-8">{t('Loading notes...')}</div>
         ) : error ? (
           <div className="text-red-600 py-8">{error}</div>
         ) : (
@@ -368,7 +364,7 @@ const UserNotesScreen: React.FC = () => {
                             : 'bg-green-100 text-green-700'
                         }`}
                       >
-                        {t(note.note_type === "private" ? "Private" : "Shared")}
+                        {t(note.note_type === 'private' ? 'Private' : 'Shared')}
                       </span>
                       {note.tags.map((tag, index) => (
                         <span
@@ -409,7 +405,6 @@ const UserNotesScreen: React.FC = () => {
         )}
       </div>
 
-      {/* Note Editor/Viewer */}
       <div className="flex-1 p-4">
         {showNewNote ? (
           <UserNotes onSave={handleSaveNote} />
@@ -431,7 +426,7 @@ const UserNotesScreen: React.FC = () => {
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h 5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a 2 2 0 01-2 2z"
                 />
               </svg>
-              <p className="text-lg">{t("Select a note to view or create a new one")}</p>
+              <p className="text-lg">{t('Select a note to view or create a new one')}</p>
             </div>
           </div>
         )}

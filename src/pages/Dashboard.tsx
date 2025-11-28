@@ -10,7 +10,7 @@ import { useSignupPopup } from '../hooks/useSignupPopup';
 import apiService from '../services/api';
 import authService from '../services/auth';
 import logger from '../services/logging';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 const Panel1 = () => {
   const { t } = useTranslation();
@@ -32,13 +32,13 @@ const Panel1 = () => {
 
   return (
     <header className="App-header">
-      <p>{t("current_time")}: {currentTime}</p>
-      <p><Link to="patients">{t("Patients")}</Link></p>
-      <p><Link to="about">{t("About")}</Link></p>
-      <p><Link to="contact">{t("Contact")}</Link></p>
+      <p>{t('current_time')}: {currentTime}</p>
+      <p><Link to='patients'>{t('Patients')}</Link></p>
+      <p><Link to='about'>{t('About')}</Link></p>
+      <p><Link to='contact'>{t('Contact')}</Link></p>
 
-      <button className="sidebar-toggle-button">{t("toggle_sidebar")}</button>
-      <button className="profile-button">{t("profile")}</button>
+      <button className="sidebar-toggle-button">{t('toggle_sidebar')}</button>
+      <button className="profile-button">{t('profile')}</button>
     </header>
   );
 };
@@ -48,12 +48,12 @@ const DashboardOld = () => {
 
   return (
     <div className="dashboard">
-      <h2>{t("Dashboard")}</h2>
+      <h2>{t('Dashboard')}</h2>
       <div className="cards-grid">
         <div className="card"><Panel1 /></div>
         <div className="card"><BarChart /></div>
-        <div className="card">{t("Panel 3")}</div>
-        <div className="card">{t("Panel 4")}</div>
+        <div className="card">{t('Panel 3')}</div>
+        <div className="card">{t('Panel 4')}</div>
       </div>
     </div>
   );
@@ -79,48 +79,48 @@ const AuthenticatedDashboard = ({
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="dashboard-title">
-          <h1>{t("Dashboard")}</h1>
-          <p>{t("welcome_back")}, {user.first_name || user.username}!</p>
+          <h1>{t('Dashboard')}</h1>
+          <p>{t('welcome_back')}, {user.first_name || user.username}!</p>
         </div>
         <div className="user-info">
           <span className="user-role">{user.role}</span>
           <button onClick={onLogout} className="logout-button">
-            {t("Logout")}
+            {t('Logout')}
           </button>
         </div>
       </div>
 
       <div className="dashboard-grid">
         <div className="card stats-card">
-          <div className="card-title">{t("Total Patients")}</div>
+          <div className="card-title">{t('Total Patients')}</div>
           <h2>{dashboardData.totalPatients}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Total Income")}</div>
+          <div className="card-title">{t('Total Income')}</div>
           <h2>${dashboardData.totalIncome}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Appointments")}</div>
+          <div className="card-title">{t('Appointments')}</div>
           <h2>{dashboardData.appointments}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Reports")}</div>
+          <div className="card-title">{t('Reports')}</div>
           <h2>{dashboardData.reports}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card appointments-card">
-          <div className="card-title">{t("Appointments")}</div>
+          <div className="card-title">{t('Appointments')}</div>
         </div>
 
         <div className="card activity-card">
-          <div className="card-title">{t("Recent Activity")}</div>
+          <div className="card-title">{t('Recent Activity')}</div>
         </div>
       </div>
     </div>
@@ -134,14 +134,14 @@ const PublicDashboard = ({ showSignupPopup }: { showSignupPopup: () => void }) =
     <div className="dashboard">
       <div className="dashboard-header">
         <div className="dashboard-title">
-          <h1>{t("Dashboard")}</h1>
-          <p>{t("welcome_public_message")}</p>
+          <h1>{t('Dashboard')}</h1>
+          <p>{t('welcome_public_message')}</p>
         </div>
 
         <div className="user-info">
-          <span className="user-role">{t("Guest")}</span>
+          <span className="user-role">{t('Guest')}</span>
           <button onClick={showSignupPopup} className="signup-button">
-            {t("Sign Up")}
+            {t('Sign Up')}
           </button>
         </div>
       </div>
@@ -149,45 +149,45 @@ const PublicDashboard = ({ showSignupPopup }: { showSignupPopup: () => void }) =
       <div className="dashboard-grid">
 
         <div className="card stats-card">
-          <div className="card-title">{t("Total Patients")}</div>
+          <div className="card-title">{t('Total Patients')}</div>
           <h2>{dashboardData.totalPatients}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Total Income")}</div>
+          <div className="card-title">{t('Total Income')}</div>
           <h2>${dashboardData.totalIncome}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Appointments")}</div>
+          <div className="card-title">{t('Appointments')}</div>
           <h2>{dashboardData.appointments}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card stats-card">
-          <div className="card-title">{t("Reports")}</div>
+          <div className="card-title">{t('Reports')}</div>
           <h2>{dashboardData.reports}</h2>
           <p>+2.7%</p>
         </div>
 
         <div className="card appointments-card">
-          <div className="card-title">{t("Appointments")}</div>
+          <div className="card-title">{t('Appointments')}</div>
           <div className="guest-notice">
-            <p>{t("signup_to_view_appointments")}</p>
+            <p>{t('signup_to_view_appointments')}</p>
             <button onClick={showSignupPopup} className="guest-action-button">
-              {t("Get Started")}
+              {t('Get Started')}
             </button>
           </div>
         </div>
 
         <div className="card activity-card">
-          <div className="card-title">{t("Recent Activity")}</div>
+          <div className="card-title">{t('Recent Activity')}</div>
           <div className="guest-notice">
-            <p>{t("signup_to_view_recent_activity")}</p>
+            <p>{t('signup_to_view_recent_activity')}</p>
             <button onClick={showSignupPopup} className="guest-action-button">
-              {t("Get Started")}
+              {t('Get Started')}
             </button>
           </div>
         </div>
@@ -289,9 +289,9 @@ const Dashboard = () => {
   const handleSetupAdmin = async () => {
     const result = await authService.setupDefaultAdmin();
     if (result.success) {
-      alert(t("default_admin_created"));
+      alert(t('default_admin_created'));
     } else {
-      alert(t("default_admin_error") + result.error);
+      alert(t('default_admin_error') + result.error);
     }
   };
 
@@ -299,7 +299,7 @@ const Dashboard = () => {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-        <p>{t("Loading")}</p>
+        <p>{t('Loading')}</p>
       </div>
     );
   }
@@ -338,9 +338,9 @@ const Dashboard = () => {
             {usersExist === false && (
               <div className="admin-setup">
                 <button onClick={handleSetupAdmin} className="setup-admin-button">
-                  {t("Setup Default Admin")}
+                  {t('Setup Default Admin')}
                 </button>
-                <p className="setup-note">{t("setup_note")}</p>
+                <p className="setup-note">{t('setup_note')}</p>
               </div>
             )}
           </div>

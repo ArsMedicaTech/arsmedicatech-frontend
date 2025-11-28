@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React, { useEffect } from 'react';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 export default function RadarChart({
   data,
@@ -58,11 +58,11 @@ export default function RadarChart({
         .attr('stroke', '#ddd');
     }
 
-    // Axes
     metrics.forEach((metric, i) => {
       const angle = i * angleSlice - Math.PI / 2;
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
+
       svg.append('line')
         .attr('x1', 0)
         .attr('y1', 0)
