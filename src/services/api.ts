@@ -535,7 +535,10 @@ export const userNotesAPI = {
     apiService.putAPI(`/user-notes/${id}`, noteData),
 
   // Delete a user note
-  delete: (id: string) => apiService.deleteAPI(`/user-notes/${id}`),
+  delete: (id: string) => {
+      const idOnly = id.split(":")[1]; 
+      return apiService.deleteAPI(`/user-notes/${idOnly}`);
+  },
 
   // Search user notes
   search: (query: string) =>
@@ -565,6 +568,24 @@ export const adminAPI = {
   // Get all administrators
   getAdministrators: (organizationId: string) =>
     apiService.getAPI(`/admin/administrators/${organizationId}`),
+};
+
+// Education API operations
+export const educationAPI = {
+  // Get education artifact by ID
+  getById: (artifactId: string) =>
+    apiService.getAPI(`/education/${artifactId}`),
+
+  // Get all education artifacts
+  getAll: () => apiService.getAPI('/education'),
+
+  // Search education artifacts
+  search: (query: string) =>
+    apiService.getAPI(`/education/search?q=${encodeURIComponent(query)}`),
+
+  // Get education artifacts by category
+  getByCategory: (category: string) =>
+    apiService.getAPI(`/education/category/${category}`),
 };
 
 export default apiService;

@@ -18,7 +18,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   isSubmitting = false,
 }) => {
   const { t, i18n } = useTranslation();
-
   const [formData, setFormData] = useState({
     patientName: "",
     appointmentDate: selectedDate
@@ -94,7 +93,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             {selectedDate && (
               <div className="mb-2 p-2 bg-blue-50 border border-blue-200 rounded-md">
                 <span className="text-sm text-blue-700">
-                  {t("selected")}: {selectedDate.toLocaleDateString(i18n.language)}
+                  {t("selected")}:{" "}
+                  {selectedDate.toLocaleDateString(i18n.language)}
                 </span>
               </div>
             )}
