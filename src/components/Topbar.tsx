@@ -24,8 +24,8 @@ export default function Topbar(props: Props) {
   const { isPopupOpen, showSignupPopup, hideSignupPopup } = useSignupPopup();
 
   const { i18n, t } = useTranslation();
-const [lang, setLang] = useState<string>(i18n.language || "en");
-    console.log("Langue actuelle :", i18n.language);
+  const [lang, setLang] = useState<string>(i18n.language || "en");
+  console.log("Langue actuelle :", i18n.language);
 
   const handleLanguageChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const newLang = event.target.value;
