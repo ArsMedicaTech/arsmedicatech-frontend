@@ -85,7 +85,7 @@ const Sidebar = () => {
         <ul>
           <li>
             <NavLink
-              to='/'
+              to="/"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Dashboard'
             >
@@ -97,7 +97,7 @@ const Sidebar = () => {
             <>
               <li>
                 <NavLink
-                  to='/organization'
+                  to="/organization"
                   className={({ isActive }) => (isActive ? 'active' : '')}
                   title='Organization'
                 >
@@ -107,7 +107,7 @@ const Sidebar = () => {
 
               <li>
                 <NavLink
-                  to='/admin'
+                  to="/admin"
                   className={({ isActive }) => (isActive ? 'active' : '')}
                   title='Admin'
                 >
@@ -132,7 +132,7 @@ const Sidebar = () => {
               )}
               <li>
                 <NavLink
-                  to='/health-metrics'
+                  to="/health-metrics"
                   className={({ isActive }) => (isActive ? 'active' : '')}
                   title='Health Metrics'
                 >
@@ -144,7 +144,7 @@ const Sidebar = () => {
             <>
               <li>
                 <NavLink
-                  to='/patients'
+                  to="/patients"
                   className={({ isActive }) => (isActive ? 'active' : '')}
                   title='Patients'
                 >
@@ -153,7 +153,7 @@ const Sidebar = () => {
               </li>
               <li>
                 <NavLink
-                  to='/optimal-table-demo'
+                  to="/optimal-table-demo"
                   className={({ isActive }) => (isActive ? 'active' : '')}
                   title='Optimal Demo'
                 >
@@ -165,7 +165,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/lab-results'
+              to="/lab-results"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Lab Results'
             >
@@ -175,7 +175,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/messages'
+              to="/messages"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Messages'
             >
@@ -185,7 +185,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/schedule'
+              to="/schedule"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Schedule'
             >
@@ -195,7 +195,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/settings'
+              to="/settings"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Settings'
             >
@@ -205,7 +205,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/uploads'
+              to="/uploads"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Uploads'
             >
@@ -227,7 +227,7 @@ const Sidebar = () => {
 
           <li>
             <NavLink
-              to='/notes'
+              to="/notes"
               className={({ isActive }) => (isActive ? 'active' : '')}
               title='Notes'
             >
