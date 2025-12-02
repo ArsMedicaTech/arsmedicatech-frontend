@@ -97,7 +97,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     field: keyof CreateAppointmentData,
     value: string
   ) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (field === "appointment_date") loadAvailableSlots(value);
   };
 
@@ -164,12 +164,12 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             </label>
             <select
               value={formData.patient_id}
-              onChange={e => handleInputChange("patient_id", e.target.value)}
+              onChange={(e) => handleInputChange("patient_id", e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
               required
             >
               <option value="">{t("selectPatient")}</option>
-              {patients.map(patient => (
+              {patients.map((patient) => (
                 <option key={patient.id} value={patient.id}>
                   {patient.first_name} {patient.last_name} (ID:{" "}
                   {patient.demographic_no})
@@ -179,11 +179,13 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("date")} *</label>
+            <label className="block text-sm font-medium mb-1">
+              {t("date")} *
+            </label>
             <input
               type="date"
               value={formData.appointment_date}
-              onChange={e =>
+              onChange={(e) =>
                 handleInputChange("appointment_date", e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -198,7 +200,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               </label>
               <select
                 value={formData.start_time}
-                onChange={e => {
+                onChange={(e) => {
                   handleInputChange("start_time", e.target.value);
                   handleInputChange(
                     "end_time",
@@ -208,7 +210,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
               >
-                {availableSlots.map(slot => (
+                {availableSlots.map((slot) => (
                   <option key={slot.start_time} value={slot.start_time}>
                     {slot.start_time}
                   </option>
@@ -223,7 +225,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               <input
                 type="time"
                 value={formData.end_time}
-                onChange={e => handleInputChange("end_time", e.target.value)}
+                onChange={(e) => handleInputChange("end_time", e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
                 required
               />
@@ -231,10 +233,12 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("type")}</label>
+            <label className="block text-sm font-medium mb-1">
+              {t("type")}
+            </label>
             <select
               value={formData.appointment_type}
-              onChange={e =>
+              onChange={(e) =>
                 handleInputChange("appointment_type", e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md"
@@ -255,17 +259,19 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               type="text"
               placeholder={t("locationPlaceholder")}
               value={formData.location}
-              onChange={e => handleInputChange("location", e.target.value)}
+              onChange={(e) => handleInputChange("location", e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">{t("notes")}</label>
+            <label className="block text-sm font-medium mb-1">
+              {t("notes")}
+            </label>
             <textarea
               placeholder={t("notesPlaceholder")}
               value={formData.notes}
-              onChange={e => handleInputChange("notes", e.target.value)}
+              onChange={(e) => handleInputChange("notes", e.target.value)}
               rows={3}
               className="w-full p-2 border border-gray-300 rounded-md"
             />
