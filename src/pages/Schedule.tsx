@@ -1,25 +1,25 @@
 // Schedule.tsx 
-import React, { useEffect, useState } from "react";
-import Calendar from "react-calendar";
-import { Value } from "react-calendar/dist/esm/shared/types.js";
-import AppointmentForm from "../components/AppointmentForm";
-import SignupPopup from "../components/SignupPopup";
-import { useSignupPopup } from "../hooks/useSignupPopup";
-import { appointmentService } from "../services/appointments";
-import authService from "../services/auth";
-import logger from "../services/logging";
-import "./Schedule.css";
+import React, { useEffect, useState } from 'react'
+import Calendar from 'react-calendar'
+import { Value } from 'react-calendar/dist/esm/shared/types.js'
+import AppointmentForm from '../components/AppointmentForm'
+import SignupPopup from '../components/SignupPopup'
+import { useSignupPopup } from '../hooks/useSignupPopup'
+import { appointmentService } from '../services/appointments'
+import authService from '../services/auth'
+import logger from '../services/logging'
+import './Schedule.css'
 
 interface Appointment {
-  id: string;
-  patientName: string;
-  appointmentDate: string;
-  startTime: string;
-  endTime: string;
-  appointmentType: string;
-  status: string;
-  notes?: string;
-  location?: string;
+  id: string
+  patientName: string
+  appointmentDate: string
+  startTime: string
+  endTime: string
+  appointmentType: string
+  status: string
+  notes?: string
+  location?: string
 }
 
 function isSameDay(date1: Date, date2: Date): boolean {
@@ -27,33 +27,32 @@ function isSameDay(date1: Date, date2: Date): boolean {
     date1.getDate() === date2.getDate() &&
     date1.getMonth() === date2.getMonth() &&
     date1.getFullYear() === date2.getFullYear()
-  );
+  )
 }
 
 const Schedule = () => {
-  const [calendarValue, setCalendarValue] = useState(new Date());
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [calendarValue, setCalendarValue] = useState(new Date())
+  const [appointments, setAppointments] = useState<Appointment[]>([])
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const isAuthenticated = authService.isAuthenticated();
-  const { isPopupOpen, showSignupPopup, hideSignupPopup } = useSignupPopup();
+  const isAuthenticated = authService.isAuthenticated()
+  const { isPopupOpen, showSignupPopup, hideSignupPopup } = useSignupPopup()
 
   useEffect(() => {
     const loadAppointments = async () => {
       if (isAuthenticated) {
         try {
-          logger.debug("Loading appointments from backend...");
-          const user = authService.getUser();
-          const userId = user?.id?.split(":")[1] || user?.id;
-          console.log("Current User ID:", userId);
-          const response = await appointmentService.getAppointments(userId);
-          logger.debug("Backend appointments response:", response);
+          logger.debug('Loading appointments from backend...')
+          const user = authService.getUser()
+          const userId = user?.id?.split(':')[1] || user?.id
+          console.log('Current User ID:', userId)
+          const response = await appointmentService.getAppointments(userId)
+          logger.debug('Backend appointments response:', response)
 
-          // Convert backend appointments to frontend format
           const convertedAppointments = response.appointments.map((apt) => ({
             id: apt.id,
-            patientName: `Patient ${apt.patient_id}`, // We'll need to get actual patient names later
+            patientName: `Patient ${apt.patient_id}`,
             appointmentDate: apt.appointment_date,
             startTime: apt.start_time,
             endTime: apt.end_time,
@@ -61,28 +60,26 @@ const Schedule = () => {
             status: apt.status,
             notes: apt.notes,
             location: apt.location,
-          }));
-          console.log("appointments", appointments);
-          logger.debug("Converted appointments:", convertedAppointments);
-          setAppointments(convertedAppointments);
+          }))
+          console.log('appointments', appointments)
+          logger.debug('Converted appointments:', convertedAppointments)
+          setAppointments(convertedAppointments)
         } catch (error) {
-          console.error("Error loading appointments:", error);
-          // For now, keep using local appointments if backend fails
+          console.error('Error loading appointments:', error)
         }
       }
-    };
+    }
 
-    loadAppointments();
-  }, [isAuthenticated]);
+    loadAppointments()
+  }, [isAuthenticated])
 
-  // Also load appointments when component becomes visible (for navigation back)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && isAuthenticated) {
-        logger.debug("Page became visible, refreshing appointments...");
+        logger.debug('Page became visible, refreshing appointments...')
         const loadAppointments = async () => {
           try {
-            const response = await appointmentService.getAppointments();
+            const response = await appointmentService.getAppointments()
             const convertedAppointments = response.appointments.map((apt) => ({
               id: apt.id,
               patientName: `Patient ${apt.patient_id}`,
@@ -93,67 +90,64 @@ const Schedule = () => {
               status: apt.status,
               notes: apt.notes,
               location: apt.location,
-            }));
-            console.log("appointments1", appointments);
-            setAppointments(convertedAppointments);
+            }))
+            console.log('appointments1', appointments)
+            setAppointments(convertedAppointments)
           } catch (error) {
-            console.error("Error refreshing appointments:", error);
+            console.error('Error refreshing appointments:', error)
           }
-        };
-        loadAppointments();
+        }
+        loadAppointments()
       }
-    };
+    }
 
-    document.addEventListener("visibilitychange", handleVisibilityChange);
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     return () =>
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [isAuthenticated]);
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [isAuthenticated])
 
   const handleCalendarChange = (
     value: Value,
     event?: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    logger.debug("Calendar change - value:", value);
+    logger.debug('Calendar change - value:', value)
 
     if (!isAuthenticated) {
-      showSignupPopup();
-      return;
+      showSignupPopup()
+      return
     }
 
-    let selectedDate: Date;
+    let selectedDate: Date
     if (value instanceof Date) {
-      selectedDate = value;
+      selectedDate = value
     } else if (Array.isArray(value) && value[0] instanceof Date) {
-      selectedDate = value[0];
+      selectedDate = value[0]
     } else {
-      selectedDate = new Date();
+      selectedDate = new Date()
     }
 
-    logger.debug("Setting selected date:", selectedDate);
-    setCalendarValue(selectedDate);
-    setSelectedDate(selectedDate);
-    setIsModalOpen(true);
-  };
+    logger.debug('Setting selected date:', selectedDate)
+    setCalendarValue(selectedDate)
+    setSelectedDate(selectedDate)
+    setIsModalOpen(true)
+  }
 
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const refreshAppointments = async () => {
     if (isAuthenticated) {
       try {
-        logger.debug("Refreshing appointments...");
-
-        const response = await appointmentService.getAppointments();
-
+        logger.debug('Refreshing appointments...')
+        const response = await appointmentService.getAppointments()
         if (!response.appointments || response.appointments.length === 0) {
-          logger.debug("No appointments returned from backend");
-          setAppointments([]);
-          return;
+          logger.debug('No appointments returned from backend')
+          setAppointments([])
+          return
         }
-
         const convertedAppointments = response.appointments.map((apt) => {
-          logger.debug("Converting appointment:", apt);
+          logger.debug('Converting appointment:', apt)
           return {
             id: apt.id,
             patientName: `Patient ${apt.patient_id}`,
@@ -164,72 +158,60 @@ const Schedule = () => {
             status: apt.status,
             notes: apt.notes,
             location: apt.location,
-          };
-        });
-        setAppointments(convertedAppointments);
-        logger.debug("Appointments refreshed:", convertedAppointments);
+          }
+        })
+        setAppointments(convertedAppointments)
+        logger.debug('Appointments refreshed:', convertedAppointments)
       } catch (error) {
-        console.error("Error refreshing appointments:", error);
-        console.error("Error details:", {
+        console.error('Error refreshing appointments:', error)
+        console.error('Error details:', {
           message: (error as Error).message,
           stack: (error as Error).stack,
           name: (error as Error).name,
-        });
+        })
       }
     }
-  };
+  }
 
   const handleAppointmentSubmit = async (appointmentData: any) => {
-    logger.debug("Appointment submitted:", appointmentData);
-    setIsSubmitting(true);
-    setError("");
+    logger.debug('Appointment submitted:', appointmentData)
+    setIsSubmitting(true)
+    setError('')
 
     try {
-      // Convert frontend form data to backend format
       const backendData = {
-        patient_id: "1", // For now, use a default patient ID - we'll need to implement patient selection
+        patient_id: '1',
         appointment_date: appointmentData.appointmentDate,
         start_time: appointmentData.startTime,
         end_time: appointmentData.endTime,
         appointment_type: appointmentData.appointmentType,
         notes: appointmentData.notes,
         location: appointmentData.location,
-      };
+      }
 
-      logger.debug("Sending to backend:", backendData);
-
-      // Send to backend
+      logger.debug('Sending to backend:', backendData)
       const newBackendAppointment =
-        await appointmentService.createAppointment(backendData);
-      logger.debug("Backend response:", newBackendAppointment);
-
-      // Refresh the appointments list from the backend
-      await refreshAppointments();
-
-      // MODIFICATION: Dispatch custom event to notify Sidebar to refresh appointments
-      // This ensures the Sidebar updates its remaining appointments count when a new appointment is created
-      window.dispatchEvent(new CustomEvent('appointmentCreated'));
-
-      setSelectedDate(null);
-      setIsModalOpen(false);
-
-      // Show success message
-      setShowSuccessMessage(true);
-      setTimeout(() => setShowSuccessMessage(false), 3000);
+        await appointmentService.createAppointment(backendData)
+      logger.debug('Backend response:', newBackendAppointment)
+      await refreshAppointments()
+      window.dispatchEvent(new CustomEvent('appointmentCreated'))
+      setSelectedDate(null)
+      setIsModalOpen(false)
+      setShowSuccessMessage(true)
+      setTimeout(() => setShowSuccessMessage(false), 3000)
     } catch (error) {
-      console.error("Error creating appointment:", error);
-      setError("Failed to create appointment. Please try again.");
+      console.error('Error creating appointment:', error)
+      setError('Failed to create appointment. Please try again.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (view === "month") {
+    if (view === 'month') {
       const dayAppointments = appointments.filter((apt) =>
         isSameDay(date, new Date(apt.appointmentDate))
-      );
-
+      )
       if (dayAppointments.length > 0) {
         return (
           <div className="appointment-indicators">
@@ -246,54 +228,45 @@ const Schedule = () => {
               </div>
             )}
           </div>
-        );
+        )
       }
     }
-    return null;
-  };
+    return null
+  }
 
   const tileClassName = ({ date, view }: { date: Date; view: string }) => {
-    if (view === "month") {
-      const classes: string[] = [];
-
-      // Check if this date has appointments
+    if (view === 'month') {
+      const classes: string[] = []
       const dayAppointments = appointments.filter((apt) =>
         isSameDay(date, new Date(apt.appointmentDate))
-      );
-      if (dayAppointments.length > 0) {
-        classes.push("has-appointments");
-      }
-
-      // Check if this is the selected date
-      if (selectedDate && isSameDay(date, selectedDate)) {
-        classes.push("selected-date");
-      }
-
-      return classes.length > 0 ? classes.join(" ") : null;
+      )
+      if (dayAppointments.length > 0) classes.push('has-appointments')
+      if (selectedDate && isSameDay(date, selectedDate)) classes.push('selected-date')
+      return classes.length > 0 ? classes.join(' ') : null
     }
-    return null;
-  };
+    return null
+  }
 
   const getAppointmentsForDate = (date: Date) => {
     return appointments
       .filter((apt) => isSameDay(date, new Date(apt.appointmentDate)))
-      .sort((a, b) => a.startTime.localeCompare(b.startTime));
-  };
+      .sort((a, b) => a.startTime.localeCompare(b.startTime))
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "confirmed":
-        return "bg-green-500";
-      case "cancelled":
-        return "bg-red-500";
-      case "completed":
-        return "bg-blue-500";
-      case "no_show":
-        return "bg-gray-500";
+      case 'confirmed':
+        return 'bg-green-500'
+      case 'cancelled':
+        return 'bg-red-500'
+      case 'completed':
+        return 'bg-blue-500'
+      case 'no_show':
+        return 'bg-gray-500'
       default:
-        return "bg-yellow-500";
+        return 'bg-yellow-500'
     }
-  };
+  }
 
   return (
     <>
@@ -319,10 +292,10 @@ const Schedule = () => {
               </button>
               <button
                 onClick={() => {
-                  logger.debug("New Appointment button clicked");
-                  setSelectedDate(new Date());
-                  setIsModalOpen(true);
-                  logger.debug("Modal should be open:", true);
+                  logger.debug('New Appointment button clicked')
+                  setSelectedDate(new Date())
+                  setIsModalOpen(true)
+                  logger.debug('Modal should be open:', true)
                 }}
                 className="btn-primary"
               >
@@ -342,7 +315,6 @@ const Schedule = () => {
           />
         </div>
 
-        {/* Appointments for selected date */}
         {selectedDate && isAuthenticated && (
           <div className="appointments-list">
             <h3>Appointments for {selectedDate.toLocaleDateString()}</h3>
@@ -352,15 +324,9 @@ const Schedule = () => {
                   <div className="appointment-time">
                     {appointment.startTime} - {appointment.endTime}
                   </div>
-                  <div className="appointment-patient">
-                    {appointment.patientName}
-                  </div>
-                  <div className="appointment-type">
-                    {appointment.appointmentType}
-                  </div>
-                  <div
-                    className={`appointment-status ${getStatusColor(appointment.status)}`}
-                  >
+                  <div className="appointment-patient">{appointment.patientName}</div>
+                  <div className="appointment-type">{appointment.appointmentType}</div>
+                  <div className={`appointment-status ${getStatusColor(appointment.status)}`}>
                     {appointment.status}
                   </div>
                   {appointment.notes && (
@@ -369,9 +335,7 @@ const Schedule = () => {
                 </div>
               ))}
               {getAppointmentsForDate(selectedDate).length === 0 && (
-                <p className="no-appointments">
-                  No appointments scheduled for this date.
-                </p>
+                <p className="no-appointments">No appointments scheduled for this date.</p>
               )}
             </div>
           </div>
@@ -380,21 +344,18 @@ const Schedule = () => {
 
       <SignupPopup isOpen={isPopupOpen} onClose={hideSignupPopup} />
 
-      {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
           Appointment created successfully!
         </div>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
           {error}
         </div>
       )}
 
-      {/* Loading Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-xl">
@@ -409,37 +370,36 @@ const Schedule = () => {
       <AppointmentForm
         isOpen={isModalOpen}
         onClose={() => {
-          logger.debug("Modal closing");
-          setIsModalOpen(false);
-          setSelectedDate(null);
+          logger.debug('Modal closing')
+          setIsModalOpen(false)
+          setSelectedDate(null)
         }}
         selectedDate={selectedDate || undefined}
         onSubmit={handleAppointmentSubmit}
         isSubmitting={isSubmitting}
       />
 
-      {/* Debug info */}
-      {process.env.NODE_ENV === "development" && (
+      {process.env.NODE_ENV === 'development' && (
         <div
           style={{
-            position: "fixed",
+            position: 'fixed',
             bottom: 10,
             right: 10,
-            background: "white",
+            background: 'white',
             padding: 10,
-            border: "1px solid #ccc",
-            fontSize: "12px",
+            border: '1px solid #ccc',
+            fontSize: '12px',
           }}
         >
           Modal Open: {isModalOpen.toString()}
           <br />
-          Selected Date: {selectedDate?.toDateString() || "None"}
+          Selected Date: {selectedDate?.toDateString() || 'None'}
           <br />
           Appointments: {appointments.length}
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Schedule;
+export default Schedule
