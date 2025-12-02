@@ -1,8 +1,8 @@
 // UserNotes
-import { MDXEditor } from "@mdxeditor/editor";
-import "@mdxeditor/editor/style.css";
-import React, { useEffect, useState } from "react";
-import { userNotesAPI } from "../services/api";
+import { MDXEditor } from '@mdxeditor/editor';
+import '@mdxeditor/editor/style.css';
+import React, { useEffect, useState } from 'react';
+import { userNotesAPI } from '../services/api';
 
 // Import all the plugins we need
 import {
@@ -27,13 +27,13 @@ import {
   tablePlugin,
   thematicBreakPlugin,
   toolbarPlugin,
-} from "@mdxeditor/editor";
+} from '@mdxeditor/editor';
 
 interface UserNote {
   id: string;
   title: string;
   content: string;
-  note_type: "private" | "shared";
+  note_type: 'private' | 'shared';
   tags: string[];
   date_created: string;
   date_updated: string;
@@ -51,38 +51,23 @@ const UserNotes: React.FC<{
   note?: UserNote;
   onSave?: (note: UserNote) => void;
 }> = ({ note, onSave }) => {
-  const [draftMarkdown, setDraftMarkdown] = useState(note?.content || "");
-  const [title, setTitle] = useState(note?.title || "");
-  const [noteType, setNoteType] = useState<"private" | "shared">(
-    note?.note_type || "private"
+  const [markdown, setMarkdown] = useState(note?.content || '');
+  const [title, setTitle] = useState(note?.title || '');
+  const [noteType, setNoteType] = useState<'private' | 'shared'>(
+    note?.note_type || 'private'
   );
   const [tags, setTags] = useState<string[]>(note?.tags || []);
   const [isEditing, setIsEditing] = useState(!note);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    if (note) {
-      setDraftMarkdown(note.content);
-      setTitle(note.title);
-      setNoteType(note.note_type);
-      setTags(note.tags);
-      setIsEditing(false);
-    } else {
-      setDraftMarkdown("");
-      setTitle("");
-      setNoteType("private");
-      setTags([]);
-      setIsEditing(true);
-    }
-  }, [note?.id]);
-
   const handleSave = async () => {
     if (!title.trim()) {
-      alert("Please enter a title for the note");
+      alert('Please enter a title for the note');
       return;
     }
-    if (!draftMarkdown.trim()) {
-      alert("Please enter some content for the note");
+
+    if (!markdown.trim()) {
+      alert('Please enter some content for the note');
       return;
     }
 
@@ -90,7 +75,7 @@ const UserNotes: React.FC<{
     try {
       const noteData = {
         title: title.trim(),
-        content: draftMarkdown,
+        content: markdown,
         note_type: noteType,
         tags: tags,
       };
@@ -98,23 +83,30 @@ const UserNotes: React.FC<{
       let savedNote: UserNote;
 
       if (note?.id) {
+        // Update existing note
         const response = await userNotesAPI.update(note.id, noteData);
-        if (!response.success)
-          throw new Error(response.error || "Failed to update note");
-        savedNote = response.note;
+        if (response.success) {
+          savedNote = response.note;
+        } else {
+          throw new Error(response.error || 'Failed to update note');
+        }
       } else {
+        // Create new note
         const response = await userNotesAPI.create(noteData);
-        if (!response.success)
-          throw new Error(response.error || "Failed to create note");
-        savedNote = response.note;
+        if (response.success) {
+          savedNote = response.note;
+        } else {
+          throw new Error(response.error || 'Failed to create note');
+        }
       }
 
       if (onSave) {
         onSave(savedNote);
       }
     } catch (error) {
-      console.error("Error saving note:", error);
-      alert("An error occurred while saving the note. Please try again later.");
+      console.error('Error saving note:', error);
+      console.error('Error saving note:', error);
+      alert('An error occurred while saving the note. Please try again later.');
     } finally {
       setIsSaving(false);
     }
@@ -128,7 +120,7 @@ const UserNotes: React.FC<{
             type="text"
             placeholder="Note title..."
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-semibold"
             disabled={!isEditing}
           />
@@ -140,14 +132,14 @@ const UserNotes: React.FC<{
               disabled={isSaving}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-blue-400"
             >
-              {isSaving ? "Saving..." : "Save"}
+              {isSaving ? 'Saving...' : 'Save'}
             </button>
           )}
           <button
             onClick={() => setIsEditing(!isEditing)}
             className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
           >
-            {isEditing ? "View" : "Edit"}
+            {isEditing ? 'View' : 'Edit'}
           </button>
         </div>
       </div>
@@ -158,8 +150,8 @@ const UserNotes: React.FC<{
             <label className="text-sm font-medium text-gray-700">Type:</label>
             <select
               value={noteType}
-              onChange={(e) =>
-                setNoteType(e.target.value as "private" | "shared")
+              onChange={e =>
+                setNoteType(e.target.value as 'private' | 'shared')
               }
               className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -172,13 +164,13 @@ const UserNotes: React.FC<{
             <input
               type="text"
               placeholder="tag1, tag2, tag3..."
-              value={tags.join(", ")}
-              onChange={(e) =>
+              value={tags.join(', ')}
+              onChange={e =>
                 setTags(
                   e.target.value
-                    .split(",")
-                    .map((tag) => tag.trim())
-                    .filter((tag) => tag)
+                    .split(',')
+                    .map(tag => tag.trim())
+                    .filter(tag => tag)
                 )
               }
               className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -188,9 +180,8 @@ const UserNotes: React.FC<{
       )}
 
       <MDXEditor
-        key={note?.id || "new"}
-        markdown={draftMarkdown}
-        onChange={setDraftMarkdown}
+        markdown={markdown}
+        onChange={setMarkdown}
         readOnly={!isEditing}
         className="min-h-[400px] border border-gray-300 rounded-lg"
         contentEditableClassName="prose max-w-none p-4 text-left"
@@ -206,7 +197,7 @@ const UserNotes: React.FC<{
           tablePlugin(),
           codeBlockPlugin(),
           codeMirrorPlugin({
-            codeBlockLanguages: { js: "JavaScript", css: "CSS", txt: "text" },
+            codeBlockLanguages: { js: 'JavaScript', css: 'CSS', txt: 'text' },
           }),
           sandpackPlugin(),
           frontmatterPlugin(),
@@ -235,7 +226,7 @@ const UserNotesScreen: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showNewNote, setShowNewNote] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     loadNotes();
@@ -248,11 +239,11 @@ const UserNotesScreen: React.FC = () => {
       if (response.success) {
         setNotes(response.notes);
       } else {
-        setError("Failed to load notes");
+        setError('Failed to load notes');
       }
     } catch (err) {
-      setError("Error loading notes");
-      console.error("Error loading notes:", err);
+      setError('Error loading notes');
+      console.error('Error loading notes:', err);
     } finally {
       setIsLoading(false);
     }
@@ -270,50 +261,56 @@ const UserNotesScreen: React.FC = () => {
 
   const handleSaveNote = async (note: UserNote) => {
     try {
-      let savedNote: UserNote;
-
       if (note.id) {
-        const response = await userNotesAPI.update(note.id, note);
-        if (!response.success) throw new Error(response.error);
-        savedNote = response.note;
+        // Update existing note - only send the fields to update, not the entire note object
+        const updateData = {
+          title: note.title,
+          content: note.content,
+          note_type: note.note_type,
+          tags: note.tags,
+        };
+        const response = await userNotesAPI.update(note.id, updateData);
+        if (response.success) {
+          setNotes(notes.map(n => (n.id === note.id ? response.note : n)));
+          setSelectedNote(response.note);
+        }
       } else {
+        // Create new note
         const response = await userNotesAPI.create(note);
-        if (!response.success) throw new Error(response.error);
-        savedNote = response.note;
+        if (response.success) {
+          setNotes([response.note, ...notes]);
+          setSelectedNote(response.note);
+          setShowNewNote(false);
+        }
       }
-
-      // Recharge toutes les notes depuis le serveur
-      await loadNotes();
-
-      // Sélectionne automatiquement la note sauvegardée
-      setSelectedNote(savedNote);
-      setShowNewNote(false);
     } catch (err) {
-      console.error(err);
-      setError("Error saving note");
+      setError('Error saving note');
+      console.error('Error saving note:', err);
     }
   };
 
   const handleDeleteNote = async (noteId: string) => {
-    if (!confirm("Are you sure you want to delete this note?")) return;
+    if (!confirm('Are you sure you want to delete this note?')) return;
 
     try {
       const response = await userNotesAPI.delete(noteId);
       if (response.success) {
-        setNotes(notes.filter((n) => n.id !== noteId));
-        if (selectedNote?.id === noteId) setSelectedNote(null);
+        setNotes(notes.filter(n => n.id !== noteId));
+        if (selectedNote?.id === noteId) {
+          setSelectedNote(null);
+        }
       }
     } catch (err) {
-      setError("Error deleting note");
-      console.error("Error deleting note:", err);
+      setError('Error deleting note');
+      console.error('Error deleting note:', err);
     }
   };
 
   const filteredNotes = notes.filter(
-    (note) =>
+    note =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       note.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.tags.some((tag) =>
+      note.tags.some(tag =>
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
@@ -337,7 +334,7 @@ const UserNotesScreen: React.FC = () => {
             type="text"
             placeholder="Search notes..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -348,14 +345,14 @@ const UserNotesScreen: React.FC = () => {
           <div className="text-red-600 py-8">{error}</div>
         ) : (
           <div className="space-y-2">
-            {filteredNotes.map((note) => (
+            {filteredNotes.map(note => (
               <div
                 key={note.id}
                 onClick={() => handleNoteClick(note)}
                 className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                   selectedNote?.id === note.id
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex justify-between items-start">
@@ -369,9 +366,9 @@ const UserNotesScreen: React.FC = () => {
                     <div className="flex items-center mt-2 space-x-2">
                       <span
                         className={`px-2 py-1 text-xs rounded-full ${
-                          note.note_type === "private"
-                            ? "bg-gray-100 text-gray-700"
-                            : "bg-green-100 text-green-700"
+                          note.note_type === 'private'
+                            ? 'bg-gray-100 text-gray-700'
+                            : 'bg-green-100 text-green-700'
                         }`}
                       >
                         {note.note_type}
@@ -387,7 +384,7 @@ const UserNotesScreen: React.FC = () => {
                     </div>
                   </div>
                   <button
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleDeleteNote(note.id);
                     }}

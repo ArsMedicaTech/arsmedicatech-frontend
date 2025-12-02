@@ -535,10 +535,7 @@ export const userNotesAPI = {
     apiService.putAPI(`/user-notes/${id}`, noteData),
 
   // Delete a user note
-  delete: (id: string) => {
-    const cleanId = id.replace("UserNote:", "");
-    return apiService.deleteAPI(`/user-notes/${cleanId}`);
-  },
+  delete: (id: string) => apiService.deleteAPI(`/user-notes/${id}`),
 
   // Search user notes
   search: (query: string) =>
