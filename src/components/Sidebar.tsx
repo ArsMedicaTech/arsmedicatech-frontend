@@ -1,97 +1,93 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { usePluginWidgets } from "../hooks/usePluginWidgets";
-import logger from "../services/logging";
-import "./Sidebar.css";
-import { useUser } from "./UserContext";
-import { useTranslation } from "react-i18next"; // 🌍 i18n
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { usePluginWidgets } from '../hooks/usePluginWidgets';
+import logger from '../services/logging';
+import './Sidebar.css';
+import { useUser } from './UserContext';
+// It is recommended to use an icon library like react-icons
+// import { FiGrid, FiUsers, FiMessageSquare, FiCalendar } from 'react-icons/fi';
 
 const Sidebar = () => {
   const { user, isLoading } = useUser();
-  const userType = user?.role || "guest";
+  const userType = user?.role || 'guest';
   const widgets = usePluginWidgets();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { t } = useTranslation();
 
-  logger.debug("Sidebar user:", user);
+  logger.debug('Sidebar user:', user);
 
-  if (isLoading) return null;
+  if (isLoading) return null; // or a spinner
 
   return (
-    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="logo-container">ArsMedicaTech</div>
         <div className="release-info">Version 0.0.1 (alpha)</div>
         <button
           className="sidebar-toggle"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          title={isCollapsed ? t("expand") : t("collapse")}
+          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {isCollapsed ? "→" : "←"}
+          {isCollapsed ? '→' : '←'}
         </button>
       </div>
-
-      <nav className={isCollapsed ? "collapsed" : ""}>
+      <nav className={isCollapsed ? 'collapsed' : ''}>
         <ul>
-          {/* 🏠 Dashboard */}
+          {/* Add the `active` class to the active route... */}
           <li>
             <NavLink
               to="/"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("dashboard")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Dashboard' : ''}
             >
-              {isCollapsed ? "📊" : t("dashboard")}
+              {isCollapsed ? '📊' : 'Dashboard'}
             </NavLink>
           </li>
-
-          {/* 🔧 Admin / Organization */}
-          {(userType === "administrator" ||
-            userType === "superadmin" ||
-            userType === "admin") && (
-            <>
+          {userType === 'administrator' ||
+            userType === 'superadmin' ||
+            (userType === 'admin' && (
               <li>
                 <NavLink
                   to="/organization"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("organization")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title={isCollapsed ? 'Organization' : ''}
                 >
-                  {isCollapsed ? "🏢" : t("organization")}
+                  {isCollapsed ? '🏢' : 'Organization'}
                 </NavLink>
               </li>
-
+            ))}
+          {userType === 'administrator' ||
+            userType === 'superadmin' ||
+            (userType === 'admin' && (
               <li>
                 <NavLink
                   to="/admin"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("admin")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title={isCollapsed ? 'Admin' : ''}
                 >
-                  {isCollapsed ? "⚙️" : t("admin")}
+                  {isCollapsed ? '⚙️' : 'Admin'}
                 </NavLink>
               </li>
-            </>
-          )}
-
-          {/* 🩺 Patient-specific routes */}
-          {userType === "patient" ? (
+            ))}
+          {userType === 'patient' ? (
             <>
               <li>
                 {user?.id && (
                   <NavLink
                     to={`/intake/${user.id}`}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                    title={t("intakeForm")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                    title={isCollapsed ? 'Intake Form' : ''}
                   >
-                    {isCollapsed ? "📝" : t("intakeForm")}
+                    {isCollapsed ? '📝' : 'Intake Form'}
                   </NavLink>
                 )}
               </li>
               <li>
                 <NavLink
                   to="/health-metrics"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("healthMetrics")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title={isCollapsed ? 'Health Metrics' : ''}
                 >
-                  {isCollapsed ? "📈" : t("healthMetrics")}
+                  {isCollapsed ? '📈' : 'Health Metrics'}
                 </NavLink>
               </li>
             </>
@@ -100,116 +96,98 @@ const Sidebar = () => {
               <li>
                 <NavLink
                   to="/patients"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("patients")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title={isCollapsed ? 'Patients' : ''}
                 >
-                  {isCollapsed ? "👥" : t("patients")}
+                  {isCollapsed ? '👥' : 'Patients'}
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/optimal-table-demo"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("optimalDemo")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title={isCollapsed ? 'Optimal (Demo)' : ''}
                 >
-                  {isCollapsed ? "📊" : t("optimalDemo")}
+                  {isCollapsed ? '📊' : 'Optimal (Demo)'}
                 </NavLink>
               </li>
             </>
           )}
-
-          {/* 🔬 Lab Results */}
           <li>
             <NavLink
               to="/lab-results"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("labResults")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Lab Results' : ''}
             >
-              {isCollapsed ? "🧪" : t("labResults")}
+              {isCollapsed ? '🧪' : 'Lab Results'}
             </NavLink>
           </li>
-
-          {/* 💬 Messages */}
           <li>
             <NavLink
               to="/messages"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("messages")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Messages' : ''}
             >
-              {isCollapsed ? "💬" : t("messages")}
+              {isCollapsed ? '💬' : 'Messages'}
             </NavLink>
           </li>
-
-          {/* 📅 Schedule */}
           <li>
             <NavLink
               to="/schedule"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("schedule")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Schedule' : ''}
             >
-              {isCollapsed ? "📅" : t("schedule")}
+              {isCollapsed ? '📅' : 'Schedule'}
             </NavLink>
           </li>
-
-          {/* ⚙️ Settings */}
           <li>
             <NavLink
               to="/settings"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("settings")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Settings' : ''}
             >
-              {isCollapsed ? "⚙️" : t("settings")}
+              {isCollapsed ? '⚙️' : 'Settings'}
             </NavLink>
           </li>
-
-          {/* 📁 Uploads */}
           <li>
             <NavLink
               to="/uploads"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("uploads")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Uploads' : ''}
             >
-              {isCollapsed ? "📁" : t("uploads")}
+              {isCollapsed ? '📁' : 'Uploads'}
             </NavLink>
           </li>
-
-          {/* 🔧 Plugin Widgets */}
-          {widgets.map((widget) => (
+          {widgets.map(widget => (
             <li key={widget.name}>
               <NavLink
                 to={widget.path}
-                className={({ isActive }) => (isActive ? "active" : "")}
-                title={isCollapsed ? widget.name : ""}
+                className={({ isActive }) => (isActive ? 'active' : '')}
+                title={isCollapsed ? widget.name : ''}
               >
-                {isCollapsed ? "🔧" : widget.name}
+                {isCollapsed ? '🔧' : widget.name}
               </NavLink>
             </li>
           ))}
-
-          {/* 📝 Notes */}
           <li>
             <NavLink
               to="/notes"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("notes")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title={isCollapsed ? 'Notes' : ''}
             >
-              {isCollapsed ? "📝" : t("notes")}
+              {isCollapsed ? '📝' : 'Notes'}
             </NavLink>
           </li>
         </ul>
       </nav>
-
       {!isCollapsed && (
         <div className="sidebar-footer">
           <div className="corner-user-avatar"></div>
           <div className="corner-user-info">
-            <h4>
-              {t("hello")}, {user?.username}
-            </h4>
+            <h4>Hello {user?.username}</h4>
             <p>
-              {t("remainingAppointments", {
-                count: user?.appointments || 0,
-              })}
+              You have {user?.appointments || 0} remaining appointments
+              scheduled today
             </p>
           </div>
         </div>
