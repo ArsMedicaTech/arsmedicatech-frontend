@@ -90,7 +90,6 @@ const Schedule = () => {
               notes: apt.notes,
               location: apt.location,
             }));
-            console.log('appointments1', appointments);
             setAppointments(convertedAppointments);
           } catch (error) {
             console.error('Error refreshing appointments:', error);
