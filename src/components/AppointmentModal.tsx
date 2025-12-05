@@ -81,16 +81,17 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     try {
       const response = await patientAPI.getAll();
       setPatients(response.patients || []);
-    } catch {
-      setError('Failed to load patients');
-    }
+     } catch (error) {
+      console.error('Error loading patients:', error);
   };
 
   const loadAvailableSlots = async (date: string) => {
     try {
       const slots = await appointmentService.getAvailableSlots(date);
       setAvailableSlots(slots);
-    } catch {}
+       } catch (error) {
+      console.error('Error loading available slots:', error);
+    }
   };
 
   const handleInputChange = (
@@ -98,8 +99,13 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     value: string
   ) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (field === 'appointment_date') loadAvailableSlots(value);
-  };
+
+    // If date or start time changes, update available slots
+    if (field === 'appointment_date' || field === 'start_time') {
+      if (field === 'appointment_date') {
+        loadAvailableSlots(value);
+      }
+    }  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,16 +114,18 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
     try {
       if (appointment) {
+        // Update existing appointment
         await appointmentService.updateAppointment(appointment.id, formData);
         onAppointmentUpdated?.(appointment);
       } else {
+        // Create new appointment        
         const newAppointment =
           await appointmentService.createAppointment(formData);
         onAppointmentCreated?.(newAppointment);
       }
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'Failed to save appointment');
+    } catch (error: any) {
+      setError(error.message || 'Failed to save appointment');
     } finally {
       setLoading(false);
     }
@@ -159,13 +167,13 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t('patient')} *
             </label>
             <select
               value={formData.patient_id}
               onChange={e => handleInputChange('patient_id', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
               <option value="">{t('selectPatient')}</option>
@@ -177,11 +185,11 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               ))}
             </select>
           </div>
-
+          {/* Date */}
           <div>
-            <label className="block text-sm font-medium mb-1">{t('date')} *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('date')} *</label>
             <input
-              type='date'
+              type="date"
               value={formData.appointment_date}
               onChange={e =>
                 handleInputChange('appointment_date', e.target.value)
@@ -190,10 +198,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               required
             />
           </div>
-
-          <div className="grid grid-cols-2 gap-4">
+         <div className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t('startTime')} *
               </label>
               <select
@@ -205,7 +212,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
                     calculateEndTime(e.target.value)
                   );
                 }}
-                className="w-full p-2 border border-gray-300 rounded-md"
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
                 {availableSlots.map(slot => (
@@ -217,11 +224,11 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 {t('endTime')} *
               </label>
               <input
-                type='time'
+                type="time"
                 value={formData.end_time}
                 onChange={e => handleInputChange('end_time', e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md"
@@ -229,60 +236,65 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
               />
             </div>
           </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">{t('type')}</label>
+          {/* Appointment Type */}
+          <div>            
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('type')}</label>
             <select
               value={formData.appointment_type}
+              
               onChange={e =>
                 handleInputChange('appointment_type', e.target.value)
               }
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value='consultation'>{t('consultation')}</option>
-              <option value='follow_up'>{t('followUp')}</option>
-              <option value='emergency'>{t('emergency')}</option>
-              <option value='routine'>{t('routineCheck')}</option>
-              <option value='specialist'>{t('specialistVisit')}</option>
+              <option value="consultation">{t('consultation')}</option>
+              <option value="follow_up">{t('followUp')}</option>
+              <option value="emergency">{t('emergency')}</option>
+              <option value="routine">{t('routineCheck')}</option>
+              <option value="specialist">{t('specialistVisit')}</option>
             </select>
-          </div>
+        {/* Location */}
+        </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">
               {t('location')}
             </label>
             <input
-              type='text'
+              type="text"
               placeholder={t('locationPlaceholder')}
               value={formData.location}
               onChange={e => handleInputChange('location', e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded-md"
-            />
+              placeholder="Room number, building, etc."
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"            />
           </div>
-
+          {/* Notes */}
           <div>
-            <label className="block text-sm font-medium mb-1">{t('notes')}</label>
+         <label className="block text-sm font-medium text-gray-700 mb-1">
+          {t('notes')}
+         </label>
             <textarea
               placeholder={t('notesPlaceholder')}
               value={formData.notes}
               onChange={e => handleInputChange('notes', e.target.value)}
+              placeholder="Additional notes about the appointment"              
               rows={3}
-              className="w-full p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-
+          {/* Action Buttons */}
           <div className="flex justify-end space-x-3 pt-4">
             <button
-              type='button'
+              type="button"
               onClick={onClose}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md"
+              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
             >
               {t('cancel')}
             </button>
             <button
-              type='submit'
+              type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:opacity-50"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
               {loading ? t('saving') : appointment ? t('update') : t('create')}
             </button>
