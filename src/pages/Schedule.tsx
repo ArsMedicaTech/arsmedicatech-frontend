@@ -46,7 +46,6 @@ const Schedule = () => {
           logger.debug('Loading appointments from backend...');
           const user = authService.getUser();
           const userId = user?.id?.split(':')[1] || user?.id;
-          console.log('Current User ID:', userId);
           const response = await appointmentService.getAppointments(userId);
           logger.debug('Backend appointments response:', response);
 
@@ -62,7 +61,6 @@ const Schedule = () => {
             notes: apt.notes,
             location: apt.location,
           }));
-          console.log('appointments', appointments);
           logger.debug('Converted appointments:', convertedAppointments);
           setAppointments(convertedAppointments);
         } catch (error) {
