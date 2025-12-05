@@ -18,7 +18,6 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   isSubmitting = false,
 }) => {
   const { t, i18n } = useTranslation();
-
   const [formData, setFormData] = useState({
     patientName: '',
     appointmentDate: selectedDate
@@ -33,13 +32,17 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
 
   React.useEffect(() => {
     if (selectedDate) {
-      setFormData((prev) => ({
+      setFormData(prev => ({
         ...prev,
         appointmentDate: selectedDate.toISOString().split('T')[0],
       }));
     }
   }, [selectedDate]);
-
+  logger.debug('AppointmentForm - selectedDate:', selectedDate);
+  logger.debug(
+    'AppointmentForm - formData.appointmentDate:',
+    formData.appointmentDate
+  );
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit?.(formData);
@@ -47,21 +50,45 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  if (!isOpen) return null;
+  logger.debug('AppointmentForm render - isOpen:', {
+    isOpen,
+    selectedDate,
+  });
 
+  if (!isOpen) {
+    logger.debug('AppointmentForm not rendering - isOpen is false');
+    return null;
+  }
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
       style={{ zIndex: 9999 }}
       onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
+             style={{
+        zIndex: 9999,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
       }}
+      onClick={e => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
     >
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl border border-gray-200">
-        <div className="flex justify-between items-center mb-6">
+      <div
+        className="bg-white rounded-lg p-6 w-full max-w-md mx-4 shadow-xl border border-gray-200"
+        style={{
+          backgroundColor: 'white',
+          zIndex: 10000,
+          border: '3px solid red',
+          minHeight: '400px',
+        }}
+      >        <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
             {t('newAppointment')}
           </h2>
@@ -69,7 +96,8 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 text-3xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100"
           >
-            ×
+            x
+            
           </button>
         </div>
 
@@ -79,7 +107,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               {t('patientName')} *
             </label>
             <input
-              type='text'
+              type="text"
               value={formData.patientName}
               onChange={(e) => handleInputChange('patientName', e.target.value)}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -99,11 +127,10 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               </div>
             )}
             <input
-              type='date'
+              type="date"
               value={formData.appointmentDate}
-              onChange={(e) =>
-                handleInputChange('appointmentDate', e.target.value)
-              }
+                onChange={(e) => handleInputChange('endTime', e.target.value)}
+              
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -115,9 +142,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 {t('startTime')} *
               </label>
               <input
-                type='time'
+                type="time"
                 value={formData.startTime}
-                onChange={(e) => handleInputChange('startTime', e.target.value)}
+                onChange={e => handleInputChange('startTime', e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               />
@@ -127,7 +154,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 {t('endTime')} *
               </label>
               <input
-                type='time'
+                type="time"
                 value={formData.endTime}
                 onChange={(e) => handleInputChange('endTime', e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -142,16 +169,16 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </label>
             <select
               value={formData.appointmentType}
-              onChange={(e) =>
+              onChange={e =>
                 handleInputChange('appointmentType', e.target.value)
               }
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value='consultation'>{t('consultation')}</option>
-              <option value='follow_up'>{t('followUp')}</option>
-              <option value='emergency'>{t('emergency')}</option>
-              <option value='routine'>{t('routineCheck')}</option>
-              <option value='specialist'>{t('specialistVisit')}</option>
+              <option value="consultation">{t('consultation')}</option>
+              <option value="follow_up">{t('followUp')}</option>
+              <option value="emergency">{t('emergency')}</option>
+              <option value="routine">{t('routineCheck')}</option>
+              <option value="specialist">{t('specialistVisit')}</option>
             </select>
           </div>
 
@@ -160,9 +187,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               {t('location')}
             </label>
             <input
-              type='text'
+              type="text"
               value={formData.location}
-              onChange={(e) => handleInputChange('location', e.target.value)}
+              onChange={e => handleInputChange('location', e.target.value)}
               placeholder={t('locationPlaceholder')}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
@@ -174,7 +201,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             </label>
             <textarea
               value={formData.notes}
-              onChange={(e) => handleInputChange('notes', e.target.value)}
+              onChange={e => handleInputChange('notes', e.target.value)}
               placeholder={t('notesPlaceholder')}
               rows={3}
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -190,7 +217,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               {t('cancel')}
             </button>
             <button
-              type='submit'
+              type="submit"
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSubmitting}
             >
