@@ -26,7 +26,7 @@ const BarChart = () => {
   useEffect(() => {
     const w = 960 / 2;
     const h = 500 / 2;
--
+
     const margin = { top: 20, right: 20, bottom: 30, left: 40 };
     const width = w - margin.left - margin.right;
     const height = h - margin.top - margin.bottom;
