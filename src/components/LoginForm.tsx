@@ -122,11 +122,11 @@ const LoginForm = ({
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor='username'>{t('username')}</label>
+            <label htmlFor="username">{t('username')}</label>
             <input
-              type='text'
-              id='username'
-              name='username'
+              type="text"
+              id="username"
+              name="username"
               value={formData.username}
               onChange={handleChange}
               className={errors.username ? 'error' : ''}
@@ -141,9 +141,9 @@ const LoginForm = ({
           <div className="form-group">
             <label htmlFor='password'>{t('password')}</label>
             <input
-              type='password'
-              id='password'
-              name='password'
+              type="password"
+              id="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               className={errors.password ? 'error' : ''}
@@ -160,7 +160,7 @@ const LoginForm = ({
           </GoogleAuthButton>
 
           <button
-            type='submit'
+            type="submit"
             className="login-button"
             disabled={isLoading}
             data-testid='login-submit'
@@ -173,7 +173,7 @@ const LoginForm = ({
           <p>
             {t('noAccount')}{' '}
             <button
-              type='button'
+              type="button"
               className="link-button"
               onClick={onSwitchToRegister}
             >
