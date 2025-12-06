@@ -18,7 +18,7 @@ const Sidebar = () => {
   if (isLoading) return null;
 
   return (
-    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="logo-container">ArsMedicaTech</div>
         <div className="release-info">Version 0.0.1 (alpha)</div>
@@ -27,43 +27,43 @@ const Sidebar = () => {
           onClick={() => setIsCollapsed(!isCollapsed)}
           title={isCollapsed ? t('expand') : t('collapse')}
         >
-          {isCollapsed ? "→" : "←"}
+          {isCollapsed ? '→' : '←'}
         </button>
       </div>
 
-      <nav className={isCollapsed ? "collapsed" : ""}>
+      <nav className={isCollapsed ? 'collapsed' : ''}>
         <ul>
           <li>
             <NavLink
               to="/"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('dashboard')}
             >
-              {isCollapsed ? "📊" : t('dashboard')}
+              {isCollapsed ? '📊' : t('dashboard')}
             </NavLink>
           </li>
 
-          {(userType === "administrator" ||
-            userType === "superadmin" ||
-            userType === "admin") && (
+          {userType === 'administrator' ||
+            userType === 'superadmin' ||
+            (userType === 'admin' && (
             <>
               <li>
                 <NavLink
                   to="/organization"
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
                   title={t('organization')}
                 >
-                  {isCollapsed ? "🏢" : t('organization')}
+                  {isCollapsed ? '🏢' : t('organization')}
                 </NavLink>
               </li>
 
               <li>
                 <NavLink
                   to="/admin"
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
                   title={t('admin')}
                 >
-                  {isCollapsed ? "⚙️" : t('admin')}
+                  {isCollapsed ? '⚙️' : t('admin')}
                 </NavLink>
               </li>
             </>
@@ -75,20 +75,20 @@ const Sidebar = () => {
                 <li>
                   <NavLink
                     to={`/intake/${user.id}`}
-                    className={({ isActive }) => (isActive ? "active" : "")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
                     title={t('intakeForm')}
                   >
-                    {isCollapsed ? "📝" : t('intakeForm')}
+                    {isCollapsed ? '📝' : t('intakeForm')}
                   </NavLink>
                 </li>
               )}
               <li>
                 <NavLink
                   to="/health-metrics"
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
                   title={t('healthMetrics')}
                 >
-                  {isCollapsed ? "📈" : t('healthMetrics')}
+                  {isCollapsed ? '📈' : t('healthMetrics')}
                 </NavLink>
               </li>
             </>
@@ -97,19 +97,19 @@ const Sidebar = () => {
               <li>
                 <NavLink
                   to="/patients"
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
                   title={t('patients')}
                 >
-                  {isCollapsed ? "👥" : t('patients')}
+                  {isCollapsed ? '👥' : t('patients')}
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/optimal-table-demo"
-                  className={({ isActive }) => (isActive ? "active" : "")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
                   title={t('optimalDemo')}
                 >
-                  {isCollapsed ? "📊" : t('optimalDemo')}
+                  {isCollapsed ? '📊' : t('optimalDemo')}
                 </NavLink>
               </li>
             </>
@@ -118,50 +118,50 @@ const Sidebar = () => {
           <li>
             <NavLink
               to="/lab-results"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('labResults')}
             >
-              {isCollapsed ? "🧪" : t('labResults')}
+              {isCollapsed ? '🧪' : t('labResults')}
             </NavLink>
           </li>
 
           <li>
             <NavLink
               to="/messages"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('messages')}
             >
-              {isCollapsed ? "💬" : t('messages')}
+              {isCollapsed ? '💬' : t('messages')}
             </NavLink>
           </li>
 
           <li>
             <NavLink
               to="/schedule"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('schedule')}
             >
-              {isCollapsed ? "📅" : t('schedule')}
+              {isCollapsed ? '📅' : t('schedule')}
             </NavLink>
           </li>
 
           <li>
             <NavLink
               to="/settings"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('settings')}
             >
-              {isCollapsed ? "⚙️" : t('settings')}
+              {isCollapsed ? '⚙️' : t('settings')}
             </NavLink>
           </li>
 
           <li>
             <NavLink
               to="/uploads"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('uploads')}
             >
-              {isCollapsed ? "📁" : t('uploads')}
+              {isCollapsed ? '📁' : t('uploads')}
             </NavLink>
           </li>
 
@@ -169,10 +169,10 @@ const Sidebar = () => {
             <li key={widget.name}>
               <NavLink
                 to={widget.path}
-                className={({ isActive }) => (isActive ? "active" : "")}
+                className={({ isActive }) => (isActive ? 'active' : '')}
                 title={isCollapsed ? widget.name : ""}
               >
-                {isCollapsed ? "🔧" : widget.name}
+                {isCollapsed ? '🔧' : widget.name}
               </NavLink>
             </li>
           ))}
@@ -180,10 +180,10 @@ const Sidebar = () => {
           <li>
             <NavLink
               to="/notes"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
               title={t('notes')}
             >
-              {isCollapsed ? "📝" : t('notes')}
+              {isCollapsed ? '📝' : t('notes')}
             </NavLink>
           </li>
         </ul>
