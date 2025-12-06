@@ -25,7 +25,7 @@ export const createErrorModalState = (
 
 const ErrorModal: React.FC<ErrorModalProps> = ({
   error = 'Something went wrong',
-  description = 'An error occurred.',
+  description = 'An unknown error has occurred. Please return to the home screen. The error has been logged and is being investigated.',
   suggested_action,
   isOpen,
   onClose,
@@ -71,7 +71,11 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
       <div className="error-modal">
         <div className="error-modal-header">
           <h3 className="error-modal-title">{error}</h3>
-          <button className="error-modal-close" onClick={onClose}>×</button>
+          <button
+            className="error-modal-close"
+            onClick={onClose}
+            aria-label="Close error modal"
+          >×</button>
         </div>
 
         <div className="error-modal-body">
@@ -80,7 +84,10 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
         <div className="error-modal-footer">
           {suggested_action && (
-            <button onClick={handleSuggestedAction} className="error-modal-action-button">
+              <button
+              onClick={handleSuggestedAction}
+              className="error-modal-action-button"
+            >
               {getActionButtonText()}
             </button>
           )}
