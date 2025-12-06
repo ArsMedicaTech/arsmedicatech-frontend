@@ -217,7 +217,7 @@ export default function PatientIntakeForm() {
                 {t('email')} <RequiredAsterisk />
               </label>
               <Input
-                type='email'
+                type="email"
                 placeholder={t('email')}
                 {...register('email', { required: true })}
               />
@@ -331,7 +331,7 @@ export default function PatientIntakeForm() {
 
             <div>
               <label className="block mb-1 font-medium">{t('symptomOnset')}</label>
-              <Input type='date' {...register('symptomOnset')} />
+              <Input type="date" {...register('symptomOnset')} />
             </div>
 
           </CardContent>
@@ -360,7 +360,7 @@ export default function PatientIntakeForm() {
         <div className="flex justify-between pt-4 items-center">
           <IconButton
             icon={<MdArrowBack size={24} />}
-            type='button'
+            type="button"
             onClick={back}
             disabled={step === 0}
           />
