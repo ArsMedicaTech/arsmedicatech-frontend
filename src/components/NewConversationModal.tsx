@@ -71,6 +71,12 @@ const NewConversationModal = ({
   const checkOpenAIAPIKey = async (): Promise<boolean> => {
     try {
       const response = await apiService.getAPI('/settings');
+      if (response.success && response.settings) {
+        return response.settings.has_openai_api_key === true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Error checking OpenAI API key:', error);
       return response.success && response.settings?.has_openai_api_key === true;
     } catch {
       return false;
@@ -150,7 +156,7 @@ const NewConversationModal = ({
             <div className="user-search-section">
               <div className="search-container">
                 <input
-                  type='text'
+                  type="text"
                   placeholder={t('searchUsersPlaceholder')}
                   value={searchQuery}
                   onChange={e => handleSearch(e.target.value)}
