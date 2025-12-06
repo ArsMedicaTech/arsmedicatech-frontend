@@ -47,12 +47,24 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-
+  if const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
   const isProvider = profile.role === 'provider' || profile.role === 'admin';
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
+    // Basic validations
+    if (formData.first_name.trim().length > 50) {
+      newErrors.first_name = 'First name must be less than 50 characters';
+    }
+
+    if (formData.last_name.trim().length > 50) {
+      newErrors.last_name = 'Last name must be less than 50 characters';
+    }
+
+    // Phone validation
 
     if (formData.phone && formData.phone.trim()) {
       const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
@@ -61,6 +73,19 @@ const EditProfile: React.FC<EditProfileProps> = ({
         newErrors.phone = t('invalidPhone');
       }
     }
+    // Provider-specific validations
+    if (isProvider) {
+      if (formData.specialty.trim().length > 100) {
+        newErrors.specialty = 'Specialty must be less than 100 characters';
+      }
+
+      if (formData.clinic_name.trim().length > 200) {
+        newErrors.clinic_name = 'Clinic name must be less than 200 characters';
+      }
+
+      if (formData.clinic_address.trim().length > 500) {
+        newErrors.clinic_address =
+          'Clinic address must be less than 500 characters';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -68,26 +93,43 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
-  };
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
-
+   // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
     setSaving(true);
     setMessage(null);
 
     try {
+      // Prepare updates (only include changed fields)
       const updates: Partial<UserProfile> = {};
 
-      if (formData.first_name !== profile.first_name) updates.first_name = formData.first_name.trim();
-      if (formData.last_name !== profile.last_name) updates.last_name = formData.last_name.trim();
-      if (formData.phone !== profile.phone) updates.phone = formData.phone.trim();
+      if (formData.first_name !== profile.first_name) {
+        updates.first_name = formData.first_name.trim();
+      }
+      if (formData.last_name !== profile.last_name) {
+        updates.last_name = formData.last_name.trim();
+      }
+      if (formData.phone !== profile.phone) {
+        updates.phone = formData.phone.trim();
+      }
       if (isProvider) {
-        if (formData.specialty !== profile.specialty) updates.specialty = formData.specialty.trim();
-        if (formData.clinic_name !== profile.clinic_name) updates.clinic_name = formData.clinic_name.trim();
-        if (formData.clinic_address !== profile.clinic_address) updates.clinic_address = formData.clinic_address.trim();
+        if (formData.specialty !== profile.specialty) {
+          updates.specialty = formData.specialty.trim();
+        }
+        if (formData.clinic_name !== profile.clinic_name) {
+          updates.clinic_name = formData.clinic_name.trim();
+        }
+        if (formData.clinic_address !== profile.clinic_address) {
+          updates.clinic_address = formData.clinic_address.trim();
+        }
       }
 
       if (Object.keys(updates).length === 0) {
@@ -138,8 +180,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 {t('firstName')}
               </label>
               <input
-                type='text'
-                id='first_name'
+                type="text"
+                id="first_name"
                 value={formData.first_name}
                 onChange={e => handleInputChange('first_name', e.target.value)}
                 className={`form-input ${errors.first_name ? 'error' : ''}`}
@@ -157,7 +199,11 @@ const EditProfile: React.FC<EditProfileProps> = ({
                 value={formData.last_name}
                 onChange={e => handleInputChange('last_name', e.target.value)}
                 className={`form-input ${errors.last_name ? 'error' : ''}`}
+                placeholder="Enter clinic or practice name"
               />
+              {errors.clinic_name && (
+                  <span className="error-message">{errors.clinic_name}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -194,34 +240,49 @@ const EditProfile: React.FC<EditProfileProps> = ({
               <div className="form-group">
                 <label htmlFor="specialty">{t('medicalSpecialty')}</label>
                 <input
-                  type='text'
-                  id='specialty'
+                  type="text"
+                  id="specialty"
                   value={formData.specialty}
                   onChange={e => handleInputChange('specialty', e.target.value)}
                   className={`form-input ${errors.specialty ? 'error' : ''}`}
+                  placeholder="e.g., Cardiology, Pediatrics, etc."
                 />
+                {errors.specialty && (
+                  <span className="error-message">{errors.specialty}</span>
+                )}
               </div>
 
               <div className="form-group">
+                <BuildingOfficeIcon className="w-4 h-4" />
                 <label htmlFor="clinic_name">{t('clinicName')}</label>
                 <input
-                  type='text'
-                  id='clinic_name'
+                  type="text"
+                  id="clinic_name"
                   value={formData.clinic_name}
                   onChange={e => handleInputChange('clinic_name', e.target.value)}
                   className={`form-input ${errors.clinic_name ? 'error' : ''}`}
+                  placeholder="Enter your last name"
                 />
+                 {errors.last_name && (
+                <span className="error-message">{errors.last_name}</span>
+              )}
               </div>
 
               <div className="form-group full-width">
-                <label htmlFor="clinic_address">{t('clinicAddress')}</label>
+                <label htmlFor="clinic_address">
+                  <MapPinIcon className="w-4 h-4" />
+                  {t('clinicAddress')}</label>
                 <textarea
-                  id='clinic_address'
+                  id="clinic_address"
                   value={formData.clinic_address}
                   onChange={e => handleInputChange('clinic_address', e.target.value)}
                   className={`form-textarea ${errors.clinic_address ? 'error' : ''}`}
+                  placeholder="Enter full clinic address"
                   rows={3}
                 />
+                  {errors.clinic_address && (
+                  <span className="error-message">{errors.clinic_address}</span>
+                )}
               </div>
             </div>
           </div>
@@ -241,3 +302,4 @@ const EditProfile: React.FC<EditProfileProps> = ({
 };
 
 export default EditProfile;
+    
