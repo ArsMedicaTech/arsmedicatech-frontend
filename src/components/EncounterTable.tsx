@@ -41,10 +41,63 @@ export function EncounterTable({
         header: t('notes'),
         cell: (ctx: any) => {
           const value = ctx.getValue();
-          return typeof value === 'string' && value.length > 80
-            ? value.substring(0, 80) + '...'
-            : value || '-';
-        },
+          const row = ctx.row.original;
+          const noteType = row.note_type;
+
+          // Check if it's SOAP notes based on note_type field or object structure
+          if (
+            noteType === 'soap' ||
+            (typeof value === 'object' &&
+              value !== null &&
+              'subjective' in value &&
+              'objective' in value &&
+              'assessment' in value &&
+              'plan' in value)
+          ) {
+            // Helper function to format text with preserved newlines
+            const formatText = (text: string) => {
+              if (!text) return '-';
+              // Replace escaped newlines with actual newlines and truncate for table view
+              const formatted = text.replace(/\\n/g, '\n');
+              return formatted.length > 50
+                ? `${formatted.substring(0, 50)}...`
+                : formatted;
+            };
+
+            return (
+              <div className="text-xs">
+                <div>
+                  <strong>S:</strong> {formatText(value.subjective || '')}
+                </div>
+                const row = ctx.row.original;
+          const noteType = row.note_type;
+
+          // Check if it's SOAP notes based on note_type field or object structure
+          if (
+            noteType === 'soap' ||
+            (typeof value === 'object' &&
+              value !== null &&
+              'subjective' in value &&
+              'objective' in value &&
+              'assessment' in value &&
+              'plan' in value)
+          ) {
+            // Helper function to format text with preserved newlines
+            const formatText = (text: string) => {
+              if (!text) return '-';
+              // Replace escaped newlines with actual newlines and truncate for table view
+              const formatted = text.replace(/\\n/g, '\n');
+              return formatted.length > 50
+                ? `${formatted.substring(0, 50)}...`
+                : formatted;
+            };
+
+            return (
+              <div className="text-xs">
+                <div>
+                  <strong>S:</strong> {formatText(value.subjective || '')}
+                </div>
+                },
       },
       {
         accessorKey: 'diagnostic_codes',
@@ -68,8 +121,7 @@ export function EncounterTable({
                     e.stopPropagation();
                     onView(encounter);
                   }}
-                  className="px-3 py-1 bg-blue-500 text-white rounded"
-                >
+                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"                >
                   {t('view')}
                 </button>
               )}
@@ -79,8 +131,7 @@ export function EncounterTable({
                     e.stopPropagation();
                     onEdit(encounter);
                   }}
-                  className="px-3 py-1 bg-yellow-500 text-white rounded"
-                >
+                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"                >
                   {t('edit')}
                 </button>
               )}
@@ -90,8 +141,7 @@ export function EncounterTable({
                     e.stopPropagation();
                     onDelete(encounter);
                   }}
-                  className="px-3 py-1 bg-red-500 text-white rounded"
-                >
+                  className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600"                >
                   {t('delete')}
                 </button>
               )}
@@ -120,9 +170,15 @@ export function EncounterTable({
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
-                <th key={header.id} className="px-6 py-3 text-xs font-medium text-gray-500 uppercase">
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
+                <th
+                  key={header.id}
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+              </th>
               ))}
             </tr>
           ))}
@@ -132,11 +188,14 @@ export function EncounterTable({
           {table.getRowModel().rows.map(row => (
             <tr
               key={row.id}
-              onClick={() => onRowClick?.(row.original)}
-              className={`${onRowClick ? 'cursor-pointer hover:bg-gray-50' : ''}`}
+              className={`hover:bg-gray-50 ${onRowClick ? 'cursor-pointer' : ''}`}
+              onClick={() => onRowClick && onRowClick(row.original)}
             >
               {row.getVisibleCells().map(cell => (
-                <td key={cell.id} className="px-6 py-4 text-sm">
+                <td
+                  key={cell.id}
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
