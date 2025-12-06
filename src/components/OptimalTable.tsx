@@ -22,6 +22,7 @@ interface OptimalTableProps {
   data: TableRow[];
   title?: string;
   onDataChange?: (newData: TableRow[]) => void;
+
   showAddRow?: boolean;
   showDeleteRow?: boolean;
   maxRows?: number;
@@ -75,7 +76,98 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
     setTableData(newData);
     onDataChange?.(newData);
   };
+     const renderCell = (row: TableRow, column: TableColumn) => {
+    const value = row[column.key];
+    const isEditing =
+      editingCell?.rowId === row.id && editingCell?.columnKey === column.key;
 
+    if (!column.editable) {
+      return (
+        <div className="px-3 py-2 text-sm text-gray-700">
+          {column.type === 'boolean' ? (
+            <span
+              className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                value
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-gray-100 text-gray-800'
+              }`}
+            >
+                   {value ? 'Yes' : 'No'}
+            </span>
+          ) : (
+            <>
+              {value}
+              {column.unit && (
+                <span className="text-gray-500 ml-1">{column.unit}</span>
+              )}
+            </>
+          )}
+        </div>
+      );
+    }
+
+    switch (column.type) {
+      case 'boolean':
+        return (
+          <div className="px-3 py-2">
+            <input
+              type="checkbox"
+              checked={value || false}
+              onChange={e =>
+                handleCellChange(row.id, column.key, e.target.checked)
+              }
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+            />
+                      </div>
+        );
+
+      case 'number':
+        return (
+          <div className="px-3 py-2">
+            <input
+              type="number"
+              value={value || ''}
+              onChange={e =>
+                handleCellChange(
+                  row.id,
+                  column.key,
+                  parseFloat(e.target.value) || 0
+                )
+              }
+              min={column.min}
+              max={column.max}
+                            step={column.step || 1}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              onFocus={() =>
+                setEditingCell({ rowId: row.id, columnKey: column.key })
+              }
+              onBlur={() => setEditingCell(null)}
+            />
+            {column.unit && (
+              <span className="text-xs text-gray-500 ml-1">{column.unit}</span>
+            )}
+          </div>
+        );
+
+      case 'text':
+      default:
+        return (
+          <div className="px-3 py-2">
+            <input
+              type="text"
+              value={value || ''}
+              onChange={e =>
+                handleCellChange(row.id, column.key, e.target.value)
+              }
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              onFocus={() =>
+                setEditingCell({ rowId: row.id, columnKey: column.key })
+              }
+              onBlur={() => setEditingCell(null)}
+            />
+          </div>
+        );
+    }};
   return (
     <div className={`bg-white rounded-xl shadow-lg border border-gray-200 ${className}`}>
       {title && (
@@ -108,36 +200,12 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
             {tableData.map(row => (
               <tr key={row.id} className="hover:bg-gray-50 transition-colors duration-150">
                 {columns.map(column => (
-                  <td key={`${row.id}-${column.key}`} className="whitespace-nowrap">
-                    {/* same renderCell code unchanged */}
-                    {column.type === 'boolean' ? (
-                      <div className="px-3 py-2">
-                        <input
-                          type='checkbox'
-                          checked={row[column.key] || false}
-                          onChange={e => handleCellChange(row.id, column.key, e.target.checked)}
-                          className="w-4 h-4"
-                        />
-                      </div>
-                    ) : column.type === 'number' ? (
-                      <div className="px-3 py-2">
-                        <input
-                          type='number'
-                          value={row[column.key] || ''}
-                          onChange={e => handleCellChange(row.id, column.key, parseFloat(e.target.value) || 0)}
-                          className="w-full px-2 py-1 border rounded"
-                        />
-                      </div>
-                    ) : (
-                      <div className="px-3 py-2">
-                        <input
-                          type='text'
-                          value={row[column.key] || ''}
-                          onChange={e => handleCellChange(row.id, column.key, e.target.value)}
-                          className="w-full px-2 py-1 border rounded"
-                        />
-                      </div>
-                    )}
+                  <td
+                    key={`${row.id}-${column.key}`}
+                    className="whitespace-nowrap"
+                  >
+                    {renderCell(row, column)}                   
+          
                   </td>
                 ))}
 
@@ -145,9 +213,22 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => handleDeleteRow(row.id)}
-                      className="text-red-600 hover:text-red-900"
+                      className="text-red-600 hover:text-red-900 transition-colors duration-200"
                       title={t('deleteRow')}
                     >
+                    <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
                       ✕
                     </button>
                   </td>
@@ -160,7 +241,23 @@ const OptimalTable: React.FC<OptimalTableProps> = ({
 
       {showAddRow && (!maxRows || tableData.length < maxRows) && (
         <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded" onClick={handleAddRow}>
+          <button
+            onClick={handleAddRow}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+          >
+            <svg
+              className="w-4 h-4 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
+            </svg>
             {t('addRow')}
           </button>
         </div>
