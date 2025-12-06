@@ -51,19 +51,21 @@ const PatientForm = () => {
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  ): void => { 
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleLocationChange = (index: number, value: string) => {
+  const handleLocationChange = (index: number, value: string) : void => {
     setFormData(prev => ({
       ...prev,
       location: prev.location.map((item, i) => (i === index ? value : item)),
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -75,9 +77,18 @@ const PatientForm = () => {
         await patientAPI.create(formData);
       }
       navigate('/patients');
-    } catch (err: any) {
-      setError(err?.response?.data?.error || t('genericError'));
-      console.error(err);
+      } catch (err) {
+      if (
+        typeof err === 'object' &&
+        err !== null &&
+        'response' in err &&
+        typeof (err as any).response === 'object'
+      ) {
+        setError((err as any).response?.data?.error || 'An error occurred');
+      } else {
+        setError('An error occurred');
+      }
+      console.log('err')
     } finally {
       setLoading(false);
     }
@@ -119,8 +130,8 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('lastName')} *</label>
             <input
-              type='text'
-              name='last_name'
+              type="text"
+              name="last_name"
               value={formData.last_name}
               onChange={handleInputChange}
               required
@@ -134,8 +145,8 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('dateOfBirth')}</label>
             <input
-              type='date'
-              name='date_of_birth'
+              type="date"
+              name="date_of_birth"
               value={formData.date_of_birth}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
@@ -144,15 +155,15 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('sex')}</label>
             <select
-              name='sex'
+              name="sex"
               value={formData.sex}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
             >
-              <option value=''>{t('select')}</option>
-              <option value='M'>{t('male')}</option>
-              <option value='F'>{t('female')}</option>
-              <option value='O'>{t('other')}</option>
+              <option value="">{t('select')}</option>
+              <option value="M">{t('male')}</option>
+              <option value="F">{t('female')}</option>
+              <option value="O">{t('other')}</option>
             </select>
           </div>
         </div>
@@ -172,8 +183,8 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('email')}</label>
             <input
-              type='email'
-              name='email'
+              type="email"
+              name="email"
               value={formData.email}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
