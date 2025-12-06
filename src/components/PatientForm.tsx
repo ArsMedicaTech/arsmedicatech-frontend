@@ -119,8 +119,8 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('firstName')} *</label>
             <input
-              type='text'
-              name='first_name'
+              type="text"
+              name="first_name"
               value={formData.first_name}
               onChange={handleInputChange}
               required
@@ -173,8 +173,8 @@ const PatientForm = () => {
           <div>
             <label className="block text-sm font-medium mb-1">{t('phone')}</label>
             <input
-              type='tel'
-              name='phone'
+              type="tel"
+              name="phone"
               value={formData.phone}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border rounded-md focus:ring-blue-500"
@@ -205,10 +205,10 @@ const PatientForm = () => {
 
         {/* Actions */}
         <div className="flex justify-end space-x-4 pt-4">
-          <button type='button' onClick={handleCancel} className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
+          <button type="button" onClick={handleCancel} className="px-4 py-2 text-gray-600 border rounded-md hover:bg-gray-50">
             {t('cancel')}
           </button>
-          <button type='submit' disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
+          <button type="submit" disabled={loading} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50">
             {loading ? t('saving') : isEditing ? t('updatePatient') : t('createPatient')}
           </button>
         </div>
