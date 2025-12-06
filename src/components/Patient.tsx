@@ -80,11 +80,15 @@ const Patient = () => {
     );
   }
 
-  const formatDate = (dateString?: string) =>
-    dateString ? new Date(dateString).toLocaleDateString() : '-';
+    const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString();
+  }; 
 
-  const formatLocation = (location?: string[] | null) =>
-    Array.isArray(location) && location.length ? location.filter(Boolean).join(', ') : '-';
+   const formatLocation = (location: string[] | null | undefined) => {
+    if (!location || !Array.isArray(location)) return '-';
+    return location.filter(Boolean).join(', ') || '-';
+  };
 
   return (
     <>
@@ -100,7 +104,7 @@ const Patient = () => {
             <p className="text-gray-600">{t('patientID')}: {patient.demographic_no}</p>
           </div>
 
-          {isAuthenticated ? (
+          {isAuthenticated && (
             <div className="flex space-x-2">
               <button onClick={handleEdit} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                 {t('editPatient')}
@@ -109,8 +113,9 @@ const Patient = () => {
                 {t('deletePatient')}
               </button>
             </div>
-          ) : (
-            <div className="guest-notice">
+          )}
+          {!isAuthenticated && (
+      <div className="guest-notice">
               <p>{t('signUpToEdit')}</p>
               <button onClick={showSignupPopup} className="guest-action-button">
                 {t('getStarted')}
