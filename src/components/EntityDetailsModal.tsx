@@ -29,6 +29,19 @@ export function EntityDetailsModal({
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
+           <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
             ×
           </button>
         </div>
@@ -38,8 +51,8 @@ export function EntityDetailsModal({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               {t('entityText')}
             </label>
-            <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
-              <span className="text-blue-900 font-medium">{entity.text}</span>
+                <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                <span className="text-blue-900 font-medium">{entity.text}</span>
             </div>
           </div>
 
@@ -47,8 +60,8 @@ export function EntityDetailsModal({
             <label className="block text-sm font-medium text-gray-700 mb-1">
               {t('entityType')}
             </label>
-            <div className="bg-gray-50 border border-gray-200 rounded-md p-3">
-              <span className="text-gray-900">{entity.label}</span>
+              <div className="bg-gray-50 border border-gray-200 rounded-md p-3">
+                <span className="text-gray-900">{entity.label}</span>
             </div>
           </div>
 
