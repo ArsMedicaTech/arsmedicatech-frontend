@@ -92,8 +92,8 @@ export function PatientFormModal({
               {t('firstName')} *
             </label>
             <input
-              type='text'
-              name='first_name'
+              type="text"
+              name="first_name"
               value={formData.first_name}
               onChange={handleInputChange}
               required
@@ -106,8 +106,8 @@ export function PatientFormModal({
               {t('lastName')} *
             </label>
             <input
-              type='text'
-              name='last_name'
+              type="text"
+              name="last_name"
               value={formData.last_name}
               onChange={handleInputChange}
               required
@@ -122,8 +122,8 @@ export function PatientFormModal({
               {t('dateOfBirth')}
             </label>
             <input
-              type='date'
-              name='date_of_birth'
+              type="date"
+              name="date_of_birth"
               value={formData.date_of_birth}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500"
@@ -133,15 +133,15 @@ export function PatientFormModal({
           <div>
             <label className="block text-sm font-medium mb-1">{t('sex')}</label>
             <select
-              name='sex'
+              name="sex"
               value={formData.sex}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500"
             >
-              <option value=''>{t('select')}</option>
-              <option value='M'>{t('male')}</option>
-              <option value='F'>{t('female')}</option>
-              <option value='O'>{t('other')}</option>
+              <option value="">{t('select')}</option>
+              <option value="M">{t('male')}</option>
+              <option value="F">{t('female')}</option>
+              <option value="O">{t('other')}</option>
             </select>
           </div>
         </div>
