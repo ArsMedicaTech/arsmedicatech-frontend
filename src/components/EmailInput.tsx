@@ -14,9 +14,9 @@ const EmailInput: React.FC<EmailInputProps> = ({
   value,
   onChange,
   required = false,
-  label,
-  placeholder,
-  className = '',
+  label = "Email",
+  placeholder = "Enter email address",
+  className = ""
 }) => {
   const { t } = useTranslation();
   const [error, setError] = useState<string>('');
@@ -35,15 +35,18 @@ const EmailInput: React.FC<EmailInputProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     onChange(newValue);
-    if (touched) setError(validateEmail(newValue));
-  };
+    if (touched) {
+      const validationError = validateEmail(newValue);
+      setError(validationError);
+    }  };
 
   const handleBlur = () => {
     setTouched(true);
-    setError(validateEmail(value));
-  };
+    const validationError = validateEmail(value);
+    console.log('Validation error:', validationError); 
+    setError(validationError);  };
 
-  const hasError = !!error && touched;
+  const hasError = error && touched;
 
   return (
     <div className={className}>
@@ -51,15 +54,20 @@ const EmailInput: React.FC<EmailInputProps> = ({
         {label || t('email')} {required && <span className="text-red-500">*</span>}
       </label>
       <input
-        type='email'
+        type="email"
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder={placeholder || t('enterEmail')}
-        className={`w-full px-3 py-2 border rounded-md ${hasError ? 'border-red-500' : 'border-gray-300'}`}
+        placeholder={placeholder}
+        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+          hasError 
+            ? 'border-red-500 focus:ring-red-500' 
+            : 'border-gray-300'
+        }`}
       />
-      {hasError && <p className="text-red-500 text-sm mt-1">{error}</p>}
-    </div>
+    {hasError && (
+        <p className="text-red-500 text-sm mt-1">{error}</p>
+      )}    </div>
   );
 };
 
