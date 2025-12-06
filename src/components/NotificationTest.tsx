@@ -19,9 +19,8 @@ const NotificationTest: React.FC = () => {
       } else {
         setStatus(t('sseTestFailed'));
       }
-    } catch (error: any) {
-      setStatus(`SSE error: ${error?.message ?? String(error)}`);
-    }
+     } catch (error) {
+      setStatus(`SSE test error: ${error}`);
   };
 
   const testAppointmentReminder = async () => {
@@ -110,3 +109,4 @@ const NotificationTest: React.FC = () => {
 };
 
 export default NotificationTest;
+  
