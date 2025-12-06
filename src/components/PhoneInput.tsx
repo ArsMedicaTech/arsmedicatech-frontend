@@ -16,10 +16,10 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
   value,
   onChange,
   required = false,
-  label = 'Phone',
-  placeholder = 'Enter phone number',
-  className = '',
-  countryCode = '1',
+  label = "Phone",
+  placeholder = "Enter phone number",
+  className = "",
+  countryCode = "1",
   showFormatHint = false,
 }) => {
   const { t } = useTranslation();
@@ -29,12 +29,12 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
 
   const getCountryInfo = (code: string) => {
     const countryMap: { [key: string]: { name: string; format: string; minLength: number; maxLength: number } } = {
-      '1': { name: 'US/Canada', format: '(XXX) XXX-XXXX', minLength: 10, maxLength: 10 },
-      '44': { name: 'UK', format: '+44 XXXX XXX XXXX', minLength: 10, maxLength: 11 },
-      '33': { name: 'France', format: '+33 X XX XX XX XX', minLength: 9, maxLength: 9 },
-      '49': { name: 'Germany', format: '+49 XXX XXXXXXXX', minLength: 10, maxLength: 12 },
-      '61': { name: 'Australia', format: '+61 X XXXX XXXX', minLength: 9, maxLength: 9 },
-      '91': { name: 'India', format: '+91 XXXXX XXXXX', minLength: 10, maxLength: 10 },
+      "1": { name: "US/Canada", format: "(XXX) XXX-XXXX", minLength: 10, maxLength: 10 },
+      "44": { name: "UK", format: "+44 XXXX XXX XXXX", minLength: 10, maxLength: 11 },
+      "33": { name: "France", format: "+33 X XX XX XX XX", minLength: 9, maxLength: 9 },
+      "49": { name: "Germany", format: "+49 XXX XXXXXXXX", minLength: 10, maxLength: 12 },
+      "61": { name: "Australia", format: "+61 X XXXX XXXX", minLength: 9, maxLength: 9 },
+      "91": { name: "India", format: "+91 XXXXX XXXXX", minLength: 10, maxLength: 10 },
     };
     return countryMap[code] || { name: 'International', format: `+${code} XXXXXXXXXX`, minLength: 7, maxLength: 15 };
   };
@@ -81,7 +81,7 @@ const PhoneInput: React.FC<PhoneInputProps> = ({
       </label>
 
       <input
-        type='tel'
+        type="tel"
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
