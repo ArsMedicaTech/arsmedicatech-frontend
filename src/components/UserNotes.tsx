@@ -97,15 +97,21 @@ const UserNotes: React.FC<{
       let savedNote: UserNote;
 
       if (note?.id) {
+        // Update existing note
         const response = await userNotesAPI.update(note.id, noteData);
-        if (!response.success)
+        if (response.success) {
+          savedNote = response.note;
+        } else {
           throw new Error(response.error || 'Failed to update note');
-        savedNote = response.note;
+        }
       } else {
+        // Create new note
         const response = await userNotesAPI.create(noteData);
-        if (!response.success)
+        if (response.success) {
+          savedNote = response.note;
+        } else {
           throw new Error(response.error || 'Failed to create note');
-        savedNote = response.note;
+        }
       }
 
       if (onSave) {
@@ -127,7 +133,7 @@ const UserNotes: React.FC<{
             type="text"
             placeholder="Note title..."
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={e => setTitle(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xl font-semibold"
             disabled={!isEditing}
           />
@@ -157,7 +163,7 @@ const UserNotes: React.FC<{
             <label className="text-sm font-medium text-gray-700">Type:</label>
             <select
               value={noteType}
-              onChange={(e) =>
+              onChange={e =>
                 setNoteType(e.target.value as 'private' | 'shared')
               }
               className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -172,12 +178,12 @@ const UserNotes: React.FC<{
               type="text"
               placeholder="tag1, tag2, tag3..."
               value={tags.join(', ')}
-              onChange={(e) =>
+              onChange={e =>
                 setTags(
                   e.target.value
                     .split(',')
-                    .map((tag) => tag.trim())
-                    .filter((tag) => tag)
+                    .map(tag => tag.trim())
+                    .filter(tag => tag)
                 )
               }
               className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -299,7 +305,7 @@ const UserNotesScreen: React.FC = () => {
     try {
       const response = await userNotesAPI.delete(noteId);
       if (response.success) {
-        setNotes(notes.filter((n) => n.id !== noteId));
+        setNotes(notes.filter(n => n.id !== noteId));
         if (selectedNote?.id === noteId) {
           setSelectedNote(null);
         }
@@ -311,10 +317,10 @@ const UserNotesScreen: React.FC = () => {
   };
 
   const filteredNotes = notes.filter(
-    (note) =>
+    note =>
       note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       note.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.tags.some((tag) =>
+      note.tags.some(tag =>
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
@@ -338,7 +344,7 @@ const UserNotesScreen: React.FC = () => {
             type="text"
             placeholder="Search notes..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={e => setSearchQuery(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -349,7 +355,7 @@ const UserNotesScreen: React.FC = () => {
           <div className="text-red-600 py-8">{error}</div>
         ) : (
           <div className="space-y-2">
-            {filteredNotes.map((note) => (
+            {filteredNotes.map(note => (
               <div
                 key={note.id}
                 onClick={() => handleNoteClick(note)}
@@ -388,7 +394,7 @@ const UserNotesScreen: React.FC = () => {
                     </div>
                   </div>
                   <button
-                    onClick={(e) => {
+                    onClick={e => {
                       e.stopPropagation();
                       handleDeleteNote(note.id);
                     }}
