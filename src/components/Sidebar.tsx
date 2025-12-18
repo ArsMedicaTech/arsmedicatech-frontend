@@ -1,97 +1,142 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { usePluginWidgets } from "../hooks/usePluginWidgets";
-import logger from "../services/logging";
-import "./Sidebar.css";
-import { useUser } from "./UserContext";
-import { useTranslation } from "react-i18next"; // 🌍 i18n
+// Sidebar.tsx 
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
+import { usePluginWidgets } from '../hooks/usePluginWidgets';
+import logger from '../services/logging';
+import './Sidebar.css';
+import authService from '../services/auth';
+import { useUser } from './UserContext';
+import { appointmentService } from '../services/appointments';
+
+// Utility functions
+const is_today = (dateString: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  return dateString === today;
+};
+
+const is_in_past = (dateTime: Date) => {
+  const now = new Date();
+  return dateTime < now;
+};
+
+const isAuthenticated = authService.isAuthenticated();
 
 const Sidebar = () => {
   const { user, isLoading } = useUser();
-  const userType = user?.role || "guest";
+  const userType = user?.role || 'guest';
   const widgets = usePluginWidgets();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { t } = useTranslation();
+  const [appointments, setAppointments] = useState<any[]>([]);
 
-  logger.debug("Sidebar user:", user);
+  logger.debug('Sidebar user:', user);
+
+  const fetchAppointments = async () => {
+    if (isAuthenticated) {
+      const user = authService.getUser();
+      const userId = user?.id?.split(':')[1] || user?.id;
+      console.log('Current User ID:', userId);
+      const response = await appointmentService.getAppointments(userId);
+      console.log('appointments', response);
+      setAppointments(response.appointments || []);
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const handleAppointmentCreated = () => {
+      console.log('Appointment created event received, refreshing sidebar...');
+      fetchAppointments();
+    };
+
+    window.addEventListener('appointmentCreated', handleAppointmentCreated);
+
+    return () => {
+      window.removeEventListener('appointmentCreated', handleAppointmentCreated);
+    };
+  }, []);
 
   if (isLoading) return null;
 
+  const remainingToday = appointments.filter((apt: any) => {
+    const aptDate = apt.appointment_date;
+    const aptTime = apt.start_time;
+    const aptDateTime = new Date(`${aptDate}T${aptTime}`);
+    return is_today(aptDate) && !is_in_past(aptDateTime);
+  }).length;
+
   return (
-    <aside className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-header">
         <div className="logo-container">ArsMedicaTech</div>
         <div className="release-info">Version 0.0.1 (alpha)</div>
         <button
           className="sidebar-toggle"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          title={isCollapsed ? t("expand") : t("collapse")}
+          title={isCollapsed ? 'Expand' : 'Collapse'}
         >
-          {isCollapsed ? "→" : "←"}
+          {isCollapsed ? '→' : '←'}
         </button>
       </div>
 
-      <nav className={isCollapsed ? "collapsed" : ""}>
+      <nav className={isCollapsed ? 'collapsed' : ''}>
         <ul>
-          {/* 🏠 Dashboard */}
           <li>
             <NavLink
               to="/"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("dashboard")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Dashboard'
             >
-              {isCollapsed ? "📊" : t("dashboard")}
+              {isCollapsed ? '📊' : 'Dashboard'}
             </NavLink>
           </li>
 
-          {/* 🔧 Admin / Organization */}
-          {(userType === "administrator" ||
-            userType === "superadmin" ||
-            userType === "admin") && (
+          {(userType === 'administrator' || userType === 'superadmin' || userType === 'admin') && (
             <>
               <li>
                 <NavLink
                   to="/organization"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("organization")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title='Organization'
                 >
-                  {isCollapsed ? "🏢" : t("organization")}
+                  {isCollapsed ? '🏢' : 'Organization'}
                 </NavLink>
               </li>
 
               <li>
                 <NavLink
                   to="/admin"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("admin")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title='Admin'
                 >
-                  {isCollapsed ? "⚙️" : t("admin")}
+                  {isCollapsed ? '⚙️' : 'Admin'}
                 </NavLink>
               </li>
             </>
           )}
 
-          {/* 🩺 Patient-specific routes */}
-          {userType === "patient" ? (
+          {userType === 'patient' ? (
             <>
-              <li>
-                {user?.id && (
+              {user?.id && (
+                <li>
                   <NavLink
                     to={`/intake/${user.id}`}
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                    title={t("intakeForm")}
+                    className={({ isActive }) => (isActive ? 'active' : '')}
+                    title='Intake Form'
                   >
-                    {isCollapsed ? "📝" : t("intakeForm")}
+                    {isCollapsed ? '📝' : 'Intake Form'}
                   </NavLink>
-                )}
-              </li>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/health-metrics"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("healthMetrics")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title='Health Metrics'
                 >
-                  {isCollapsed ? "📈" : t("healthMetrics")}
+                  {isCollapsed ? '📈' : 'Health Metrics'}
                 </NavLink>
               </li>
             </>
@@ -100,100 +145,93 @@ const Sidebar = () => {
               <li>
                 <NavLink
                   to="/patients"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("patients")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title='Patients'
                 >
-                  {isCollapsed ? "👥" : t("patients")}
+                  {isCollapsed ? '👥' : 'Patients'}
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to="/optimal-table-demo"
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                  title={t("optimalDemo")}
+                  className={({ isActive }) => (isActive ? 'active' : '')}
+                  title='Optimal Demo'
                 >
-                  {isCollapsed ? "📊" : t("optimalDemo")}
+                  {isCollapsed ? '📊' : 'Optimal Demo'}
                 </NavLink>
               </li>
             </>
           )}
 
-          {/* 🔬 Lab Results */}
           <li>
             <NavLink
               to="/lab-results"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("labResults")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Lab Results'
             >
-              {isCollapsed ? "🧪" : t("labResults")}
+              {isCollapsed ? '🧪' : 'Lab Results'}
             </NavLink>
           </li>
 
-          {/* 💬 Messages */}
           <li>
             <NavLink
               to="/messages"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("messages")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Messages'
             >
-              {isCollapsed ? "💬" : t("messages")}
+              {isCollapsed ? '💬' : 'Messages'}
             </NavLink>
           </li>
 
-          {/* 📅 Schedule */}
           <li>
             <NavLink
               to="/schedule"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("schedule")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Schedule'
             >
-              {isCollapsed ? "📅" : t("schedule")}
+              {isCollapsed ? '📅' : 'Schedule'}
             </NavLink>
           </li>
 
-          {/* ⚙️ Settings */}
           <li>
             <NavLink
               to="/settings"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("settings")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Settings'
             >
-              {isCollapsed ? "⚙️" : t("settings")}
+              {isCollapsed ? '⚙️' : 'Settings'}
             </NavLink>
           </li>
 
-          {/* 📁 Uploads */}
           <li>
             <NavLink
               to="/uploads"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("uploads")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Uploads'
             >
-              {isCollapsed ? "📁" : t("uploads")}
+              {isCollapsed ? '📁' : 'Uploads'}
             </NavLink>
           </li>
 
-          {/* 🔧 Plugin Widgets */}
           {widgets.map((widget) => (
             <li key={widget.name}>
               <NavLink
                 to={widget.path}
-                className={({ isActive }) => (isActive ? "active" : "")}
-                title={isCollapsed ? widget.name : ""}
+                className={({ isActive }) => (isActive ? 'active' : '')}
+                title={isCollapsed ? widget.name : ''}
               >
-                {isCollapsed ? "🔧" : widget.name}
+                {isCollapsed ? '🔧' : widget.name}
               </NavLink>
             </li>
           ))}
 
-          {/* 📝 Notes */}
           <li>
             <NavLink
               to="/notes"
-              className={({ isActive }) => (isActive ? "active" : "")}
-              title={t("notes")}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+              title='Notes'
             >
-              {isCollapsed ? "📝" : t("notes")}
+              {isCollapsed ? '📝' : 'Notes'}
             </NavLink>
           </li>
         </ul>
@@ -204,13 +242,9 @@ const Sidebar = () => {
           <div className="corner-user-avatar"></div>
           <div className="corner-user-info">
             <h4>
-              {t("hello")}, {user?.username}
+              Hello, {user?.username}
             </h4>
-            <p>
-              {t("remainingAppointments", {
-                count: user?.appointments || 0,
-              })}
-            </p>
+            <p>Remaining appointments today: {remainingToday}</p>
           </div>
         </div>
       )}
