@@ -1,12 +1,14 @@
-// Sidebar.tsx 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { usePluginWidgets } from '../hooks/usePluginWidgets';
 import logger from '../services/logging';
 import './Sidebar.css';
-import authService from '../services/auth';
 import { useUser } from './UserContext';
+
+// It is recommended to use an icon library like react-icons
+// import { FiGrid, FiUsers, FiMessageSquare, FiCalendar } from 'react-icons/fi';
 import { appointmentService } from '../services/appointments';
+import authService from '../services/auth';
 
 // Utility functions
 const is_today = (dateString: string) => {
@@ -26,6 +28,7 @@ const Sidebar = () => {
   const userType = user?.role || 'guest';
   const widgets = usePluginWidgets();
   const [isCollapsed, setIsCollapsed] = useState(false);
+
   const [appointments, setAppointments] = useState<any[]>([]);
 
   logger.debug('Sidebar user:', user);
@@ -54,11 +57,14 @@ const Sidebar = () => {
     window.addEventListener('appointmentCreated', handleAppointmentCreated);
 
     return () => {
-      window.removeEventListener('appointmentCreated', handleAppointmentCreated);
+      window.removeEventListener(
+        'appointmentCreated',
+        handleAppointmentCreated
+      );
     };
   }, []);
 
-  if (isLoading) return null;
+  if (isLoading) return null; // or a spinner
 
   const remainingToday = appointments.filter((apt: any) => {
     const aptDate = apt.appointment_date;
@@ -80,42 +86,47 @@ const Sidebar = () => {
           {isCollapsed ? '→' : '←'}
         </button>
       </div>
-
       <nav className={isCollapsed ? 'collapsed' : ''}>
         <ul>
+          {/* Add the `active` class to the active route... */}
           <li>
             <NavLink
               to="/"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Dashboard'
+              title={isCollapsed ? 'Dashboard' : ''}
             >
               {isCollapsed ? '📊' : 'Dashboard'}
             </NavLink>
           </li>
-
-          {(userType === 'administrator' || userType === 'superadmin' || userType === 'admin') && (
+          {(userType === 'administrator' ||
+            userType === 'superadmin' ||
+            userType === 'admin') && (
             <>
               <li>
                 <NavLink
                   to="/organization"
                   className={({ isActive }) => (isActive ? 'active' : '')}
-                  title='Organization'
+                  title={isCollapsed ? 'Organization' : ''}
                 >
                   {isCollapsed ? '🏢' : 'Organization'}
                 </NavLink>
               </li>
+            </>
+          )}
 
+          {userType === 'administrator' ||
+            userType === 'superadmin' ||
+            (userType === 'admin' && (
               <li>
                 <NavLink
                   to="/admin"
                   className={({ isActive }) => (isActive ? 'active' : '')}
-                  title='Admin'
+                  title={isCollapsed ? 'Admin' : ''}
                 >
                   {isCollapsed ? '⚙️' : 'Admin'}
                 </NavLink>
               </li>
-            </>
-          )}
+            ))}
 
           {userType === 'patient' ? (
             <>
@@ -124,7 +135,7 @@ const Sidebar = () => {
                   <NavLink
                     to={`/intake/${user.id}`}
                     className={({ isActive }) => (isActive ? 'active' : '')}
-                    title='Intake Form'
+                    title={isCollapsed ? 'Intake Form' : ''}
                   >
                     {isCollapsed ? '📝' : 'Intake Form'}
                   </NavLink>
@@ -134,7 +145,7 @@ const Sidebar = () => {
                 <NavLink
                   to="/health-metrics"
                   className={({ isActive }) => (isActive ? 'active' : '')}
-                  title='Health Metrics'
+                  title={isCollapsed ? 'Health Metrics' : ''}
                 >
                   {isCollapsed ? '📈' : 'Health Metrics'}
                 </NavLink>
@@ -146,7 +157,7 @@ const Sidebar = () => {
                 <NavLink
                   to="/patients"
                   className={({ isActive }) => (isActive ? 'active' : '')}
-                  title='Patients'
+                  title={isCollapsed ? 'Patients' : ''}
                 >
                   {isCollapsed ? '👥' : 'Patients'}
                 </NavLink>
@@ -155,65 +166,59 @@ const Sidebar = () => {
                 <NavLink
                   to="/optimal-table-demo"
                   className={({ isActive }) => (isActive ? 'active' : '')}
-                  title='Optimal Demo'
+                  title={isCollapsed ? 'Optimal (Demo)' : ''}
                 >
-                  {isCollapsed ? '📊' : 'Optimal Demo'}
+                  {isCollapsed ? '📊' : 'Optimal (Demo)'}
                 </NavLink>
               </li>
             </>
           )}
-
           <li>
             <NavLink
               to="/lab-results"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Lab Results'
+              title={isCollapsed ? 'Lab Results' : ''}
             >
               {isCollapsed ? '🧪' : 'Lab Results'}
             </NavLink>
           </li>
-
           <li>
             <NavLink
               to="/messages"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Messages'
+              title={isCollapsed ? 'Messages' : ''}
             >
               {isCollapsed ? '💬' : 'Messages'}
             </NavLink>
           </li>
-
           <li>
             <NavLink
               to="/schedule"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Schedule'
+              title={isCollapsed ? 'Schedule' : ''}
             >
               {isCollapsed ? '📅' : 'Schedule'}
             </NavLink>
           </li>
-
           <li>
             <NavLink
               to="/settings"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Settings'
+              title={isCollapsed ? 'Settings' : ''}
             >
               {isCollapsed ? '⚙️' : 'Settings'}
             </NavLink>
           </li>
-
           <li>
             <NavLink
               to="/uploads"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Uploads'
+              title={isCollapsed ? 'Uploads' : ''}
             >
               {isCollapsed ? '📁' : 'Uploads'}
             </NavLink>
           </li>
-
-          {widgets.map((widget) => (
+          {widgets.map(widget => (
             <li key={widget.name}>
               <NavLink
                 to={widget.path}
@@ -224,27 +229,26 @@ const Sidebar = () => {
               </NavLink>
             </li>
           ))}
-
           <li>
             <NavLink
               to="/notes"
               className={({ isActive }) => (isActive ? 'active' : '')}
-              title='Notes'
+              title={isCollapsed ? 'Notes' : ''}
             >
               {isCollapsed ? '📝' : 'Notes'}
             </NavLink>
           </li>
         </ul>
       </nav>
-
       {!isCollapsed && (
         <div className="sidebar-footer">
           <div className="corner-user-avatar"></div>
           <div className="corner-user-info">
-            <h4>
-              Hello, {user?.username}
-            </h4>
-            <p>Remaining appointments today: {remainingToday}</p>
+            <h4>Hello {user?.username}</h4>
+            <p>
+              You have {user?.appointments || 0} remaining appointments
+              scheduled today
+            </p>
           </div>
         </div>
       )}

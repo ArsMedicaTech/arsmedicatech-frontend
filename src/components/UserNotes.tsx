@@ -1,4 +1,3 @@
-// UserNotes
 import { MDXEditor } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import React, { useEffect, useState } from 'react';
@@ -51,7 +50,7 @@ const UserNotes: React.FC<{
   note?: UserNote;
   onSave?: (note: UserNote) => void;
 }> = ({ note, onSave }) => {
-  const [markdown, setMarkdown] = useState(note?.content || '');
+  const [draftMarkdown, setDraftMarkdown] = useState(note?.content || '');
   const [title, setTitle] = useState(note?.title || '');
   const [noteType, setNoteType] = useState<'private' | 'shared'>(
     note?.note_type || 'private'
@@ -60,13 +59,28 @@ const UserNotes: React.FC<{
   const [isEditing, setIsEditing] = useState(!note);
   const [isSaving, setIsSaving] = useState(false);
 
+  useEffect(() => {
+    if (note) {
+      setDraftMarkdown(note.content);
+      setTitle(note.title);
+      setNoteType(note.note_type);
+      setTags(note.tags);
+      setIsEditing(false);
+    } else {
+      setDraftMarkdown('');
+      setTitle('');
+      setNoteType('private');
+      setTags([]);
+      setIsEditing(true);
+    }
+  }, [note?.id]);
+
   const handleSave = async () => {
     if (!title.trim()) {
       alert('Please enter a title for the note');
       return;
     }
-
-    if (!markdown.trim()) {
+    if (!draftMarkdown.trim()) {
       alert('Please enter some content for the note');
       return;
     }
@@ -75,7 +89,7 @@ const UserNotes: React.FC<{
     try {
       const noteData = {
         title: title.trim(),
-        content: markdown,
+        content: draftMarkdown,
         note_type: noteType,
         tags: tags,
       };
@@ -104,7 +118,6 @@ const UserNotes: React.FC<{
         onSave(savedNote);
       }
     } catch (error) {
-      console.error('Error saving note:', error);
       console.error('Error saving note:', error);
       alert('An error occurred while saving the note. Please try again later.');
     } finally {
@@ -180,8 +193,9 @@ const UserNotes: React.FC<{
       )}
 
       <MDXEditor
-        markdown={markdown}
-        onChange={setMarkdown}
+        key={note?.id || 'new'}
+        markdown={draftMarkdown}
+        onChange={setDraftMarkdown}
         readOnly={!isEditing}
         className="min-h-[400px] border border-gray-300 rounded-lg"
         contentEditableClassName="prose max-w-none p-4 text-left"
@@ -261,31 +275,27 @@ const UserNotesScreen: React.FC = () => {
 
   const handleSaveNote = async (note: UserNote) => {
     try {
+      let savedNote: UserNote;
+
       if (note.id) {
-        // Update existing note - only send the fields to update, not the entire note object
-        const updateData = {
-          title: note.title,
-          content: note.content,
-          note_type: note.note_type,
-          tags: note.tags,
-        };
-        const response = await userNotesAPI.update(note.id, updateData);
-        if (response.success) {
-          setNotes(notes.map(n => (n.id === note.id ? response.note : n)));
-          setSelectedNote(response.note);
-        }
+        const response = await userNotesAPI.update(note.id, note);
+        if (!response.success) throw new Error(response.error);
+        savedNote = response.note;
       } else {
-        // Create new note
         const response = await userNotesAPI.create(note);
-        if (response.success) {
-          setNotes([response.note, ...notes]);
-          setSelectedNote(response.note);
-          setShowNewNote(false);
-        }
+        if (!response.success) throw new Error(response.error);
+        savedNote = response.note;
       }
+
+      // Recharge toutes les notes depuis le serveur
+      await loadNotes();
+
+      // Sélectionne automatiquement la note sauvegardée
+      setSelectedNote(savedNote);
+      setShowNewNote(false);
     } catch (err) {
+      console.error(err);
       setError('Error saving note');
-      console.error('Error saving note:', err);
     }
   };
 
