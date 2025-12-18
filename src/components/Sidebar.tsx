@@ -1,11 +1,28 @@
 import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { usePluginWidgets } from '../hooks/usePluginWidgets';
 import logger from '../services/logging';
 import './Sidebar.css';
 import { useUser } from './UserContext';
+
 // It is recommended to use an icon library like react-icons
 // import { FiGrid, FiUsers, FiMessageSquare, FiCalendar } from 'react-icons/fi';
+import authService from '../services/auth';
+import { appointmentService } from '../services/appointments';
+
+// Utility functions
+const is_today = (dateString: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  return dateString === today;
+};
+
+const is_in_past = (dateTime: Date) => {
+  const now = new Date();
+  return dateTime < now;
+};
+
+const isAuthenticated = authService.isAuthenticated();
 
 const Sidebar = () => {
   const { user, isLoading } = useUser();
@@ -13,9 +30,46 @@ const Sidebar = () => {
   const widgets = usePluginWidgets();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const [appointments, setAppointments] = useState<any[]>([]);
+
   logger.debug('Sidebar user:', user);
 
+  const fetchAppointments = async () => {
+    if (isAuthenticated) {
+      const user = authService.getUser();
+      const userId = user?.id?.split(':')[1] || user?.id;
+      console.log('Current User ID:', userId);
+      const response = await appointmentService.getAppointments(userId);
+      console.log('appointments', response);
+      setAppointments(response.appointments || []);
+    }
+  };
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    const handleAppointmentCreated = () => {
+      console.log('Appointment created event received, refreshing sidebar...');
+      fetchAppointments();
+    };
+
+    window.addEventListener('appointmentCreated', handleAppointmentCreated);
+
+    return () => {
+      window.removeEventListener('appointmentCreated', handleAppointmentCreated);
+    };
+  }, []);
+
   if (isLoading) return null; // or a spinner
+
+  const remainingToday = appointments.filter((apt: any) => {
+    const aptDate = apt.appointment_date;
+    const aptTime = apt.start_time;
+    const aptDateTime = new Date(`${aptDate}T${aptTime}`);
+    return is_today(aptDate) && !is_in_past(aptDateTime);
+  }).length;
 
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -25,7 +79,7 @@ const Sidebar = () => {
         <button
           className="sidebar-toggle"
           onClick={() => setIsCollapsed(!isCollapsed)}
-          title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={isCollapsed ? 'Expand' : 'Collapse'}
         >
           {isCollapsed ? '→' : '←'}
         </button>
@@ -42,9 +96,8 @@ const Sidebar = () => {
               {isCollapsed ? '📊' : 'Dashboard'}
             </NavLink>
           </li>
-          {userType === 'administrator' ||
-            userType === 'superadmin' ||
-            (userType === 'admin' && (
+          {(userType === 'administrator' || userType === 'superadmin' || userType === 'admin') && (
+            <>
               <li>
                 <NavLink
                   to="/organization"
@@ -55,6 +108,7 @@ const Sidebar = () => {
                 </NavLink>
               </li>
             ))}
+          
           {userType === 'administrator' ||
             userType === 'superadmin' ||
             (userType === 'admin' && (
@@ -68,10 +122,13 @@ const Sidebar = () => {
                 </NavLink>
               </li>
             ))}
+            </>
+          )}
+          
           {userType === 'patient' ? (
             <>
-              <li>
-                {user?.id && (
+              {user?.id && (
+                <li>
                   <NavLink
                     to={`/intake/${user.id}`}
                     className={({ isActive }) => (isActive ? 'active' : '')}
@@ -79,8 +136,8 @@ const Sidebar = () => {
                   >
                     {isCollapsed ? '📝' : 'Intake Form'}
                   </NavLink>
-                )}
-              </li>
+                </li>
+              )}
               <li>
                 <NavLink
                   to="/health-metrics"
@@ -189,6 +246,10 @@ const Sidebar = () => {
               You have {user?.appointments || 0} remaining appointments
               scheduled today
             </p>
+            <h4>
+              Hello, {user?.username}
+            </h4>
+            <p>Remaining appointments today: {remainingToday}</p>
           </div>
         </div>
       )}

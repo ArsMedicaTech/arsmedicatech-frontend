@@ -1,3 +1,4 @@
+// Schedule.tsx
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { Value } from 'react-calendar/dist/esm/shared/types.js';
@@ -43,11 +44,13 @@ const Schedule = () => {
       if (isAuthenticated) {
         try {
           logger.debug('Loading appointments from backend...');
-          const response = await appointmentService.getAppointments();
+          const user = authService.getUser();
+          const userId = user?.id?.split(':')[1] || user?.id;
+          const response = await appointmentService.getAppointments(userId);
           logger.debug('Backend appointments response:', response);
 
           // Convert backend appointments to frontend format
-          const convertedAppointments = response.appointments.map(apt => ({
+          const convertedAppointments = response.appointments.map((apt) => ({
             id: apt.id,
             patientName: `Patient ${apt.patient_id}`, // We'll need to get actual patient names later
             appointmentDate: apt.appointment_date,
@@ -62,7 +65,6 @@ const Schedule = () => {
           setAppointments(convertedAppointments);
         } catch (error) {
           console.error('Error loading appointments:', error);
-          // For now, keep using local appointments if backend fails
         }
       }
     };
@@ -70,7 +72,6 @@ const Schedule = () => {
     loadAppointments();
   }, [isAuthenticated]);
 
-  // Also load appointments when component becomes visible (for navigation back)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && isAuthenticated) {
@@ -78,7 +79,7 @@ const Schedule = () => {
         const loadAppointments = async () => {
           try {
             const response = await appointmentService.getAppointments();
-            const convertedAppointments = response.appointments.map(apt => ({
+            const convertedAppointments = response.appointments.map((apt) => ({
               id: apt.id,
               patientName: `Patient ${apt.patient_id}`,
               appointmentDate: apt.appointment_date,
@@ -146,7 +147,7 @@ const Schedule = () => {
           return;
         }
 
-        const convertedAppointments = response.appointments.map(apt => {
+        const convertedAppointments = response.appointments.map((apt) => {
           logger.debug('Converting appointment:', apt);
           return {
             id: apt.id,
@@ -179,9 +180,8 @@ const Schedule = () => {
     setError('');
 
     try {
-      // Convert frontend form data to backend format
       const backendData = {
-        patient_id: '1', // For now, use a default patient ID - we'll need to implement patient selection
+        patient_id: '1',
         appointment_date: appointmentData.appointmentDate,
         start_time: appointmentData.startTime,
         end_time: appointmentData.endTime,
@@ -192,18 +192,17 @@ const Schedule = () => {
 
       logger.debug('Sending to backend:', backendData);
 
-      // Send to backend
       const newBackendAppointment =
         await appointmentService.createAppointment(backendData);
       logger.debug('Backend response:', newBackendAppointment);
 
-      // Refresh the appointments list from the backend
       await refreshAppointments();
+
+      window.dispatchEvent(new CustomEvent('appointmentCreated'));
 
       setSelectedDate(null);
       setIsModalOpen(false);
 
-      // Show success message
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
     } catch (error) {
@@ -216,14 +215,14 @@ const Schedule = () => {
 
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (view === 'month') {
-      const dayAppointments = appointments.filter(apt =>
+      const dayAppointments = appointments.filter((apt) =>
         isSameDay(date, new Date(apt.appointmentDate))
       );
 
       if (dayAppointments.length > 0) {
         return (
           <div className="appointment-indicators">
-            {dayAppointments.slice(0, 3).map(apt => (
+            {dayAppointments.slice(0, 3).map((apt) => (
               <div
                 key={apt.id}
                 className={`appointment-dot appointment-${apt.status}`}
@@ -246,15 +245,13 @@ const Schedule = () => {
     if (view === 'month') {
       const classes: string[] = [];
 
-      // Check if this date has appointments
-      const dayAppointments = appointments.filter(apt =>
+      const dayAppointments = appointments.filter((apt) =>
         isSameDay(date, new Date(apt.appointmentDate))
       );
       if (dayAppointments.length > 0) {
         classes.push('has-appointments');
       }
 
-      // Check if this is the selected date
       if (selectedDate && isSameDay(date, selectedDate)) {
         classes.push('selected-date');
       }
@@ -266,7 +263,7 @@ const Schedule = () => {
 
   const getAppointmentsForDate = (date: Date) => {
     return appointments
-      .filter(apt => isSameDay(date, new Date(apt.appointmentDate)))
+      .filter((apt) => isSameDay(date, new Date(apt.appointmentDate)))
       .sort((a, b) => a.startTime.localeCompare(b.startTime));
   };
 
@@ -332,12 +329,11 @@ const Schedule = () => {
           />
         </div>
 
-        {/* Appointments for selected date */}
         {selectedDate && isAuthenticated && (
           <div className="appointments-list">
             <h3>Appointments for {selectedDate.toLocaleDateString()}</h3>
             <div className="appointments-grid">
-              {getAppointmentsForDate(selectedDate).map(appointment => (
+              {getAppointmentsForDate(selectedDate).map((appointment) => (
                 <div key={appointment.id} className="appointment-card">
                   <div className="appointment-time">
                     {appointment.startTime} - {appointment.endTime}
@@ -349,7 +345,9 @@ const Schedule = () => {
                     {appointment.appointmentType}
                   </div>
                   <div
-                    className={`appointment-status ${getStatusColor(appointment.status)}`}
+                    className={`appointment-status ${getStatusColor(
+                      appointment.status
+                    )}`}
                   >
                     {appointment.status}
                   </div>
@@ -370,21 +368,18 @@ const Schedule = () => {
 
       <SignupPopup isOpen={isPopupOpen} onClose={hideSignupPopup} />
 
-      {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
           Appointment created successfully!
         </div>
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-md shadow-lg z-50">
           {error}
         </div>
       )}
 
-      {/* Loading Overlay */}
       {isSubmitting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-xl">
@@ -408,7 +403,6 @@ const Schedule = () => {
         isSubmitting={isSubmitting}
       />
 
-      {/* Debug info */}
       {process.env.NODE_ENV === 'development' && (
         <div
           style={{
