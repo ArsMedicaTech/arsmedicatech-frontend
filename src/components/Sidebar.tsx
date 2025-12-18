@@ -107,7 +107,8 @@ const Sidebar = () => {
                   {isCollapsed ? '🏢' : 'Organization'}
                 </NavLink>
               </li>
-            ))}
+            </>
+          )}
           
           {userType === 'administrator' ||
             userType === 'superadmin' ||
