@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { usePluginWidgets } from '../hooks/usePluginWidgets';
 import logger from '../services/logging';
@@ -8,8 +7,8 @@ import { useUser } from './UserContext';
 
 // It is recommended to use an icon library like react-icons
 // import { FiGrid, FiUsers, FiMessageSquare, FiCalendar } from 'react-icons/fi';
-import authService from '../services/auth';
 import { appointmentService } from '../services/appointments';
+import authService from '../services/auth';
 
 // Utility functions
 const is_today = (dateString: string) => {
@@ -58,7 +57,10 @@ const Sidebar = () => {
     window.addEventListener('appointmentCreated', handleAppointmentCreated);
 
     return () => {
-      window.removeEventListener('appointmentCreated', handleAppointmentCreated);
+      window.removeEventListener(
+        'appointmentCreated',
+        handleAppointmentCreated
+      );
     };
   }, []);
 
@@ -96,7 +98,9 @@ const Sidebar = () => {
               {isCollapsed ? '📊' : 'Dashboard'}
             </NavLink>
           </li>
-          {(userType === 'administrator' || userType === 'superadmin' || userType === 'admin') && (
+          {(userType === 'administrator' ||
+            userType === 'superadmin' ||
+            userType === 'admin') && (
             <>
               <li>
                 <NavLink
@@ -109,7 +113,7 @@ const Sidebar = () => {
               </li>
             </>
           )}
-          
+
           {userType === 'administrator' ||
             userType === 'superadmin' ||
             (userType === 'admin' && (
@@ -123,9 +127,7 @@ const Sidebar = () => {
                 </NavLink>
               </li>
             ))}
-            </>
-          )}
-          
+
           {userType === 'patient' ? (
             <>
               {user?.id && (
@@ -247,10 +249,6 @@ const Sidebar = () => {
               You have {user?.appointments || 0} remaining appointments
               scheduled today
             </p>
-            <h4>
-              Hello, {user?.username}
-            </h4>
-            <p>Remaining appointments today: {remainingToday}</p>
           </div>
         </div>
       )}
