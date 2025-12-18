@@ -1,0 +1,8 @@
+[
+  { "condition_label": "fever", "condition_icon": "/icons/diseases/cough.png" },
+  { "condition_label": "cough", "condition_icon": "/icons/diseases/cough.png" },
+  { "condition_label": "diabetes", "condition_icon": "/icons/diseases/diabetes.png" },
+  { "condition_label": "hypertension", "condition_icon": "/icons/diseases/hypertension.png" },
+  { "condition_label": "headache", "condition_icon": "/icons/diseases/headache.png" },
+  { "condition_label": "asthma", "condition_icon": "/icons/diseases/asthma.png" }
+]
